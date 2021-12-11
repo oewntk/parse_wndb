@@ -1,12 +1,12 @@
 # WordNet WNDB parser
 
-![Dataflow1](images/dataflow7.png  "Dataflow")
+![Dataflow](images/dataflow7.png  "Dataflow")
 
 ## WNDB parser
 
-Project [parse](https://github.com/x-englishwordnet/parse)
+This library parses WNDB(5WN) files into Plain Old Java Objects. These objects are not a model but come in handy when it comes to building one.
 
-This library parses WNDB(5WN) files.
+Project [parse](https://github.com/x-englishwordnet/parse)
 
 ## Command line
 
