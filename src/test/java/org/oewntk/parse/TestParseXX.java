@@ -1,29 +1,38 @@
 package org.oewntk.parse;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.oewntk.pojos.ParsePojoException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 public class TestParseXX
 {
-	private final String wnHome = System.getProperty("SOURCEXX");
+	private static final PrintStream ps = !System.getProperties().containsKey("SILENT") ? System.out : new PrintStream(new OutputStream()
+	{
+		public void write(int b)
+		{
+			//DO NOTHING
+		}
+	});
 
-	private final boolean silent = System.getProperties().containsKey("SILENT");
+	private static final String wnHome = System.getProperty("SOURCEXX");
 
-	@Before
-	public void init()
+	private static final File wnDir = new File(wnHome);
+
+	@BeforeClass
+	public static void init()
 	{
 		if (wnHome == null)
 		{
 			System.err.println("Define WNDB source dir with -DSOURCEXX=path%n");
 			System.exit(1);
 		}
-		final File dir = new File(wnHome);
-		System.out.printf("source=%s%n", dir.getAbsolutePath());
-		if (!dir.exists())
+		System.out.printf("source=%s%n", wnDir.getAbsolutePath());
+		if (!wnDir.exists())
 		{
 			System.err.println("Define WNDB source dir that exists");
 			System.exit(2);
@@ -33,24 +42,24 @@ public class TestParseXX
 	@Test
 	public void parse() throws IOException, ParsePojoException
 	{
-		Parser.main(new String[]{wnHome});
+		Parser.parseAll(wnDir, ps::println, ps::println, ps::println);
 	}
 
 	@Test
 	public void indexParse() throws IOException, ParsePojoException
 	{
-		IndexParser.main(new String[]{wnHome});
+		IndexParser.parseAllIndexes(wnDir, ps::println);
 	}
 
 	@Test
 	public void dataParse() throws IOException, ParsePojoException
 	{
-		DataParser.main(new String[]{wnHome});
+		DataParser.parseAllSynsets(wnDir, ps::println);
 	}
 
 	@Test
 	public void senseParse() throws IOException, ParsePojoException
 	{
-		SenseParser.main(new String[]{wnHome});
+		SenseParser.parseSenses(wnDir, ps::println);
 	}
 }
