@@ -27,7 +27,7 @@ public class IndexParser
 	// PrintStreams
 	private static final PrintStream psnull = Utils.nullPrintStream();
 	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? System.err : psnull;
-	private static final PrintStream psi = !System.getProperties().containsKey("SILENT") ? System.out : psnull;
+	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? System.out : psnull;
 
 	public static void main(String[] args) throws IOException, ParsePojoException
 	{
