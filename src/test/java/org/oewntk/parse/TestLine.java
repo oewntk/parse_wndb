@@ -32,10 +32,10 @@ public class TestLine
 	{
 		for (String line : lines)
 		{
+			ps.println(line);
 			assertNotNull(line);
 			Synset synset = Synset.parseSynset(line, false);
 			assertNotNull(synset);
 		}
-		ps.println("Done");
 	}
 }
