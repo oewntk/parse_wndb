@@ -34,13 +34,13 @@ parse the WNDB database at expected *offset* of *data.{noun|verb|adj|adv}*
 
 [WNDBDIR] the WNDB directory where WordNet files are
 
-[POS]     n|v|a|r
+[POS] n|v|a|r
 
-[SENSEID]     sense id
+[SENSEID] sense id
 
-[SYNSETID]    synset id
+[SYNSETID] synset id
 
-[OFS]     offset
+[OFS] offset
 
 If WNHOME20, WNHOME21, WNHOME30, WNHOME31, WNHOMEXX environment variables are defined, you can refer to them by 20, 21, 30, 31, 00 respectively, instead of the full path.
 
