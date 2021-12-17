@@ -3,21 +3,15 @@ package org.oewntk.parse;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.oewntk.pojos.ParsePojoException;
+import org.oewntk.utils.Tracing;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 
 public class TestParseXX
 {
-	private static final PrintStream ps = !System.getProperties().containsKey("SILENT") ? System.out : new PrintStream(new OutputStream()
-	{
-		public void write(int b)
-		{
-			//DO NOTHING
-		}
-	});
+	private static final PrintStream ps = !System.getProperties().containsKey("SILENT") ? Tracing.psInfo : Tracing.psNull;
 
 	private static final String wnHome = System.getProperty("SOURCEXX");
 
@@ -28,13 +22,14 @@ public class TestParseXX
 	{
 		if (wnHome == null)
 		{
-			System.err.println("Define WNDB source dir with -DSOURCEXX=path%n");
+			Tracing.psErr.println("Define WNDB source dir with -DSOURCEXX=path%n");
+			Tracing.psErr.println("When running Maven tests, define a WNHOMEXX_compat environment variable that points to WordNet 2021 compat dict directory.");
 			System.exit(1);
 		}
-		System.out.printf("source=%s%n", wnDir.getAbsolutePath());
+		Tracing.psInfo.printf("source=%s%n", wnDir.getAbsolutePath());
 		if (!wnDir.exists())
 		{
-			System.err.println("Define WNDB source dir that exists");
+			Tracing.psErr.println("Define WNDB source dir that exists");
 			System.exit(2);
 		}
 	}

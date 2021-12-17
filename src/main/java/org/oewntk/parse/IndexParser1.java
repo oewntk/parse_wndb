@@ -6,6 +6,7 @@ package org.oewntk.parse;
 
 import org.oewntk.pojos.CoreIndex;
 import org.oewntk.pojos.ParsePojoException;
+import org.oewntk.utils.Tracing;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -40,16 +41,16 @@ public class IndexParser1
 			{
 				if (line.contains(target))
 				{
-					System.out.println(line);
+					Tracing.psInfo.println(line);
 					CoreIndex index;
 					try
 					{
 						index = parseIndexLine(line);
-						System.out.println(index);
+						Tracing.psInfo.println(index);
 					}
 					catch (ParsePojoException e)
 					{
-						System.err.printf("%s cause:%s%n", e.getMessage(), e.getCause());
+						Tracing.psErr.printf("%s cause:%s%n", e.getMessage(), e.getCause());
 						e.printStackTrace();
 					}
 				}

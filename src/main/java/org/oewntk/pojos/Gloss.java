@@ -4,6 +4,8 @@
 
 package org.oewntk.pojos;
 
+import org.oewntk.utils.Tracing;
+
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,7 +36,7 @@ public final class Gloss
 		}
 		if (quoteCount % 2 != 0)
 		{
-			System.err.println("Uneven quotes in :" + gloss);
+			Tracing.psErr.println("Uneven quotes in :" + gloss);
 		}
 
 		final Matcher matcher = pattern.matcher(gloss); // get a matcher object

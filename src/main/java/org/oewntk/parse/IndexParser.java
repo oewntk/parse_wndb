@@ -7,6 +7,7 @@ package org.oewntk.parse;
 import org.oewntk.pojos.CoreIndex;
 import org.oewntk.pojos.Index;
 import org.oewntk.pojos.ParsePojoException;
+import org.oewntk.utils.Tracing;
 
 import java.io.*;
 import java.util.function.Consumer;
@@ -20,14 +21,13 @@ public class IndexParser
 {
 	private static final boolean THROW = false;
 
-	// Consumer
-	private static final Consumer<Index> consumer = System.out::println;
-	private static final Consumer<CoreIndex> coreConsumer = System.out::println;
-
 	// PrintStreams
-	private static final PrintStream psnull = Utils.nullPrintStream();
-	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? System.err : psnull;
-	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? System.out : psnull;
+	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? Tracing.psInfo : Tracing.psNull;
+	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? Tracing.psErr : Tracing.psNull;
+
+	// Consumer
+	private static final Consumer<Index> consumer = psi::println;
+	//private static final Consumer<CoreIndex> coreConsumer = psi::println;
 
 	public static void main(String[] args) throws IOException, ParsePojoException
 	{

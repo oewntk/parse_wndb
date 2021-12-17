@@ -6,6 +6,7 @@ package org.oewntk.parse;
 
 import org.oewntk.pojos.ParsePojoException;
 import org.oewntk.pojos.Synset;
+import org.oewntk.utils.Tracing;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,9 +29,9 @@ public class DataParser1
 
 		// Process
 		String line = read(dir, posName, fileOffset);
-		System.out.println(line);
+		Tracing.psInfo.println(line);
 		Synset synset = parseSynset(line, isAdj);
-		System.out.println(synset.toPrettyString());
+		Tracing.psInfo.println(synset.toPrettyString());
 	}
 
 	public static String read(final String dir, final String posName, final long fileOffset) throws IOException

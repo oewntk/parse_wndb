@@ -8,6 +8,7 @@ import org.oewntk.pojos.Index;
 import org.oewntk.pojos.ParsePojoException;
 import org.oewntk.pojos.Sense;
 import org.oewntk.pojos.Synset;
+import org.oewntk.utils.Tracing;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,14 +17,14 @@ import java.util.function.Consumer;
 
 public class Parser
 {
-	// Consumers
-	private static final Consumer<Synset> synsetConsumer = System.out::println;
-	private static final Consumer<Sense> senseConsumer = System.out::println;
-	private static final Consumer<Index> indexConsumer = System.out::println;
 
 	// PrintStreams
-	private static final PrintStream psnull = Utils.nullPrintStream();
-	private static final PrintStream psi = !System.getProperties().containsKey("SILENT") ? System.out : psnull;
+	private static final PrintStream psi = !System.getProperties().containsKey("SILENT") ? Tracing.psInfo : Tracing.psNull;
+
+	// Consumers
+	private static final Consumer<Synset> synsetConsumer = psi::println;
+	private static final Consumer<Sense> senseConsumer = psi::println;
+	private static final Consumer<Index> indexConsumer = psi::println;
 
 	public static void main(String[] args) throws IOException, ParsePojoException
 	{

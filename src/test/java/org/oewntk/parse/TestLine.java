@@ -3,6 +3,7 @@ package org.oewntk.parse;
 import org.junit.Test;
 import org.oewntk.pojos.ParsePojoException;
 import org.oewntk.pojos.Synset;
+import org.oewntk.utils.Tracing;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -11,13 +12,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class TestLine
 {
-	private static final PrintStream ps = !System.getProperties().containsKey("SILENT") ? System.out : new PrintStream(new OutputStream()
-	{
-		public void write(int b)
-		{
-			//DO NOTHING
-		}
-	});
+	private static final PrintStream ps = !System.getProperties().containsKey("SILENT") ? Tracing.psInfo : Tracing.psNull;
 
 	private static final String[] lines = { //
 			"04643324 07 n 04 humor 1 humour 1 sense_of_humor 0 sense_of_humour 0 005 @ 04642395 n 0000 + 01248854 a 0101 + 10189454 n 0101 + 01248854 a 0202 + 10189454 n 0202 | the trait of appreciating (and being able to express) the humorous; \"she didn't appreciate my humor\" \"you can't survive in the army without a sense of humor\"", //

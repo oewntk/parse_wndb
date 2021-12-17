@@ -1,6 +1,6 @@
 # WordNet WNDB parser
 
-![Dataflow](images/dataflow7.png  "Dataflow")
+![Dataflow](images/dataflow.png  "Dataflow")
 
 ## WNDB parser
 

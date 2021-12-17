@@ -9,15 +9,4 @@ import java.io.PrintStream;
 
 public class Utils
 {
-	public static PrintStream nullPrintStream()
-	{
-		return new PrintStream(new OutputStream()
-		{
-			@Override
-			public void write(final int i)
-			{
-				// do nothing
-			}
-		});
-	}
 }

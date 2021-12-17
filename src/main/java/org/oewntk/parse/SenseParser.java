@@ -6,6 +6,7 @@ package org.oewntk.parse;
 
 import org.oewntk.pojos.ParsePojoException;
 import org.oewntk.pojos.Sense;
+import org.oewntk.utils.Tracing;
 
 import java.io.*;
 import java.util.function.Consumer;
@@ -19,13 +20,12 @@ public class SenseParser
 {
 	private static final boolean THROW = false;
 
-	// Consumer
-	private static final Consumer<Sense> consumer = System.out::println;
-
 	// PrintStreams
-	private static final PrintStream psnull = Utils.nullPrintStream();
-	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? System.err : psnull;
-	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? System.out : psnull;
+	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? Tracing.psInfo : Tracing.psNull;
+	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? Tracing.psErr : Tracing.psNull;
+
+	// Consumer
+	private static final Consumer<Sense> consumer = psi::println;
 
 	public static void main(String[] args) throws IOException, ParsePojoException
 	{
