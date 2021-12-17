@@ -94,7 +94,7 @@ public class DataParser
 				long readOffset = Long.parseLong(lineFields[0]);
 				if (fileOffset != readOffset)
 				{
-					pse.println(posName + ';' + lineCount + " offset=" + fileOffset + " line=[" + line + "]");
+					pse.printf("Offset: data.%s:%d offset=%08d line=[%s]%n", posName, lineCount, fileOffset, line);
 					offsetErrorCount++;
 					continue;
 				}

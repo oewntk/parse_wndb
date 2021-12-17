@@ -62,7 +62,7 @@ public class CoreSynset
 			fieldPointer++;
 
 			// lex domain
-			final Domain domain = Domain.parseDomain(fields[fieldPointer]);
+			final Domain domain = Domain.parseDomainId(fields[fieldPointer]);
 			fieldPointer++;
 
 			// type

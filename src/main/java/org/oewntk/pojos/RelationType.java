@@ -15,25 +15,45 @@ import java.util.Map;
 public enum RelationType
 {
 	// @formatter:off
-	HYPERNYM("@", "hypernym", true), HYPONYM("~", "hyponym", true), INSTANCE_HYPERNYM("@i", "instance hypernym", true), INSTANCE_HYPONYM("~i", "instance hyponym", true),
+	HYPERNYM("@", "hypernym", true), //
+	HYPONYM("~", "hyponym", true), //
+	INSTANCE_HYPERNYM("@i", "instance_hypernym", true),  //
+	INSTANCE_HYPONYM("~i", "instance_hyponym", true), //
 
-	PART_HOLONYM("%p", "part holonym", true), PART_MERONYM("#p", "part meronym", true), MEMBER_HOLONYM("%m", "member holonym", true), MEMBER_MERONYM("#m", "member meronym", true), SUBSTANCE_HOLONYM("%s", "substance holonym", true), SUBSTANCE_MERONYM("#s",
-			"substance meronym", true),
+	PART_HOLONYM("%p", "holo_part", true),  //
+	PART_MERONYM("#p", "mero_part", true),  //
+	MEMBER_HOLONYM("%m", "holo_member", true),  //
+	MEMBER_MERONYM("#m", "mero_member", true),  //
+	SUBSTANCE_HOLONYM("%s", "holo_substance", true),  //
+	SUBSTANCE_MERONYM("#s","mero_substance", true), //
 
-	ENTAIL("*", "entail", true), IS_ENTAILED("*^", "is entailed by", true), CAUSE(">", "cause", true), IS_CAUSED(">^", "is caused by", true),
+	ENTAIL("*", "entails", true),  //
+	IS_ENTAILED("*^", "is_entailed_by", true),  //
+	CAUSE(">", "causes", true),  //
+	IS_CAUSED(">^", "is_caused_by", true), //
 
-	ANTONYM("!", "antonym", false), SIMILAR("&", "similar", false),
+	ANTONYM("!", "antonym", false),  //
+	SIMILAR("&", "similar", false), //
 
-	ALSO("^", "also", false), ATTRIBUTE("=", "attribute", false),
+	ALSO("^", "also", false),  //
+	ATTRIBUTE("=", "attribute", false), //
 
-	VERB_GROUP("$", "verb group", false), PARTICIPLE("<", "participle", false),
+	VERB_GROUP("$", "verb_group", false),
+	PARTICIPLE("<", "participle", false),
 
-	PERTAINYM("\\", "pertainym", false), DERIVATION("+", "derivation", false),
+	PERTAINYM("\\", "pertainym", false),
+	DERIVATION("+", "derivation", false),
 
-	DOMAIN_CATEGORY(";c", "domain category", false), MEMBER_CATEGORY("-c", "domain member category", false), DOMAIN_REGION(";r", "domain region", false), MEMBER_REGION("-r", "domain member region", false), DOMAIN_USAGE(";u", "domain usage",
-			false), MEMBER_USAGE("-u", "domain member usage", false),
+	DOMAIN_TOPIC(";c", "domain_topic", false),
+	HAS_DOMAIN_TOPIC("-c", "has_domain_topic", false),
+	DOMAIN_REGION(";r", "domain_region", false),
+	HAS_DOMAIN_REGION("-r", "has_domain_region", false),
+	DOMAIN_USAGE(";u", "exemplifies",false),
+	HAS_DOMAIN_USAGE("-u", "is_exemplified_by", false),
 
-	DOMAIN(";", "domain", false), MEMBER("-", "member", false);
+	DOMAIN(";", "domain", false),
+	MEMBER("-", "member", false);
+
 	// @formatter:on
 
 	private static final Map<String, RelationType> MAP = new HashMap<>();

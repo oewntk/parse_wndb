@@ -93,7 +93,7 @@ public class Sensekey
 		{
 			final NormalizedString word = new NormalizedString(fields[0]);
 			final Type type = Type.fromIndex(Integer.parseInt(fields[1]));
-			final Domain domain = Domain.parseDomain(fields[2]);
+			final Domain domain = Domain.parseDomainId(fields[2]);
 			final int lexid = Integer.parseInt(fields[3]);
 			final NormalizedString headWord = fields[4].isEmpty() ? null : new NormalizedString(fields[4]);
 			final int headLexid = fields[5].isEmpty() ? -1 : Integer.parseInt(fields[5]);
