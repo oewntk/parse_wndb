@@ -1,5 +1,6 @@
 package org.oewntk.parse;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.oewntk.pojos.ParsePojoException;
@@ -25,13 +26,13 @@ public class TestParse31
 		{
 			Tracing.psErr.println("Define WNDB source dir with -DSOURCE31=path%n");
 			Tracing.psErr.println("When running Maven tests, define a WNHOME31 environment variable that points to WordNet 3.1 dict directory.");
-			System.exit(1);
+			Assert.fail();
 		}
 		Tracing.psInfo.printf("source=%s%n", wnDir.getAbsolutePath());
 		if (!wnDir.exists())
 		{
 			Tracing.psErr.println("Define WNDB source dir that exists");
-			System.exit(2);
+			Assert.fail();
 		}
 	}
 
