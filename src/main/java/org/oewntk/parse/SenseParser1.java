@@ -20,16 +20,6 @@ import java.io.IOException;
  */
 public class SenseParser1
 {
-	public static void main(String[] args) throws IOException
-	{
-		// Input
-		String dir = args[0];
-		String target = args[1];
-
-		// Process
-		read(dir, target);
-	}
-
 	static void read(final String dir, final String target) throws IOException
 	{
 		final File file = new File(dir, "index.sense");
@@ -60,5 +50,15 @@ public class SenseParser1
 	private static Sense parseSense(final String line) throws ParsePojoException
 	{
 		return Sense.parseSense(line);
+	}
+
+	public static void main(final String[] args) throws IOException
+	{
+		// Input
+		String dir = args[0];
+		String target = args[1];
+
+		// Process
+		read(dir, target);
 	}
 }

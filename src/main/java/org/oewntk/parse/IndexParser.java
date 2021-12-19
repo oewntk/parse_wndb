@@ -29,23 +29,7 @@ public class IndexParser
 	private static final Consumer<Index> consumer = psi::println;
 	//private static final Consumer<CoreIndex> coreConsumer = psi::println;
 
-	public static void main(String[] args) throws IOException, ParsePojoException
-	{
-		// Timing
-		final long startTime = System.currentTimeMillis();
-
-		// Input
-		File dir = new File(args[0]);
-
-		// Process
-		parseAllIndexes(dir, consumer);
-
-		// Timing
-		final long endTime = System.currentTimeMillis();
-		psi.println("Total execution time: " + (endTime - startTime) / 1000 + "s");
-	}
-
-	public static void parseAllIndexes(File dir, Consumer<Index> consumer) throws IOException, ParsePojoException
+	public static void parseAllIndexes(final File dir, final Consumer<Index> consumer) throws IOException, ParsePojoException
 	{
 		// Process for all pos
 		for (final String posName : new String[]{"noun", "verb", "adj", "adv"})
@@ -54,7 +38,7 @@ public class IndexParser
 		}
 	}
 
-	public static void parseAllCoreIndexes(File dir, Consumer<CoreIndex> consumer) throws IOException, ParsePojoException
+	public static void parseAllCoreIndexes(final File dir, final Consumer<CoreIndex> consumer) throws IOException, ParsePojoException
 	{
 		// Process for all pos
 		for (final String posName : new String[]{"noun", "verb", "adj", "adv"})
@@ -63,7 +47,7 @@ public class IndexParser
 		}
 	}
 
-	public static void parseIndexes(File dir, String posName, Consumer<Index> consumer) throws IOException, ParsePojoException
+	public static void parseIndexes(final File dir, final String posName, final Consumer<Index> consumer) throws IOException, ParsePojoException
 	{
 		psi.println("* Indexes " + posName);
 
@@ -108,7 +92,7 @@ public class IndexParser
 		}
 	}
 
-	public static void parseCoreIndexes(File dir, String posName, Consumer<CoreIndex> consumer) throws IOException, ParsePojoException
+	public static void parseCoreIndexes(final File dir, final String posName, final Consumer<CoreIndex> consumer) throws IOException, ParsePojoException
 	{
 		psi.println("* Indexes " + posName);
 
@@ -151,5 +135,21 @@ public class IndexParser
 			(parseErrorCount > 0 ? pse : psi).printf(format, "parse successes", indexCount);
 			(parseErrorCount > 0 ? pse : psi).printf(format, "parse errors", parseErrorCount);
 		}
+	}
+
+	public static void main(final String[] args) throws IOException, ParsePojoException
+	{
+		// Timing
+		final long startTime = System.currentTimeMillis();
+
+		// Input
+		File dir = new File(args[0]);
+
+		// Process
+		parseAllIndexes(dir, consumer);
+
+		// Timing
+		final long endTime = System.currentTimeMillis();
+		psi.println("Total execution time: " + (endTime - startTime) / 1000 + "s");
 	}
 }

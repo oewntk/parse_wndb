@@ -30,23 +30,7 @@ public class DataParser
 	// Consumer
 	private static final Consumer<Synset> consumer = psi::println;
 
-	public static void main(String[] args) throws ParsePojoException, IOException
-	{
-		// Timing
-		final long startTime = System.currentTimeMillis();
-
-		// Input
-		File dir = new File(args[0]);
-
-		// Process
-		parseAllSynsets(dir, consumer);
-
-		// Timing
-		final long endTime = System.currentTimeMillis();
-		psi.println("Total execution time: " + (endTime - startTime) / 1000 + "s");
-	}
-
-	public static void parseAllSynsets(File dir, Consumer<Synset> consumer) throws IOException, ParsePojoException
+	public static void parseAllSynsets(final File dir, final Consumer<Synset> consumer) throws IOException, ParsePojoException
 	{
 		for (final String posName : new String[]{"noun", "verb", "adj", "adv"})
 		{
@@ -54,7 +38,7 @@ public class DataParser
 		}
 	}
 
-	public static void parseSynsets(final File dir, final String posName, Consumer<Synset> consumer) throws ParsePojoException, IOException
+	public static void parseSynsets(final File dir, final String posName, final Consumer<Synset> consumer) throws ParsePojoException, IOException
 	{
 		psi.println("* Synsets " + posName);
 
@@ -124,8 +108,24 @@ public class DataParser
 		}
 	}
 
-	private static Synset parseSynset(String line, boolean isAdj) throws ParsePojoException
+	private static Synset parseSynset(final String line, final boolean isAdj) throws ParsePojoException
 	{
 		return Synset.parseSynset(line, isAdj);
+	}
+
+	public static void main(final String[] args) throws ParsePojoException, IOException
+	{
+		// Timing
+		final long startTime = System.currentTimeMillis();
+
+		// Input
+		File dir = new File(args[0]);
+
+		// Process
+		parseAllSynsets(dir, consumer);
+
+		// Timing
+		final long endTime = System.currentTimeMillis();
+		psi.println("Total execution time: " + (endTime - startTime) / 1000 + "s");
 	}
 }

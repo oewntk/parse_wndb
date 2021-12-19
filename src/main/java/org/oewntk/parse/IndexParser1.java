@@ -20,17 +20,6 @@ import java.io.IOException;
  */
 public class IndexParser1
 {
-	public static void main(String[] args) throws IOException
-	{
-		// Input
-		String dir = args[0];
-		String posName = args[1];
-		String target = args[2];
-
-		// Process
-		read(dir, posName, target);
-	}
-
 	public static void read(final String dir, final String posName, final String target) throws IOException
 	{
 		final File file = new File(dir, "index." + posName);
@@ -58,8 +47,19 @@ public class IndexParser1
 		}
 	}
 
-	private static CoreIndex parseIndexLine(String line) throws ParsePojoException
+	private static CoreIndex parseIndexLine(final String line) throws ParsePojoException
 	{
 		return CoreIndex.parseCoreIndex(line);
+	}
+
+	public static void main(final String[] args) throws IOException
+	{
+		// Input
+		String dir = args[0];
+		String posName = args[1];
+		String target = args[2];
+
+		// Process
+		read(dir, posName, target);
 	}
 }

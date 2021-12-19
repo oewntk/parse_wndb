@@ -4,19 +4,20 @@
 
 package org.oewntk.parse;
 
+import org.oewntk.pojos.MorphMapping;
 import org.oewntk.pojos.ParsePojoException;
-import org.oewntk.pojos.Sense;
+import org.oewntk.pojos.Pos;
 import org.oewntk.utils.Tracing;
 
 import java.io.*;
 import java.util.function.Consumer;
 
 /**
- * Sense Parser (index.sense)
+ * Morph Parser ({noun|verb|adj|adv|}.exc)
  *
  * @author Bernard Bou
  */
-public class SenseParser
+public class MorphParser
 {
 	private static final boolean THROW = false;
 
@@ -25,19 +26,30 @@ public class SenseParser
 	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? Tracing.psErr : Tracing.psNull;
 
 	// Consumer
-	private static final Consumer<Sense> consumer = psi::println;
+	private static final Consumer<MorphMapping> consumer = psi::println;
 
-	public static void parseSenses(final File dir, final Consumer<Sense> consumer) throws IOException, ParsePojoException
+	public static void parseAllMorphs(final File dir, final Consumer<MorphMapping> consumer) throws IOException, ParsePojoException
 	{
-		psi.println("* Senses");
+		// Process for all pos
+		for (final String posName : new String[]{"noun", "verb", "adj", "adv"})
+		{
+			parseMorphs(dir, posName, consumer);
+		}
+	}
+
+	public static void parseMorphs(final File dir, String posName, final Consumer<MorphMapping> consumer) throws IOException, ParsePojoException
+	{
+		psi.println("* Morphs");
+
+		Pos pos = Pos.fromName(posName);
 
 		// iterate on lines
-		final File file = new File(dir, "index.sense");
+		final File file = new File(dir, posName + ".exc");
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), Flags.charSet)))
 		{
 			int lineCount = 0;
 			int parseErrorCount = 0;
-			long senseCount = 0;
+			long morphMappingCount = 0;
 
 			String line;
 			while ((line = reader.readLine()) != null)
@@ -46,9 +58,9 @@ public class SenseParser
 
 				try
 				{
-					Sense sense = Sense.parseSense(line);
-					senseCount++;
-					consumer.accept(sense);
+					MorphMapping morphMapping = MorphMapping.parseMorphMapping(line, pos);
+					morphMappingCount++;
+					consumer.accept(morphMapping);
 				}
 				catch (final ParsePojoException e)
 				{
@@ -62,12 +74,12 @@ public class SenseParser
 			}
 			String format = "%-50s %d%n";
 			psi.printf(format, "lines", lineCount);
-			psi.printf(format, "parse successes", senseCount);
+			psi.printf(format, "parse successes", morphMappingCount);
 			(parseErrorCount > 0 ? pse : psi).printf(format, "parse errors", parseErrorCount);
 		}
 	}
 
-	public static void main(final String[] args) throws IOException, ParsePojoException
+	public static void main(String[] args) throws IOException, ParsePojoException
 	{
 		// Timing
 		final long startTime = System.currentTimeMillis();
@@ -76,7 +88,7 @@ public class SenseParser
 		File dir = new File(args[0]);
 
 		// Process
-		parseSenses(dir, consumer);
+		parseAllMorphs(dir, consumer);
 
 		// Timing
 		final long endTime = System.currentTimeMillis();
