@@ -72,9 +72,9 @@ public class NormalizedString implements Comparable<NormalizedString>, Serializa
 	// O R D E R I N G
 
 	@Override
-	public int compareTo(final NormalizedString other)
+	public int compareTo(final NormalizedString that)
 	{
-		return this.normalized.compareTo(other.normalized);
+		return this.normalized.compareTo(that.normalized);
 	}
 
 	// T O S T R I N G

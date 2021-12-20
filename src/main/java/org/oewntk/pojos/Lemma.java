@@ -94,9 +94,9 @@ public class Lemma /* extends NormalizedString */ implements Comparable<Lemma>, 
 	// O R D E R I N G
 
 	@Override
-	public int compareTo(final Lemma other)
+	public int compareTo(final Lemma that)
 	{
-		return this.lowerCasedNormalized.compareTo(other.lowerCasedNormalized);
+		return this.lowerCasedNormalized.compareTo(that.lowerCasedNormalized);
 	}
 
 	// T O S T R I N G
