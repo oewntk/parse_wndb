@@ -40,7 +40,7 @@ public class IndexParser1
 					catch (ParsePojoException e)
 					{
 						Tracing.psErr.printf("%s cause:%s%n", e.getMessage(), e.getCause());
-						e.printStackTrace();
+						e.printStackTrace(Tracing.psErr);
 					}
 				}
 			}
