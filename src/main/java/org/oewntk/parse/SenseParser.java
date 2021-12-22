@@ -21,15 +21,16 @@ public class SenseParser
 	private static final boolean THROW = false;
 
 	// PrintStreams
+	private static final PrintStream psl = Tracing.psNull;
 	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? Tracing.psInfo : Tracing.psNull;
 	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? Tracing.psErr : Tracing.psNull;
 
 	// Consumer
 	private static final Consumer<Sense> consumer = psi::println;
 
-	public static void parseSenses(final File dir, final Consumer<Sense> consumer) throws IOException, ParsePojoException
+	public static long parseSenses(final File dir, final Consumer<Sense> consumer) throws IOException, ParsePojoException
 	{
-		psi.println("* Senses");
+		psl.println("* Senses");
 
 		// iterate on lines
 		final File file = new File(dir, "index.sense");
@@ -61,9 +62,10 @@ public class SenseParser
 				}
 			}
 			String format = "%-50s %d%n";
-			psi.printf(format, "lines", lineCount);
-			psi.printf(format, "parse successes", senseCount);
-			(parseErrorCount > 0 ? pse : psi).printf(format, "parse errors", parseErrorCount);
+			psl.printf(format, "lines", lineCount);
+			psl.printf(format, "parse successes", senseCount);
+			(parseErrorCount > 0 ? pse : psl).printf(format, "parse errors", parseErrorCount);
+			return senseCount;
 		}
 	}
 
@@ -80,6 +82,6 @@ public class SenseParser
 
 		// Timing
 		final long endTime = System.currentTimeMillis();
-		psi.println("Total execution time: " + (endTime - startTime) / 1000 + "s");
+		psl.println("Total execution time: " + (endTime - startTime) / 1000 + "s");
 	}
 }

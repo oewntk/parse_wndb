@@ -22,6 +22,7 @@ public class IndexParser
 	private static final boolean THROW = false;
 
 	// PrintStreams
+	private static final PrintStream psl = Tracing.psNull;
 	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? Tracing.psInfo : Tracing.psNull;
 	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? Tracing.psErr : Tracing.psNull;
 
@@ -29,27 +30,29 @@ public class IndexParser
 	private static final Consumer<Index> consumer = psi::println;
 	//private static final Consumer<CoreIndex> coreConsumer = psi::println;
 
-	public static void parseAllIndexes(final File dir, final Consumer<Index> consumer) throws IOException, ParsePojoException
+	public static long parseAllIndexes(final File dir, final Consumer<Index> consumer) throws IOException, ParsePojoException
 	{
-		// Process for all pos
+		long count = 0;
 		for (final String posName : new String[]{"noun", "verb", "adj", "adv"})
 		{
-			parseIndexes(dir, posName, consumer);
+			count += parseIndexes(dir, posName, consumer);
 		}
+		return count;
 	}
 
-	public static void parseAllCoreIndexes(final File dir, final Consumer<CoreIndex> consumer) throws IOException, ParsePojoException
+	public static long parseAllCoreIndexes(final File dir, final Consumer<CoreIndex> consumer) throws IOException, ParsePojoException
 	{
-		// Process for all pos
+		long count = 0;
 		for (final String posName : new String[]{"noun", "verb", "adj", "adv"})
 		{
-			parseCoreIndexes(dir, posName, consumer);
+			count += parseCoreIndexes(dir, posName, consumer);
 		}
+		return count;
 	}
 
-	public static void parseIndexes(final File dir, final String posName, final Consumer<Index> consumer) throws IOException, ParsePojoException
+	public static long parseIndexes(final File dir, final String posName, final Consumer<Index> consumer) throws IOException, ParsePojoException
 	{
-		psi.println("* Indexes " + posName);
+		psl.println("* Indexes " + posName);
 
 		// iterate on lines
 		final File file = new File(dir, "index." + posName);
@@ -86,15 +89,16 @@ public class IndexParser
 				}
 			}
 			String format = "%-50s %d%n";
-			psi.printf(format, "lines", nonCommentCount);
-			(parseErrorCount > 0 ? pse : psi).printf(format, "parse successes", indexCount);
-			(parseErrorCount > 0 ? pse : psi).printf(format, "parse errors", parseErrorCount);
+			psl.printf(format, "lines", nonCommentCount);
+			(parseErrorCount > 0 ? pse : psl).printf(format, "parse successes", indexCount);
+			(parseErrorCount > 0 ? pse : psl).printf(format, "parse errors", parseErrorCount);
+			return indexCount;
 		}
 	}
 
-	public static void parseCoreIndexes(final File dir, final String posName, final Consumer<CoreIndex> consumer) throws IOException, ParsePojoException
+	public static long parseCoreIndexes(final File dir, final String posName, final Consumer<CoreIndex> consumer) throws IOException, ParsePojoException
 	{
-		psi.println("* Indexes " + posName);
+		psl.println("* Indexes " + posName);
 
 		// iterate on lines
 		final File file = new File(dir, "index." + posName);
@@ -131,9 +135,10 @@ public class IndexParser
 				}
 			}
 			String format = "%-50s %d%n";
-			psi.printf(format, "lines", nonCommentCount);
-			(parseErrorCount > 0 ? pse : psi).printf(format, "parse successes", indexCount);
-			(parseErrorCount > 0 ? pse : psi).printf(format, "parse errors", parseErrorCount);
+			psl.printf(format, "lines", nonCommentCount);
+			(parseErrorCount > 0 ? pse : psl).printf(format, "parse successes", indexCount);
+			(parseErrorCount > 0 ? pse : psl).printf(format, "parse errors", parseErrorCount);
+			return indexCount;
 		}
 	}
 
@@ -150,6 +155,6 @@ public class IndexParser
 
 		// Timing
 		final long endTime = System.currentTimeMillis();
-		psi.println("Total execution time: " + (endTime - startTime) / 1000 + "s");
+		psl.println("Total execution time: " + (endTime - startTime) / 1000 + "s");
 	}
 }

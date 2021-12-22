@@ -24,23 +24,26 @@ public class DataParser
 	private static final boolean THROW = false;
 
 	// PrintStreams
+	private static final PrintStream psl = Tracing.psNull;
 	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? Tracing.psInfo : Tracing.psNull;
 	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? Tracing.psErr : Tracing.psNull;
 
 	// Consumer
 	private static final Consumer<Synset> consumer = psi::println;
 
-	public static void parseAllSynsets(final File dir, final Consumer<Synset> consumer) throws IOException, ParsePojoException
+	public static long parseAllSynsets(final File dir, final Consumer<Synset> consumer) throws IOException, ParsePojoException
 	{
+		long count = 0;
 		for (final String posName : new String[]{"noun", "verb", "adj", "adv"})
 		{
-			parseSynsets(dir, posName, consumer);
+			count += parseSynsets(dir, posName, consumer);
 		}
+		return count;
 	}
 
-	public static void parseSynsets(final File dir, final String posName, final Consumer<Synset> consumer) throws ParsePojoException, IOException
+	public static long parseSynsets(final File dir, final String posName, final Consumer<Synset> consumer) throws ParsePojoException, IOException
 	{
-		psi.println("* Synsets " + posName);
+		psl.println("* Synsets " + posName);
 
 		final boolean isAdj = posName.equals("adj");
 
@@ -101,10 +104,11 @@ public class DataParser
 				}
 			}
 			String format = "%-50s %d%n";
-			psi.printf(format, "lines", nonCommentCount);
-			psi.printf(format, "parse successes", synsetCount);
-			(offsetErrorCount > 0 ? pse : psi).printf(format, "offset errors", offsetErrorCount);
-			(parseErrorCount > 0 ? pse : psi).printf(format, "parse errors", parseErrorCount);
+			psl.printf(format, "lines", nonCommentCount);
+			psl.printf(format, "parse successes", synsetCount);
+			(offsetErrorCount > 0 ? pse : psl).printf(format, "offset errors", offsetErrorCount);
+			(parseErrorCount > 0 ? pse : psl).printf(format, "parse errors", parseErrorCount);
+			return synsetCount;
 		}
 	}
 
@@ -126,6 +130,6 @@ public class DataParser
 
 		// Timing
 		final long endTime = System.currentTimeMillis();
-		psi.println("Total execution time: " + (endTime - startTime) / 1000 + "s");
+		psl.println("Total execution time: " + (endTime - startTime) / 1000 + "s");
 	}
 }
