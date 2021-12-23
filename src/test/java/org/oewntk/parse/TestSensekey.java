@@ -66,7 +66,7 @@ public class TestSensekey
 		assertEquals(sk1.getWord().toString(), "go to the dogs");
 		assertEquals(sk1.getLemma().toString(), "go to the dogs");
 		assertEquals(sk1.getType(), Type.VERB);
-		assertEquals(sk1.getDomain().getDomain(), "change");
+		assertEquals(sk1.getDomain().getDomain(), "verb.change");
 		assertNull(sk1.getHeadWord());
 		assertEquals(sk1.getHeadLexId(), -1);
 
@@ -75,7 +75,7 @@ public class TestSensekey
 		assertEquals(sk2.getWord().toString(), "half-size");
 		assertEquals(sk2.getLemma().toString(), "half-size");
 		assertEquals(sk2.getType(), Type.ADJSAT);
-		assertEquals(sk2.getDomain().getDomain(), "all");
+		assertEquals(sk2.getDomain().getDomain(), "adj.all");
 		assertEquals(sk2.getHeadWord().toString(), "small");
 		assertEquals(sk2.getHeadLexId(), 0);
 
