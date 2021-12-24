@@ -50,7 +50,7 @@ public class Synset extends CoreSynset
 
 			// copy data from proto
 			final Type type = protoSynset.getType();
-			final LemmaCS[] cslemmas = protoSynset.getCSLemmas();
+			final LemmaCS[] csLemmas = protoSynset.getCSLemmas();
 			final SynsetId synsetId = protoSynset.getId();
 			final Domain domain = protoSynset.getDomain();
 			final Gloss gloss = protoSynset.getGloss();
@@ -76,7 +76,7 @@ public class Synset extends CoreSynset
 			fieldPointer++;
 
 			// lemma set
-			fieldPointer += 2 * cslemmas.length;
+			fieldPointer += 2 * csLemmas.length;
 
 			// relation count
 			final int relationCount = Integer.parseInt(fields[fieldPointer], 10);
@@ -104,7 +104,7 @@ public class Synset extends CoreSynset
 				{
 					final int fromWordIndex = relationSourceTarget >> 8;
 					final int toWordIndex = relationSourceTarget & 0xff;
-					final LemmaCS fromLemma = cslemmas[fromWordIndex - 1];
+					final LemmaCS fromLemma = csLemmas[fromWordIndex - 1];
 					final LemmaRef toLemma = new LemmaRef(toId, toWordIndex);
 					relations[i] = new LexRelation(relationType, synsetId, toId, fromLemma, toLemma);
 				}
@@ -138,7 +138,7 @@ public class Synset extends CoreSynset
 					Lemma[] frameLemmas;
 					if (wordIndex != 0)
 					{
-						frameLemmas = new Lemma[]{cslemmas[wordIndex - 1].lemma};
+						frameLemmas = new Lemma[]{csLemmas[wordIndex - 1].lemma};
 					}
 					else // 0 means all
 					{
@@ -147,7 +147,7 @@ public class Synset extends CoreSynset
 					frames[i] = new VerbFrameRef(frameLemmas, frameId);
 				}
 			}
-			return new Synset(synsetId, cslemmas, type, domain, gloss, relations, frames);
+			return new Synset(synsetId, csLemmas, type, domain, gloss, relations, frames);
 		}
 		catch (Exception e)
 		{

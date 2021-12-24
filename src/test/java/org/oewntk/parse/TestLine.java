@@ -5,7 +5,6 @@ import org.oewntk.pojos.ParsePojoException;
 import org.oewntk.pojos.Synset;
 import org.oewntk.utils.Tracing;
 
-import java.io.OutputStream;
 import java.io.PrintStream;
 
 import static org.junit.Assert.assertNotNull;

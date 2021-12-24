@@ -6,7 +6,6 @@ import org.oewntk.pojos.Sensekey;
 import org.oewntk.pojos.Type;
 import org.oewntk.utils.Tracing;
 
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
