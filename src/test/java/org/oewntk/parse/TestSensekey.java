@@ -37,19 +37,19 @@ public class TestSensekey
 				ps.printf("%s%n", sensekey);
 
 				String[] decoded = Sensekey.decode(sensekey);
-				assertEquals(decoded.length, 6);
-				assertEquals(decoded[0], lemma);
-				assertEquals(decoded[1], String.format("%01d", POS));
-				assertEquals(decoded[2], String.format("%02d", LEXFILE));
-				assertEquals(decoded[3], String.format("%02d", LEXID));
-				assertEquals(decoded[4], head);
+				assertEquals(6, decoded.length);
+				assertEquals(lemma, decoded[0]);
+				assertEquals(String.format("%01d", POS), decoded[1]);
+				assertEquals(String.format("%02d", LEXFILE), decoded[2]);
+				assertEquals(String.format("%02d", LEXID), decoded[3]);
+				assertEquals(head, decoded[4]);
 				if (head.isEmpty())
 				{
-					assertEquals(decoded[5], "");
+					assertEquals("", decoded[5]);
 				}
 				else
 				{
-					assertEquals(decoded[5], String.format("%02d", HEADID));
+					assertEquals(String.format("%02d", HEADID), decoded[5]);
 				}
 			}
 		}
@@ -62,21 +62,21 @@ public class TestSensekey
 
 		Sensekey sk1 = Sensekey.parseSensekey(sensekeys[0]);
 		assertNotNull(sk1);
-		assertEquals(sk1.getWord().toString(), "go to the dogs");
-		assertEquals(sk1.getLemma().toString(), "go to the dogs");
-		assertEquals(sk1.getType(), Type.VERB);
-		assertEquals(sk1.getDomain().getDomain(), "verb.change");
+		assertEquals("go to the dogs", sk1.getWord().toString());
+		assertEquals("go to the dogs", sk1.getLemma().toString());
+		assertEquals(Type.VERB, sk1.getType());
+		assertEquals("verb.change", sk1.getDomain().getDomain());
 		assertNull(sk1.getHeadWord());
-		assertEquals(sk1.getHeadLexId(), -1);
+		assertEquals(-1, sk1.getHeadLexId());
 
 		Sensekey sk2 = Sensekey.parseSensekey(sensekeys[1]);
 		assertNotNull(sk2);
-		assertEquals(sk2.getWord().toString(), "half-size");
-		assertEquals(sk2.getLemma().toString(), "half-size");
-		assertEquals(sk2.getType(), Type.ADJSAT);
-		assertEquals(sk2.getDomain().getDomain(), "adj.all");
-		assertEquals(sk2.getHeadWord().toString(), "small");
-		assertEquals(sk2.getHeadLexId(), 0);
+		assertEquals("half-size", sk2.getWord().toString());
+		assertEquals("half-size", sk2.getLemma().toString());
+		assertEquals(Type.ADJSAT, sk2.getType());
+		assertEquals("adj.all", sk2.getDomain().getDomain());
+		assertEquals("small", sk2.getHeadWord().toString());
+		assertEquals(0, sk2.getHeadLexId());
 
 		for (int i = 2; i < sensekeys.length; i++)
 		{
@@ -93,8 +93,8 @@ public class TestSensekey
 
 		Sensekey sk1 = Sensekey.parseSensekey(sensekey);
 		assertNotNull(sk1);
-		assertEquals(sk1.getWord().toString(), "100%");
-		assertEquals(sk1.getLemma().toString(), "100%");
+		assertEquals("100%", sk1.getWord().toString());
+		assertEquals("100%", sk1.getLemma().toString());
 		ps.println(sk1.getWord().toString());
 	}
 
