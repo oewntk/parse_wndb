@@ -4,15 +4,13 @@
 
 package org.oewntk.parse;
 
-import org.oewntk.pojos.Index;
-import org.oewntk.pojos.ParsePojoException;
-import org.oewntk.pojos.Sense;
-import org.oewntk.pojos.Synset;
+import org.oewntk.pojos.*;
 import org.oewntk.utils.Tracing;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 public class Counter
@@ -24,8 +22,25 @@ public class Counter
 	private long synsetCount;
 	private long senseCount;
 	private long indexCount;
+	private long relationCount;
+	private long synsetRelationCount;
+	private long senseRelationCount;
 
-	private final Consumer<Synset> synsetConsumer = synset -> synsetCount++;
+	private final Consumer<Synset> synsetConsumer = synset -> {
+		synsetCount++;
+		Relation[] relations = synset.getRelations();
+		relationCount += relations.length;
+		Arrays.stream(relations).forEach(r -> {
+			if (r instanceof LexRelation)
+			{
+				senseRelationCount++;
+			}
+			else
+			{
+				synsetRelationCount++;
+			}
+		});
+	};
 	private final Consumer<Sense> senseConsumer = sense -> senseCount++;
 	private final Consumer<Index> indexConsumer = index -> indexCount++;
 
@@ -38,17 +53,20 @@ public class Counter
 		synsetCount = 0;
 		senseCount = 0;
 		indexCount = 0;
+		relationCount = 0;
+		synsetRelationCount = 0;
+		senseRelationCount = 0;
 	}
 
 	public void parseAll() throws IOException, ParsePojoException
 	{
 		long rSynsetCount = DataParser.parseAllSynsets(dir, synsetConsumer);
 		long rIndexCount = IndexParser.parseAllIndexes(dir, indexConsumer);
-		long rSenseCount =  SenseParser.parseSenses(dir, senseConsumer);
+		long rSenseCount = SenseParser.parseSenses(dir, senseConsumer);
 		assert rSynsetCount == synsetCount;
 		assert rSenseCount == senseCount;
 		assert rIndexCount == indexCount;
-		Tracing.psInfo.printf("-----%n%s synsets:%d senses:%d indexes:%d%n%n", dir, synsetCount, senseCount, indexCount);
+		Tracing.psInfo.printf("%s synsets:%d senses:%d indexes:%d relations:%d synset_relations:%d sense_relations:%d%n", dir, synsetCount, senseCount, indexCount, relationCount, synsetRelationCount, senseRelationCount);
 	}
 
 	public static void main(String[] args) throws IOException, ParsePojoException
