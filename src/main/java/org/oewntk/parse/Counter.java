@@ -51,13 +51,16 @@ public class Counter
 		});
 	};
 
+	// Consumers
+
 	private final Consumer<Sense> senseConsumer = sense -> senseCount++;
 
 	private final Consumer<Index> indexConsumer = index -> indexCount++;
 
+	// Source
+
 	private final File dir;
 
-	// Consumers
 	Counter(final File dir)
 	{
 		this.dir = dir;
