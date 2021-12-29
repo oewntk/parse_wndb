@@ -69,6 +69,7 @@ public class RelationParser
 		this.dir = dir;
 	}
 
+	@SuppressWarnings("UnusedReturnValue")
 	public RelationParser parseAllSynsets() throws IOException, ParsePojoException
 	{
 		long count = 0;

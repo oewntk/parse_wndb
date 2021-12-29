@@ -89,6 +89,7 @@ public class Counter
 		return this;
 	}
 
+	@SuppressWarnings("UnusedReturnValue")
 	public Counter reportRelationCounts()
 	{
 		long[] countSum = new long[2];
