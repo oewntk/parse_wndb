@@ -11,11 +11,35 @@ package org.oewntk.pojos;
  */
 public class TagCnt
 {
-	private final int tagCount;
+	public final int tagCount;
 
-	public TagCnt(final int tagCount)
+	public final int senseNum;
+
+	public TagCnt(final int tagCount, final int senseNum)
 	{
 		this.tagCount = tagCount;
+		this.senseNum = senseNum;
+	}
+
+	/**
+	 * Parse tagcount from string
+	 *
+	 * @param str      string
+	 * @param senseNum senseNumber
+	 * @return tag count
+	 * @throws ParsePojoException parse exception
+	 */
+	public static TagCnt parseTagCnt(final String str, int senseNum) throws ParsePojoException
+	{
+		try
+		{
+			final int tagCount = Integer.parseInt(str);
+			return new TagCnt(tagCount, senseNum);
+		}
+		catch (Exception e)
+		{
+			throw new ParsePojoException(e);
+		}
 	}
 
 	/**
@@ -27,20 +51,7 @@ public class TagCnt
 	 */
 	public static TagCnt parseTagCnt(final String str) throws ParsePojoException
 	{
-		try
-		{
-			final int tagCount = Integer.parseInt(str);
-			return new TagCnt(tagCount);
-		}
-		catch (Exception e)
-		{
-			throw new ParsePojoException(e);
-		}
-	}
-
-	public int getTagCount()
-	{
-		return this.tagCount;
+		return parseTagCnt(str, 0);
 	}
 
 	@Override
