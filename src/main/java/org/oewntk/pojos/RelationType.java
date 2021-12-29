@@ -6,6 +6,7 @@ package org.oewntk.pojos;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Relation type
@@ -53,6 +54,35 @@ public enum RelationType
 
 	DOMAIN(";", "domain", false),
 	MEMBER("-", "member", false);
+
+	public static final Set<String> SYNSET_RELATIONS = Set.of( //
+			"hypernym", "hyponym", //
+			"instance_hypernym", "instance_hyponym", //
+			"mero_part", "holo_part", //
+			"mero_member", "holo_member", //
+			"mero_substance", "holo_substance", //
+			"causes", "is_caused_by", //
+			"entails", "is_entailed_by", //
+			"exemplifies", "is_exemplified_by", //
+			"domain_topic", "has_domain_topic", //
+			"domain_region", "has_domain_region", //
+			"attribute", //
+			"similar", //
+			"verb_group", //
+			"also");
+
+	public static final Set<String> SENSE_RELATIONS = Set.of( //
+			"antonym", //
+			"similar",  //
+			"exemplifies", "is_exemplified_by", //
+			"derivation",  //
+			"pertainym",  //
+			"verb_group", //
+			"participle",  //
+			"also",  //
+			"domain_region", "has_domain_region", //
+			"domain_topic", "has_domain_topic", //
+			"other");
 
 	// @formatter:on
 
