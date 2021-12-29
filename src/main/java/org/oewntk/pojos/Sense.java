@@ -42,7 +42,7 @@ public class Sense extends CoreSense
 			final SynsetId synsetId = new SynsetId(type.toPos(), Long.parseLong(fields[1]));
 
 			// parse tag/lexid
-			final TagCnt tagCnt = TagCnt.parseTagCnt(fields[3]);
+			final TagCnt tagCnt = TagCnt.parseTagCnt(fields[3], sensenum);
 
 			return new Sense(synsetId, lemma, sensenum, sensekey, tagCnt);
 		}
