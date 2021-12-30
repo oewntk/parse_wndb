@@ -65,7 +65,12 @@ public class LexRelation extends Relation
 	@Override
 	public String toString()
 	{
-		return this.type.getName() + "-[" + this.fromWord + "]:" + this.toWord;
+		return String.format("%s: %s[%s] -> %s[%d]", this.type.getName(), this.fromSynsetId.toString(), this.fromWord, this.toSynsetId.toString(), this.toWord.getWordNum());
+	}
+
+	public String toString(final String toWord)
+	{
+		return String.format("%s: %s[%s] -> %s[%s]", this.type.getName(), this.fromSynsetId.toString(), this.fromWord, this.toSynsetId.toString(), toWord);
 	}
 
 	public Lemma resolveToWord(final Function<SynsetId, CoreSynset> f)

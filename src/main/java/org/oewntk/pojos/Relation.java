@@ -74,6 +74,6 @@ public class Relation
 	@Override
 	public String toString()
 	{
-		return this.type.getName() + ":" + this.toSynsetId.toString();
+		return String.format("%s: %s -> %s", this.type.getName(), this.fromSynsetId.toString(), this.toSynsetId.toString());
 	}
 }

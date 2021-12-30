@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.RandomAccessFile;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -27,9 +29,12 @@ public class RelationParser
 	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? Tracing.psInfo : Tracing.psNull;
 	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? Tracing.psErr : Tracing.psNull;
 
-	// Consumer
-	//private static final Consumer<Relation> consumer = psi::println;
-	private final Consumer<Relation> consumer = relation -> {
+	private final Map<SynsetId, Synset> synsetsById = new HashMap<>();
+
+	// Consumers
+	private final Consumer<Synset> synsetConsumer = (synset) -> synsetsById.put(synset.getId(), synset);
+
+	private final Consumer<Relation> relationConsumer = (relation) -> {
 
 		String type = relation.type.toString();
 		if (relation.fromSynsetId == null || relation.fromSynsetId.getOffset() == 0L || relation.toSynsetId == null || relation.toSynsetId.getOffset() == 0L)
@@ -60,6 +65,35 @@ public class RelationParser
 		}
 	};
 
+	private final Consumer<LexRelation> lexRelationConsumer = (relation) -> {
+
+		String type = relation.type.toString();
+		if (relation.fromSynsetId == null || relation.fromSynsetId.getOffset() == 0L || relation.toSynsetId == null || relation.toSynsetId.getOffset() == 0L)
+		{
+			throw new IllegalArgumentException(relation.toString());
+		}
+		LemmaRef toWord = relation.getToWord();
+		if (toWord == null || toWord.getSynsetId().getOffset() == 0 || toWord.getWordNum() == 0)
+		{
+			throw new IllegalArgumentException(relation.toString());
+		}
+		if (!RelationType.SENSE_RELATIONS.contains(type))
+		{
+			throw new IllegalArgumentException(relation.toString());
+		}
+		// psi.printf("%-6s %s%n", "sense", relation);
+		String resolvedToWord = resolveToWord(relation);
+		psi.printf("%-6s %s%n", "sense", relation.toString(resolvedToWord));
+	};
+
+	private String resolveToWord(final LexRelation lr)
+	{
+		SynsetId toSynsetId = lr.getToSynsetId();
+		Synset toSynset = synsetsById.get(toSynsetId);
+		LemmaRef toWordRef = lr.getToWord();
+		return toWordRef.resolve(toSynset).toString();
+	}
+
 	// Source
 
 	private final File dir;
@@ -72,15 +106,18 @@ public class RelationParser
 	@SuppressWarnings("UnusedReturnValue")
 	public RelationParser parseAllSynsets() throws IOException, ParsePojoException
 	{
-		long count = 0;
 		for (final String posName : new String[]{"noun", "verb", "adj", "adv"})
 		{
-			count += parseSynsets(dir, posName, consumer);
+			parseSynsets(dir, posName, synsetConsumer, null, null);
+		}
+		for (final String posName : new String[]{"noun", "verb", "adj", "adv"})
+		{
+			parseSynsets(dir, posName, null, null, lexRelationConsumer);
 		}
 		return this;
 	}
 
-	public static long parseSynsets(final File dir, final String posName, final Consumer<Relation> consumer) throws ParsePojoException, IOException
+	public static long parseSynsets(final File dir, final String posName, final Consumer<Synset> synsetConsumer, final Consumer<Relation> relationConsumer, final Consumer<LexRelation> lexRelationConsumer) throws ParsePojoException, IOException
 	{
 		psl.println("* Synsets " + posName);
 
@@ -129,10 +166,25 @@ public class RelationParser
 				try
 				{
 					Synset synset = parseSynset(line, isAdj);
+					if (synsetConsumer != null)
+					{
+						synsetConsumer.accept(synset);
+					}
+					if (relationConsumer == null && lexRelationConsumer == null)
+					{
+						continue;
+					}
 					Relation[] relations = synset.getRelations();
 					for (Relation relation : relations)
 					{
-						consumer.accept(relation);
+						if (relation instanceof LexRelation && lexRelationConsumer != null)
+						{
+							lexRelationConsumer.accept((LexRelation) relation);
+						}
+						else if (relationConsumer != null)
+						{
+							relationConsumer.accept(relation);
+						}
 						relationCount++;
 					}
 				}
