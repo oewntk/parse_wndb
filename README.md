@@ -6,7 +6,7 @@
 
 This library parses WNDB(5WN) files into Plain Old Java Objects. These objects are not a model but come in handy when it comes to building one.
 
-Project [parse](https://github.com/x-englishwordnet/parse)
+Project [parse](https://github.com/oewntk/parse)
 
 ## Command line
 
@@ -46,6 +46,6 @@ If WNHOME20, WNHOME21, WNHOME30, WNHOME31, WNHOMEXX environment variables are de
 
 ## Maven Central
 
-        <groupId>io.github.x-englishwordnet</groupId>
+        <groupId>io.github.oewntk</groupId>
         <artifactId>parse</artifactId>
         <version>2.0.0-SNAPSHOT</version>
