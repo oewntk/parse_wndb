@@ -25,4 +25,4 @@ else
 fi
 
 echo "${INDIR}"
-java -cp oewn-parse.jar org.oewntk.parse.IndexParser1 "${INDIR}" "$2" "$3"
+java -cp oewn-parse_wndb.jar org.oewntk.parse.IndexParser1 "${INDIR}" "$2" "$3"

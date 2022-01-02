@@ -38,4 +38,4 @@ esac
 OFS=$3
 
 echo "${INDIR}"
-java -cp oewn-parse.jar org.oewntk.parse.DataParser1 "${INDIR}" ${POS} "${OFS}"
+java -cp oewn-parse_wndb.jar org.oewntk.parse.DataParser1 "${INDIR}" ${POS} "${OFS}"
