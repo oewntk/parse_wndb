@@ -117,6 +117,7 @@ public class RelationParser
 		return this;
 	}
 
+	@SuppressWarnings("UnusedReturnValue")
 	public static long parseSynsets(final File dir, final String posName, final Consumer<Synset> synsetConsumer, final Consumer<Relation> relationConsumer, final Consumer<LexRelation> lexRelationConsumer) throws ParsePojoException, IOException
 	{
 		psl.println("* Synsets " + posName);
