@@ -8,6 +8,15 @@ public class Sense extends CoreSense
 {
 	public final TagCnt tagCnt;
 
+	/**
+	 * Constructor
+	 *
+	 * @param synsetId      synset id
+	 * @param lemma         lemma
+	 * @param sensePosIndex sense index in pos
+	 * @param sensekey      sensekey
+	 * @param tagCnt        tag count
+	 */
 	public Sense(final SynsetId synsetId, final Lemma lemma, final int sensePosIndex, final Sensekey sensekey, final TagCnt tagCnt)
 	{
 		super(synsetId, lemma, sensePosIndex, sensekey);

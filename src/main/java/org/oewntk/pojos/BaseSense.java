@@ -19,6 +19,13 @@ public class BaseSense
 
 	public final int sensePosIndex;
 
+	/**
+	 * Constructor
+	 *
+	 * @param synsetId      synset id
+	 * @param word          word
+	 * @param sensePosIndex sense index in pos
+	 */
 	protected BaseSense(final SynsetId synsetId, final Lemma word, final int sensePosIndex)
 	{
 		this.lemma = word;
@@ -26,6 +33,15 @@ public class BaseSense
 		this.sensePosIndex = sensePosIndex;
 	}
 
+	/**
+	 * Make sense
+	 *
+	 * @param lemma          lemma
+	 * @param pos            pos
+	 * @param synsetIdString synset id as string
+	 * @param sensePosIndex  sense index in pos
+	 * @return base sense
+	 */
 	public static BaseSense make(final Lemma lemma, final Pos pos, final String synsetIdString, final int sensePosIndex)
 	{
 		return new BaseSense(new SynsetId(pos, Long.parseLong(synsetIdString)), lemma, sensePosIndex);

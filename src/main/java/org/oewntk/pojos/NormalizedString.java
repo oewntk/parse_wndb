@@ -20,16 +20,32 @@ public class NormalizedString implements Comparable<NormalizedString>, Serializa
 
 	protected String normalized;
 
+	/**
+	 * Constructor
+	 *
+	 * @param rawStr raw string
+	 */
 	public NormalizedString(final String rawStr)
 	{
 		this.normalized = normalize(rawStr);
 	}
 
+	/**
+	 * Copy constructor
+	 *
+	 * @param other other normalized string
+	 */
 	protected NormalizedString(final NormalizedString other)
 	{
 		this.normalized = other.normalized;
 	}
 
+	/**
+	 * Normalize
+	 *
+	 * @param rawStr raw string
+	 * @return normalized string
+	 */
 	public static String normalize(final String rawStr)
 	{
 		// convert underscore to space
@@ -40,6 +56,11 @@ public class NormalizedString implements Comparable<NormalizedString>, Serializa
 		return result;
 	}
 
+	/**
+	 * Get normalized string
+	 *
+	 * @return normalized string
+	 */
 	public String getNormalized()
 	{
 		return this.normalized;
@@ -67,7 +88,6 @@ public class NormalizedString implements Comparable<NormalizedString>, Serializa
 	{
 		return Objects.hash(normalized);
 	}
-
 
 	// O R D E R I N G
 

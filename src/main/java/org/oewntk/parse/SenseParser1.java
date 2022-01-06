@@ -20,6 +20,13 @@ import java.io.IOException;
  */
 public class SenseParser1
 {
+	/**
+	 * Read lines for target
+	 *
+	 * @param dir    WNDB dir
+	 * @param target target for lines to contain to be selected
+	 * @throws IOException io exception
+	 */
 	static void read(final String dir, final String target) throws IOException
 	{
 		final File file = new File(dir, "index.sense");
@@ -34,7 +41,7 @@ public class SenseParser1
 					Sense sense;
 					try
 					{
-						sense = parseSense(line);
+						sense = parseSenseLine(line);
 						Tracing.psInfo.println(sense);
 					}
 					catch (ParsePojoException e)
@@ -47,11 +54,24 @@ public class SenseParser1
 		}
 	}
 
-	private static Sense parseSense(final String line) throws ParsePojoException
+	/**
+	 * Parse sense line
+	 *
+	 * @param line line
+	 * @return sense
+	 * @throws ParsePojoException parse pojo exception
+	 */
+	private static Sense parseSenseLine(final String line) throws ParsePojoException
 	{
 		return Sense.parseSense(line);
 	}
 
+	/**
+	 * Main
+	 *
+	 * @param args cmd-line args
+	 * @throws IOException io exception
+	 */
 	public static void main(final String[] args) throws IOException
 	{
 		// Input

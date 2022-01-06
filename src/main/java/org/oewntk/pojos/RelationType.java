@@ -102,6 +102,13 @@ public enum RelationType
 
 	private final boolean recurses;
 
+	/**
+	 * Constructor
+	 *
+	 * @param symbol   pointer symbol
+	 * @param name     name
+	 * @param recurses whether relation can recurse
+	 */
 	RelationType(final String symbol, final String name, final boolean recurses)
 	{
 		this.symbol = symbol;
@@ -126,11 +133,21 @@ public enum RelationType
 		return value;
 	}
 
+	/**
+	 * Get recursion capability
+	 *
+	 * @return recursion capability
+	 */
 	public boolean getRecurses()
 	{
 		return this.recurses;
 	}
 
+	/**
+	 * Get name
+	 *
+	 * @return name
+	 */
 	public String getName()
 	{
 		return this.name;

@@ -19,11 +19,22 @@ public final class Gloss
 {
 	private final String[] splitGloss;
 
+	/**
+	 * Constructor
+	 *
+	 * @param gloss raw gloss
+	 */
 	public Gloss(final String gloss)
 	{
 		this.splitGloss = split(gloss.trim());
 	}
 
+	/**
+	 * Parse gloss into fields
+	 *
+	 * @param gloss gloss
+	 * @return fields
+	 */
 	private String[] split(final String gloss)
 	{
 		final String REGEX = "\"[^\"]*\"";
@@ -72,14 +83,44 @@ public final class Gloss
 		return result;
 	}
 
+	/**
+	 * Get definition
+	 *
+	 * @return definition
+	 */
 	public String getDefinition()
 	{
 		return this.splitGloss[0];
 	}
 
+	/**
+	 * Get samples
+	 *
+	 * @return samples
+	 */
 	public String[] getSamples()
 	{
 		return Arrays.copyOfRange(this.splitGloss, 1, this.splitGloss.length);
+	}
+
+	/**
+	 * Get pretty string
+	 *
+	 * @return pretty string
+	 */
+	public String toPrettyString()
+	{
+		final StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < this.splitGloss.length; i++)
+		{
+			if (i != 0)
+			{
+				sb.append(";");
+				sb.append("\n\t");
+			}
+			sb.append(this.splitGloss[i]);
+		}
+		return sb.toString();
 	}
 
 	@Override
@@ -91,21 +132,6 @@ public final class Gloss
 			if (i != 0)
 			{
 				sb.append(";");
-			}
-			sb.append(this.splitGloss[i]);
-		}
-		return sb.toString();
-	}
-
-	public String toPrettyString()
-	{
-		final StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < this.splitGloss.length; i++)
-		{
-			if (i != 0)
-			{
-				sb.append(";");
-				sb.append("\n\t");
 			}
 			sb.append(this.splitGloss[i]);
 		}

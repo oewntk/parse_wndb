@@ -15,6 +15,12 @@ public class TagCnt
 
 	public final int senseNum;
 
+	/**
+	 * Constructor
+	 *
+	 * @param tagCount tag count
+	 * @param senseNum sense number (index)
+	 */
 	public TagCnt(final int tagCount, final int senseNum)
 	{
 		this.tagCount = tagCount;

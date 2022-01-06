@@ -65,6 +65,13 @@ public enum Domain
 
 	private final Pos pos;
 
+	/**
+	 * Constructor
+	 *
+	 * @param id   num id
+	 * @param name name
+	 * @param pos  pos
+	 */
 	Domain(final int id, final String name, final Pos pos)
 	{
 		this.id = id;
@@ -110,21 +117,41 @@ public enum Domain
 		throw new ParsePojoException("Domain:" + str);
 	}
 
+	/**
+	 * Get num id
+	 *
+	 * @return num id
+	 */
 	public int getId()
 	{
 		return this.id;
 	}
 
+	/**
+	 * Get name
+	 *
+	 * @return name
+	 */
 	public String getName()
 	{
 		return this.name;
 	}
 
+	/**
+	 * get pos
+	 *
+	 * @return pos
+	 */
 	public Pos getPos()
 	{
 		return this.pos;
 	}
 
+	/**
+	 * Get domain name
+	 *
+	 * @return domain name
+	 */
 	public String getDomain()
 	{
 		return this.pos.getName() + '.' + this.name;

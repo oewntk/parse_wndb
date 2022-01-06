@@ -21,13 +21,23 @@ public class SenseParser
 	private static final boolean THROW = false;
 
 	// PrintStreams
+
 	private static final PrintStream psl = Tracing.psNull;
 	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? Tracing.psInfo : Tracing.psNull;
 	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? Tracing.psErr : Tracing.psNull;
 
 	// Consumer
+
 	private static final Consumer<Sense> consumer = psi::println;
 
+	/**
+	 * Parse senses
+	 * @param dir WNDB dir
+	 * @param consumer sense consumer
+	 * @return sense count
+	 * @throws IOException io exception
+	 * @throws ParsePojoException parse pojo exception
+	 */
 	public static long parseSenses(final File dir, final Consumer<Sense> consumer) throws IOException, ParsePojoException
 	{
 		psl.println("* Senses");
@@ -69,6 +79,13 @@ public class SenseParser
 		}
 	}
 
+	/**
+	 * Main
+	 *
+	 * @param args cmd-line args
+	 * @throws ParsePojoException parse pojo exception
+	 * @throws IOException        io exception
+	 */
 	public static void main(final String[] args) throws IOException, ParsePojoException
 	{
 		// Timing

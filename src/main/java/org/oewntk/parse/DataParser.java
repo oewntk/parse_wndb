@@ -24,13 +24,24 @@ public class DataParser
 	private static final boolean THROW = false;
 
 	// PrintStreams
+
 	private static final PrintStream psl = Tracing.psNull;
 	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? Tracing.psInfo : Tracing.psNull;
 	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? Tracing.psErr : Tracing.psNull;
 
 	// Consumer
+
 	private static final Consumer<Synset> consumer = psi::println;
 
+	/**
+	 * Parse all synsets
+	 *
+	 * @param dir      WNDB dir
+	 * @param consumer synset consumer
+	 * @return synset count
+	 * @throws IOException        io exception
+	 * @throws ParsePojoException parse pojo exception
+	 */
 	public static long parseAllSynsets(final File dir, final Consumer<Synset> consumer) throws IOException, ParsePojoException
 	{
 		long count = 0;
@@ -41,6 +52,16 @@ public class DataParser
 		return count;
 	}
 
+	/**
+	 * Parse synsets
+	 *
+	 * @param dir      WNDB dir
+	 * @param posName  pos
+	 * @param consumer synset consumer
+	 * @return synset count
+	 * @throws ParsePojoException parse pojo exception
+	 * @throws IOException        io exception
+	 */
 	public static long parseSynsets(final File dir, final String posName, final Consumer<Synset> consumer) throws ParsePojoException, IOException
 	{
 		psl.println("* Synsets " + posName);
@@ -89,7 +110,7 @@ public class DataParser
 				// read
 				try
 				{
-					Synset synset = parseSynset(line, isAdj);
+					Synset synset = parseSynsetLine(line, isAdj);
 					synsetCount++;
 					consumer.accept(synset);
 				}
@@ -112,11 +133,26 @@ public class DataParser
 		}
 	}
 
-	private static Synset parseSynset(final String line, final boolean isAdj) throws ParsePojoException
+	/**
+	 * Parse line
+	 *
+	 * @param line  line
+	 * @param isAdj whether the pos is adj
+	 * @return synset
+	 * @throws ParsePojoException parse pojo exception
+	 */
+	private static Synset parseSynsetLine(final String line, final boolean isAdj) throws ParsePojoException
 	{
-		return Synset.parseSynset(line, isAdj);
+		return Synset.parseSynsetLine(line, isAdj);
 	}
 
+	/**
+	 * Main
+	 *
+	 * @param args cmd-line args
+	 * @throws ParsePojoException parse pojo exception
+	 * @throws IOException        io exception
+	 */
 	public static void main(final String[] args) throws ParsePojoException, IOException
 	{
 		// Timing

@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * Synset Parser data.{noun|verb|adj|adv}
+ * Synset relation parser data.{noun|verb|adj|adv}
  *
  * @author Bernard Bou
  */
@@ -25,15 +25,28 @@ public class RelationParser
 	private static final boolean THROW = false;
 
 	// PrintStreams
+
 	private static final PrintStream psl = Tracing.psInfo;
 	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? Tracing.psInfo : Tracing.psNull;
 	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? Tracing.psErr : Tracing.psNull;
 
+	// Maps
+
+	/**
+	 * Synset by id map
+	 */
 	private final Map<SynsetId, Synset> synsetsById = new HashMap<>();
 
 	// Consumers
+
+	/**
+	 * Synset consumer
+	 */
 	private final Consumer<Synset> synsetConsumer = (synset) -> synsetsById.put(synset.getId(), synset);
 
+	/**
+	 * Semantic relation consumer
+	 */
 	private final Consumer<Relation> relationConsumer = (relation) -> {
 
 		String type = relation.type.toString();
@@ -65,6 +78,9 @@ public class RelationParser
 		}
 	};
 
+	/**
+	 * Lexical relation consumer
+	 */
 	private final Consumer<LexRelation> lexRelationConsumer = (relation) -> {
 
 		String type = relation.type.toString();
@@ -86,37 +102,58 @@ public class RelationParser
 		psi.printf("%-6s %s%n", "sense", relation.toString(resolvedToWord));
 	};
 
-	private String resolveToWord(final LexRelation lr)
-	{
-		SynsetId toSynsetId = lr.getToSynsetId();
-		Synset toSynset = synsetsById.get(toSynsetId);
-		LemmaRef toWordRef = lr.getToWord();
-		return toWordRef.resolve(toSynset).toString();
-	}
-
 	// Source
 
+	/**
+	 * WNDB source dir
+	 */
 	private final File dir;
 
-	RelationParser(final File dir)
+	/**
+	 * Constructor
+	 *
+	 * @param dir WNDB dir
+	 */
+	public RelationParser(final File dir)
 	{
 		this.dir = dir;
 	}
 
+	/**
+	 * Parse all synsets
+	 *
+	 * @return this
+	 * @throws IOException        io exception
+	 * @throws ParsePojoException parse pojo exception
+	 */
 	@SuppressWarnings("UnusedReturnValue")
 	public RelationParser parseAllSynsets() throws IOException, ParsePojoException
 	{
+		// make map for resolution
 		for (final String posName : new String[]{"noun", "verb", "adj", "adv"})
 		{
 			parseSynsets(dir, posName, synsetConsumer, null, null);
 		}
+		// consume relations
 		for (final String posName : new String[]{"noun", "verb", "adj", "adv"})
 		{
-			parseSynsets(dir, posName, null, null, lexRelationConsumer);
+			parseSynsets(dir, posName, null, relationConsumer, lexRelationConsumer);
 		}
 		return this;
 	}
 
+	/**
+	 * Parse synsets
+	 *
+	 * @param dir                 WNDB dir
+	 * @param posName             pos
+	 * @param synsetConsumer      synset consumer
+	 * @param relationConsumer    relation consumer
+	 * @param lexRelationConsumer lex relation consumer
+	 * @return relation count
+	 * @throws ParsePojoException parse pojo exception
+	 * @throws IOException        io exception
+	 */
 	@SuppressWarnings("UnusedReturnValue")
 	public static long parseSynsets(final File dir, final String posName, final Consumer<Synset> synsetConsumer, final Consumer<Relation> relationConsumer, final Consumer<LexRelation> lexRelationConsumer) throws ParsePojoException, IOException
 	{
@@ -166,7 +203,7 @@ public class RelationParser
 				// read
 				try
 				{
-					Synset synset = parseSynset(line, isAdj);
+					Synset synset = parseSynsetLine(line, isAdj);
 					if (synsetConsumer != null)
 					{
 						synsetConsumer.accept(synset);
@@ -208,11 +245,40 @@ public class RelationParser
 		}
 	}
 
-	private static Synset parseSynset(final String line, final boolean isAdj) throws ParsePojoException
+	/**
+	 * Parse synset line
+	 *
+	 * @param line  line
+	 * @param isAdj whether adjectives are being processed
+	 * @return synset
+	 * @throws ParsePojoException parse pojo exception
+	 */
+	private static Synset parseSynsetLine(final String line, final boolean isAdj) throws ParsePojoException
 	{
-		return Synset.parseSynset(line, isAdj);
+		return Synset.parseSynsetLine(line, isAdj);
 	}
 
+	/**
+	 * Resolve lexical relation to target word
+	 *
+	 * @param lr lexical relation
+	 * @return resolve target word
+	 */
+	private String resolveToWord(final LexRelation lr)
+	{
+		SynsetId toSynsetId = lr.getToSynsetId();
+		Synset toSynset = synsetsById.get(toSynsetId);
+		LemmaRef toWordRef = lr.getToWord();
+		return toWordRef.resolve(toSynset).toString();
+	}
+
+	/**
+	 * Main
+	 *
+	 * @param args cmd-line args
+	 * @throws ParsePojoException parse pojo exception
+	 * @throws IOException        io exception
+	 */
 	public static void main(final String[] args) throws ParsePojoException, IOException
 	{
 		// Timing

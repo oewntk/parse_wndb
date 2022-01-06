@@ -22,14 +22,24 @@ public class IndexParser
 	private static final boolean THROW = false;
 
 	// PrintStreams
+
 	private static final PrintStream psl = Tracing.psNull;
 	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? Tracing.psInfo : Tracing.psNull;
 	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? Tracing.psErr : Tracing.psNull;
 
 	// Consumer
-	private static final Consumer<Index> consumer = psi::println;
-	//private static final Consumer<CoreIndex> coreConsumer = psi::println;
 
+	private static final Consumer<Index> consumer = psi::println;
+
+	/**
+	 * Parse all indexes
+	 *
+	 * @param dir      WNDB dir
+	 * @param consumer index consumer
+	 * @return index count
+	 * @throws IOException        io exception
+	 * @throws ParsePojoException parse pojo exception
+	 */
 	public static long parseAllIndexes(final File dir, final Consumer<Index> consumer) throws IOException, ParsePojoException
 	{
 		long count = 0;
@@ -40,6 +50,15 @@ public class IndexParser
 		return count;
 	}
 
+	/**
+	 * Parse all core indexes
+	 *
+	 * @param dir      WNDB dir
+	 * @param consumer core index consumer
+	 * @return index count
+	 * @throws IOException        io exception
+	 * @throws ParsePojoException parse pojo exception
+	 */
 	public static long parseAllCoreIndexes(final File dir, final Consumer<CoreIndex> consumer) throws IOException, ParsePojoException
 	{
 		long count = 0;
@@ -50,6 +69,16 @@ public class IndexParser
 		return count;
 	}
 
+	/**
+	 * Parse indexes
+	 *
+	 * @param dir      WNDB dir
+	 * @param posName  pos
+	 * @param consumer index consumer
+	 * @return index count
+	 * @throws IOException        io exception
+	 * @throws ParsePojoException parse pojo exception
+	 */
 	public static long parseIndexes(final File dir, final String posName, final Consumer<Index> consumer) throws IOException, ParsePojoException
 	{
 		psl.println("* Indexes " + posName);
@@ -96,6 +125,16 @@ public class IndexParser
 		}
 	}
 
+	/**
+	 * Parse core indexes
+	 *
+	 * @param dir      WNDB dir
+	 * @param posName  pos
+	 * @param consumer core index consumer
+	 * @return index count
+	 * @throws IOException        io exception
+	 * @throws ParsePojoException parse pojo exception
+	 */
 	public static long parseCoreIndexes(final File dir, final String posName, final Consumer<CoreIndex> consumer) throws IOException, ParsePojoException
 	{
 		psl.println("* Indexes " + posName);
@@ -142,6 +181,13 @@ public class IndexParser
 		}
 	}
 
+	/**
+	 * Main
+	 *
+	 * @param args cmd-line args
+	 * @throws ParsePojoException parse pojo exception
+	 * @throws IOException        io exception
+	 */
 	public static void main(final String[] args) throws IOException, ParsePojoException
 	{
 		// Timing

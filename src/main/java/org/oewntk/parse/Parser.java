@@ -15,17 +15,45 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.function.Consumer;
 
+/**
+ * Parser
+ */
 public class Parser
 {
-
 	// PrintStreams
+
 	private static final PrintStream psi = !System.getProperties().containsKey("SILENT") ? Tracing.psInfo : Tracing.psNull;
 
 	// Consumers
+
 	private static final Consumer<Synset> synsetConsumer = psi::println;
 	private static final Consumer<Sense> senseConsumer = psi::println;
 	private static final Consumer<Index> indexConsumer = psi::println;
 
+	/**
+	 * Parse all
+	 *
+	 * @param dir            WNDB dir
+	 * @param synsetConsumer synset consumer
+	 * @param senseConsumer  sense  consumer
+	 * @param indexConsumer  index  consumer
+	 * @throws IOException        io exception
+	 * @throws ParsePojoException parse pojo exception
+	 */
+	public static void parseAll(final File dir, final Consumer<Synset> synsetConsumer, final Consumer<Sense> senseConsumer, final Consumer<Index> indexConsumer) throws IOException, ParsePojoException
+	{
+		DataParser.parseAllSynsets(dir, synsetConsumer);
+		IndexParser.parseAllIndexes(dir, indexConsumer);
+		SenseParser.parseSenses(dir, senseConsumer);
+	}
+
+	/**
+	 * Main
+	 *
+	 * @param args cmd-line args
+	 * @throws ParsePojoException parse pojo exception
+	 * @throws IOException        io exception
+	 */
 	public static void main(String[] args) throws IOException, ParsePojoException
 	{
 		// Timing
@@ -38,12 +66,5 @@ public class Parser
 		// Timing
 		final long endTime = System.currentTimeMillis();
 		psi.println("Total execution time: " + (endTime - startTime) / 1000 + "s");
-	}
-
-	public static void parseAll(final File dir, final Consumer<Synset> synsetConsumer, final Consumer<Sense> senseConsumer, final Consumer<Index> indexConsumer) throws IOException, ParsePojoException
-	{
-		DataParser.parseAllSynsets(dir, synsetConsumer);
-		IndexParser.parseAllIndexes(dir, indexConsumer);
-		SenseParser.parseSenses(dir, senseConsumer);
 	}
 }

@@ -41,7 +41,7 @@ public class Synset extends CoreSynset
 	 * @return synset
 	 * @throws ParsePojoException parse exception
 	 */
-	public static Synset parseSynset(final String line, final boolean isAdj) throws ParsePojoException
+	public static Synset parseSynsetLine(final String line, final boolean isAdj) throws ParsePojoException
 	{
 		try
 		{
@@ -155,11 +155,21 @@ public class Synset extends CoreSynset
 		}
 	}
 
+	/**
+	 * Get relations
+	 *
+	 * @return relations
+	 */
 	public Relation[] getRelations()
 	{
 		return this.relations;
 	}
 
+	/**
+	 * Get verb frames
+	 *
+	 * @return verb frames
+	 */
 	public VerbFrameRef[] getVerbFrames()
 	{
 		return this.verbFrameRefs;
@@ -199,6 +209,11 @@ public class Synset extends CoreSynset
 		return sb.toString();
 	}
 
+	/**
+	 * Pretty string
+	 *
+	 * @return pretty string
+	 */
 	public String toPrettyString()
 	{
 		final StringBuilder sb = new StringBuilder();

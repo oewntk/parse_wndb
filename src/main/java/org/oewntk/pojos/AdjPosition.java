@@ -72,11 +72,21 @@ public enum AdjPosition
 		throw new ParsePojoException("AdjPosition:" + name);
 	}
 
+	/**
+	 * Get id
+	 *
+	 * @return id
+	 */
 	public String getId()
 	{
 		return this.id;
 	}
 
+	/**
+	 * Get description
+	 *
+	 * @return description
+	 */
 	public String getDescription()
 	{
 		return this.description;

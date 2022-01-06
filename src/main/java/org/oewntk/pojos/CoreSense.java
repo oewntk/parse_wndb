@@ -13,6 +13,14 @@ public class CoreSense extends BaseSense
 {
 	public final Sensekey sensekey;
 
+	/**
+	 * Core sense
+	 *
+	 * @param synsetId      synset id
+	 * @param lemma         lemma
+	 * @param sensePosIndex sense index in pos
+	 * @param sensekey      sensekey
+	 */
 	public CoreSense(final SynsetId synsetId, final Lemma lemma, final int sensePosIndex, final Sensekey sensekey)
 	{
 		super(synsetId, lemma, sensePosIndex);

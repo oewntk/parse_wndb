@@ -22,6 +22,13 @@ public enum Pos
 
 	private final String description;
 
+	/**
+	 * Constructor
+	 *
+	 * @param id          character id
+	 * @param name        name
+	 * @param description description
+	 */
 	Pos(final char id, final String name, final String description)
 	{
 		assert id == 'n' || id == 'v' || id == 'a' || id == 'r';
@@ -30,16 +37,31 @@ public enum Pos
 		this.description = description;
 	}
 
+	/**
+	 * Get char id
+	 *
+	 * @return char id
+	 */
 	public char toChar()
 	{
 		return this.id;
 	}
 
+	/**
+	 * Get name
+	 *
+	 * @return name
+	 */
 	public String getName()
 	{
 		return this.name;
 	}
 
+	/**
+	 * Get description
+	 *
+	 * @return description
+	 */
 	public String getDescription()
 	{
 		return this.description;

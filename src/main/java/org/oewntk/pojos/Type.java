@@ -25,6 +25,14 @@ public enum Type
 
 	private final Pos pos;
 
+	/**
+	 * Constructor
+	 *
+	 * @param id          char id
+	 * @param name        name
+	 * @param description description
+	 * @param pos         pos
+	 */
 	Type(final char id, final String name, final String description, final Pos pos)
 	{
 		assert id == 'n' || id == 'v' || id == 'a' || id == 'r' || id == 's';
@@ -34,21 +42,41 @@ public enum Type
 		this.pos = pos;
 	}
 
+	/**
+	 * Get char id
+	 *
+	 * @return char id
+	 */
 	public char toChar()
 	{
 		return this.id;
 	}
 
+	/**
+	 * Get name
+	 *
+	 * @return name
+	 */
 	public String getName()
 	{
 		return this.name;
 	}
 
+	/**
+	 * Get description
+	 *
+	 * @return description
+	 */
 	public String getDescription()
 	{
 		return this.description;
 	}
 
+	/**
+	 * Get pos
+	 *
+	 * @return pos
+	 */
 	public Pos toPos()
 	{
 		return this.pos;
@@ -107,6 +135,11 @@ public enum Type
 		return null;
 	}
 
+	/**
+	 * Whether this synset has adj type
+	 *
+	 * @return whether this synset has adj type
+	 */
 	public boolean isAdj()
 	{
 		return this.equals(Type.ADJHEAD) || this.equals(Type.ADJSAT);

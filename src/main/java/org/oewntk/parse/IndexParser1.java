@@ -20,6 +20,14 @@ import java.io.IOException;
  */
 public class IndexParser1
 {
+	/**
+	 * Read lines for target
+	 *
+	 * @param dir     WNDB dir
+	 * @param posName pos
+	 * @param target  target for line to include to be selected
+	 * @throws IOException io exception
+	 */
 	public static void read(final String dir, final String posName, final String target) throws IOException
 	{
 		final File file = new File(dir, "index." + posName);
@@ -47,11 +55,24 @@ public class IndexParser1
 		}
 	}
 
+	/**
+	 * Parse index line
+	 *
+	 * @param line line
+	 * @return core index
+	 * @throws ParsePojoException parse pojo exception
+	 */
 	private static CoreIndex parseIndexLine(final String line) throws ParsePojoException
 	{
 		return CoreIndex.parseCoreIndex(line);
 	}
 
+	/**
+	 * Main
+	 *
+	 * @param args cmd-line args
+	 * @throws IOException io exception
+	 */
 	public static void main(final String[] args) throws IOException
 	{
 		// Input

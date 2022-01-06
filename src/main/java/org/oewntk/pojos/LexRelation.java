@@ -18,6 +18,15 @@ public class LexRelation extends Relation
 
 	private final LemmaRef toWord;
 
+	/**
+	 * Lex relation
+	 *
+	 * @param type         relation type
+	 * @param fromSynsetId source synset id
+	 * @param toSynsetId   target synset id
+	 * @param fromWord     source word
+	 * @param toWord       target word
+	 */
 	public LexRelation(final RelationType type, final SynsetId fromSynsetId, final SynsetId toSynsetId, final LemmaCS fromWord, final LemmaRef toWord)
 	{
 		super(type, fromSynsetId, toSynsetId);
@@ -25,14 +34,36 @@ public class LexRelation extends Relation
 		this.toWord = toWord;
 	}
 
+	/**
+	 * Get (case-sensitive) source word
+	 *
+	 * @return (case - sensitive) source word
+	 */
 	public LemmaCS getFromWord()
 	{
 		return fromWord;
 	}
 
+	/**
+	 * Get target word reference
+	 *
+	 * @return target word (unresolved) reference
+	 */
 	public LemmaRef getToWord()
 	{
 		return toWord;
+	}
+
+	/**
+	 * Resolve reference
+	 *
+	 * @param resolver resolver function
+	 * @return resolved word
+	 */
+
+	public Lemma resolveToWord(final Function<SynsetId, CoreSynset> resolver)
+	{
+		return this.toWord.resolve(resolver);
 	}
 
 	// I D E N T I T Y
@@ -71,10 +102,5 @@ public class LexRelation extends Relation
 	public String toString(final String toWord)
 	{
 		return String.format("%s: %s[%s] -> %s[%s]", this.type.getName(), this.fromSynsetId.toString(), this.fromWord, this.toSynsetId.toString(), toWord);
-	}
-
-	public Lemma resolveToWord(final Function<SynsetId, CoreSynset> f)
-	{
-		return this.toWord.resolve(f);
 	}
 }

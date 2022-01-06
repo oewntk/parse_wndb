@@ -15,6 +15,12 @@ public class VerbFrameRef
 
 	public final Lemma[] lemmas;
 
+	/**
+	 * Verb frame
+	 *
+	 * @param lemmas  lemmas
+	 * @param frameId frame id
+	 */
 	public VerbFrameRef(final Lemma[] lemmas, final int frameId)
 	{
 		this.lemmas = lemmas;

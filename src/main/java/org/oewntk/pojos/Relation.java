@@ -33,16 +33,31 @@ public class Relation
 		this.toSynsetId = toSynsetId;
 	}
 
+	/**
+	 * Get relation type
+	 *
+	 * @return relation type
+	 */
 	public RelationType getType()
 	{
 		return type;
 	}
 
+	/**
+	 * Get source synset id
+	 *
+	 * @return source synset id
+	 */
 	public SynsetId getFromSynsetId()
 	{
 		return fromSynsetId;
 	}
 
+	/**
+	 * Get target synset id
+	 *
+	 * @return target synset id
+	 */
 	public SynsetId getToSynsetId()
 	{
 		return toSynsetId;

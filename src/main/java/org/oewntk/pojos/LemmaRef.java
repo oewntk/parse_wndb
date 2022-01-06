@@ -36,14 +36,47 @@ public class LemmaRef
 		this.wordNum = wordNum;
 	}
 
+	/**
+	 * Get synset id
+	 *
+	 * @return synset id
+	 */
 	public SynsetId getSynsetId()
 	{
 		return synsetId;
 	}
 
+	/**
+	 * Get word num
+	 *
+	 * @return word num
+	 */
 	public int getWordNum()
 	{
 		return wordNum;
+	}
+
+	/**
+	 * Dereference / Resolve
+	 *
+	 * @param f functions that when applied to synsetId yields synset
+	 * @return lemma referred to by reference
+	 */
+	public Lemma resolve(final Function<SynsetId, CoreSynset> f)
+	{
+		final CoreSynset synset = f.apply(this.synsetId);
+		return synset.getCSLemmas()[this.wordNum - 1].lemma;
+	}
+
+	/**
+	 * Dereference / Resolve
+	 *
+	 * @param synset synset
+	 * @return lemma referred to by reference
+	 */
+	public Lemma resolve(final CoreSynset synset)
+	{
+		return synset.getCSLemmas()[this.wordNum - 1].lemma;
 	}
 
 	// I D E N T I T Y
@@ -73,28 +106,5 @@ public class LemmaRef
 	public String toString()
 	{
 		return this.synsetId + "[" + this.wordNum + "]";
-	}
-
-	/**
-	 * Dereference / Resolve
-	 *
-	 * @param f functions that when applied to synsetId yields synset
-	 * @return lemma referred to by reference
-	 */
-	public Lemma resolve(final Function<SynsetId, CoreSynset> f)
-	{
-		final CoreSynset synset = f.apply(this.synsetId);
-		return synset.getCSLemmas()[this.wordNum - 1].lemma;
-	}
-
-	/**
-	 * Dereference / Resolve
-	 *
-	 * @param synset synset
-	 * @return lemma referred to by reference
-	 */
-	public Lemma resolve(final CoreSynset synset)
-	{
-		return synset.getCSLemmas()[this.wordNum - 1].lemma;
 	}
 }

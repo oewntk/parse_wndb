@@ -10,6 +10,15 @@ public class Index extends CoreIndex
 
 	final TagCnt tagCnt;
 
+	/**
+	 * Constructor
+	 *
+	 * @param lemma         lemma
+	 * @param pos           pos
+	 * @param senses        senses
+	 * @param relationTypes relation types
+	 * @param tagCnt        tag count
+	 */
 	public Index(final Lemma lemma, final Pos pos, final BaseSense[] senses, final RelationType[] relationTypes, final TagCnt tagCnt)
 	{
 		super(lemma, pos, senses);

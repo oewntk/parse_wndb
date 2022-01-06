@@ -17,11 +17,19 @@ public class LemmaCS
 
 	public final NormalizedString cased;
 
+	/**
+	 * Constructor
+	 *
+	 * @param lemma lemma
+	 * @param cased cased form
+	 */
 	public LemmaCS(final Lemma lemma, final NormalizedString cased)
 	{
 		this.lemma = lemma;
 		this.cased = cased;
 	}
+
+	// I D E N T I T Y
 
 	@Override
 	public boolean equals(final Object o)

@@ -4,6 +4,9 @@
 
 package org.oewntk.pojos;
 
+/**
+ * Exception raised when Pojo object can't be parsed
+ */
 public class ParsePojoException extends Exception
 {
 	private static final long serialVersionUID = 1L;

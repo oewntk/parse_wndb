@@ -28,7 +28,7 @@ public class TestLine
 		{
 			ps.println(line);
 			assertNotNull(line);
-			Synset synset = Synset.parseSynset(line, false);
+			Synset synset = Synset.parseSynsetLine(line, false);
 			assertNotNull(synset);
 		}
 	}

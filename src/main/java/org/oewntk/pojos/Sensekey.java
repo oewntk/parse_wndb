@@ -130,41 +130,81 @@ public class Sensekey
 		return fields;
 	}
 
+	/**
+	 * Get domain
+	 *
+	 * @return domain
+	 */
 	public Domain getDomain()
 	{
 		return this.domain;
 	}
 
+	/**
+	 * Get normalized word
+	 *
+	 * @return normalized word
+	 */
 	public NormalizedString getWord()
 	{
 		return this.word;
 	}
 
+	/**
+	 * Get lemma
+	 *
+	 * @return lemma
+	 */
 	public Lemma getLemma()
 	{
 		return new Lemma(this.word);
 	}
 
+	/**
+	 * Get lex id
+	 *
+	 * @return lexid
+	 */
 	public int getLexId()
 	{
 		return this.lexId;
 	}
 
+	/**
+	 * Get type
+	 *
+	 * @return type
+	 */
 	public Type getType()
 	{
 		return this.type;
 	}
 
+	/**
+	 * Get key
+	 *
+	 * @return key
+	 */
 	public String getKey()
 	{
 		return this.key;
 	}
 
+	/**
+	 * Get head word
+	 *
+	 * @return head word
+	 */
 	public NormalizedString getHeadWord()
 	{
 		return this.headWord;
 	}
 
+	/**
+	 * Get head lexid
+	 *
+	 * @return head lexid
+	 */
 	public int getHeadLexId()
 	{
 		return this.headLexId;
@@ -199,6 +239,11 @@ public class Sensekey
 		return this.key;
 	}
 
+	/**
+	 * Get parsed sensekey string
+	 *
+	 * @return parsed sensekey string
+	 */
 	public String toParsedString()
 	{
 		return "word=" + this.word + " lexid=" + this.lexId + " domain=" + this.domain + " type=" + this.type;

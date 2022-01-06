@@ -22,12 +22,22 @@ public class MorphParser
 	private static final boolean THROW = false;
 
 	// PrintStreams
+
 	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? Tracing.psInfo : Tracing.psNull;
 	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? Tracing.psErr : Tracing.psNull;
 
 	// Consumer
+
 	private static final Consumer<MorphMapping> consumer = psi::println;
 
+	/**
+	 * Parse morph mappings
+	 *
+	 * @param dir      WNDB dir
+	 * @param consumer morphmapping consumer
+	 * @throws IOException        io exception
+	 * @throws ParsePojoException parse pojo exception
+	 */
 	public static void parseAllMorphs(final File dir, final Consumer<MorphMapping> consumer) throws IOException, ParsePojoException
 	{
 		// Process for all pos
@@ -37,6 +47,15 @@ public class MorphParser
 		}
 	}
 
+	/**
+	 * Parse morph mappings
+	 *
+	 * @param dir      WNDB dir
+	 * @param posName  pos
+	 * @param consumer morphmapping consumer
+	 * @throws IOException        io exception
+	 * @throws ParsePojoException parse pojo exception
+	 */
 	public static void parseMorphs(final File dir, String posName, final Consumer<MorphMapping> consumer) throws IOException, ParsePojoException
 	{
 		psi.println("* Morphs");
@@ -79,6 +98,13 @@ public class MorphParser
 		}
 	}
 
+	/**
+	 * Main
+	 *
+	 * @param args cmd-line args
+	 * @throws ParsePojoException parse pojo exception
+	 * @throws IOException        io exception
+	 */
 	public static void main(String[] args) throws IOException, ParsePojoException
 	{
 		// Timing

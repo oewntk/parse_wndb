@@ -19,6 +19,46 @@ import java.io.RandomAccessFile;
  */
 public class DataParser1
 {
+	/**
+	 * Read line at given offset
+	 *
+	 * @param dir        WNDB dir
+	 * @param posName    pos
+	 * @param fileOffset file offset
+	 * @return line
+	 * @throws IOException io exception
+	 */
+	public static String read(final String dir, final String posName, final long fileOffset) throws IOException
+	{
+		final File file = new File(dir, "data." + posName);
+		try (final RandomAccessFile raFile = new RandomAccessFile(file, "r"))
+		{
+			raFile.seek(fileOffset);
+			String rawString = raFile.readLine();
+			return new String(rawString.getBytes(Flags.charSet));
+		}
+	}
+
+	/**
+	 * Parse synset from line
+	 *
+	 * @param line  line
+	 * @param isAdj whether adjs are being processed
+	 * @return synset
+	 * @throws ParsePojoException parse pojo exception
+	 */
+	public static Synset parseSynset(String line, boolean isAdj) throws ParsePojoException
+	{
+		return Synset.parseSynsetLine(line, isAdj);
+	}
+
+	/**
+	 * Main
+	 *
+	 * @param args cmd-line args
+	 * @throws ParsePojoException parse pojo exception
+	 * @throws IOException        io exception
+	 */
 	public static void main(String[] args) throws IOException, ParsePojoException
 	{
 		// Input
@@ -32,21 +72,5 @@ public class DataParser1
 		Tracing.psInfo.println(line);
 		Synset synset = parseSynset(line, isAdj);
 		Tracing.psInfo.println(synset.toPrettyString());
-	}
-
-	public static String read(final String dir, final String posName, final long fileOffset) throws IOException
-	{
-		final File file = new File(dir, "data." + posName);
-		try (final RandomAccessFile raFile = new RandomAccessFile(file, "r"))
-		{
-			raFile.seek(fileOffset);
-			String rawString = raFile.readLine();
-			return new String(rawString.getBytes(Flags.charSet));
-		}
-	}
-
-	public static Synset parseSynset(String line, boolean isAdj) throws ParsePojoException
-	{
-		return Synset.parseSynset(line, isAdj);
 	}
 }

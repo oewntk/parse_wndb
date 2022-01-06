@@ -20,6 +20,13 @@ public class CoreIndex
 
 	public final BaseSense[] senses;
 
+	/**
+	 * Constructor
+	 *
+	 * @param lemma  lemma
+	 * @param pos    pos
+	 * @param senses senses
+	 */
 	protected CoreIndex(final Lemma lemma, final Pos pos, final BaseSense[] senses)
 	{
 		this.lemma = lemma;

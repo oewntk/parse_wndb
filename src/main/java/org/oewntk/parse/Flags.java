@@ -7,6 +7,9 @@ package org.oewntk.parse;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Flags
+ */
 public class Flags
 {
 	/**

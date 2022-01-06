@@ -177,16 +177,31 @@ public class CoreSynset
 		}
 	}
 
+	/**
+	 * Get synset id
+	 *
+	 * @return synset id
+	 */
 	public SynsetId getId()
 	{
 		return this.synsetId;
 	}
 
+	/**
+	 * Get case-sensitive lemma
+	 *
+	 * @return case-sensitive lemma
+	 */
 	public LemmaCS[] getCSLemmas()
 	{
 		return this.lemmas;
 	}
 
+	/**
+	 * Get lemmas
+	 *
+	 * @return lemmas
+	 */
 	public Lemma[] getLemmas()
 	{
 		Lemma[] lemmas = new Lemma[this.lemmas.length];
@@ -198,16 +213,31 @@ public class CoreSynset
 		return lemmas;
 	}
 
+	/**
+	 * Get synset type
+	 *
+	 * @return synset type
+	 */
 	public Type getType()
 	{
 		return this.type;
 	}
 
+	/**
+	 * Get domain
+	 *
+	 * @return domain
+	 */
 	public Domain getDomain()
 	{
 		return this.domain;
 	}
 
+	/**
+	 * get gloss
+	 *
+	 * @return gloss
+	 */
 	public Gloss getGloss()
 	{
 		return this.gloss;

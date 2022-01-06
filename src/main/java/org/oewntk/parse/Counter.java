@@ -15,11 +15,16 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
+/**
+ * Counts
+ */
 public class Counter
 {
-
 	// PrintStreams
+
 	private static final PrintStream psi = !System.getProperties().containsKey("SILENT") ? Tracing.psInfo : Tracing.psNull;
+
+	// Counts
 
 	private long synsetCount;
 	private long senseCount;
@@ -29,6 +34,8 @@ public class Counter
 	private long senseRelationCount;
 	private final Map<String, Long> synsetRelationByTypeCount = new TreeMap<>();
 	private final Map<String, Long> senseRelationByTypeCount = new TreeMap<>();
+
+	// Consumers
 
 	private final Consumer<Synset> synsetConsumer = synset -> {
 		synsetCount++;
@@ -51,8 +58,6 @@ public class Counter
 		});
 	};
 
-	// Consumers
-
 	private final Consumer<Sense> senseConsumer = sense -> senseCount++;
 
 	private final Consumer<Index> indexConsumer = index -> indexCount++;
@@ -61,6 +66,11 @@ public class Counter
 
 	private final File dir;
 
+	/**
+	 * Constructor
+	 *
+	 * @param dir WNDB dir
+	 */
 	Counter(final File dir)
 	{
 		this.dir = dir;
@@ -72,6 +82,13 @@ public class Counter
 		senseRelationCount = 0;
 	}
 
+	/**
+	 * Parse all
+	 *
+	 * @return this
+	 * @throws IOException        io exception
+	 * @throws ParsePojoException parse pojo exception
+	 */
 	public Counter parseAll() throws IOException, ParsePojoException
 	{
 		long rSynsetCount = DataParser.parseAllSynsets(dir, synsetConsumer);
@@ -83,12 +100,22 @@ public class Counter
 		return this;
 	}
 
+	/**
+	 * Report
+	 *
+	 * @return this
+	 */
 	public Counter reportCounts()
 	{
 		Tracing.psInfo.printf("%s synsets:%d senses:%d indexes:%d relations:%d synset_relations:%d sense_relations:%d%n", dir, synsetCount, senseCount, indexCount, relationCount, synsetRelationCount, senseRelationCount);
 		return this;
 	}
 
+	/**
+	 * Report relations
+	 *
+	 * @return this
+	 */
 	@SuppressWarnings("UnusedReturnValue")
 	public Counter reportRelationCounts()
 	{
@@ -111,6 +138,13 @@ public class Counter
 		return this;
 	}
 
+	/**
+	 * Main
+	 *
+	 * @param args args
+	 * @throws IOException        io exception
+	 * @throws ParsePojoException parse pojo exception
+	 */
 	public static void main(String[] args) throws IOException, ParsePojoException
 	{
 		// Timing
