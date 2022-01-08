@@ -34,11 +34,16 @@ public class Counter
 	private long senseRelationCount;
 	private final Map<String, Long> synsetRelationByTypeCount = new TreeMap<>();
 	private final Map<String, Long> senseRelationByTypeCount = new TreeMap<>();
+	private long verbFrameCount;
+	private long verbFrameMultiSensesCount;
+	private long verbFrameSingleSensesCount;
 
 	// Consumers
 
 	private final Consumer<Synset> synsetConsumer = synset -> {
 		synsetCount++;
+
+		// relations
 		Relation[] relations = synset.getRelations();
 		relationCount += relations.length;
 		Arrays.stream(relations).forEach(r -> {
@@ -56,6 +61,24 @@ public class Counter
 				synsetRelationByTypeCount.put(type, ++val);
 			}
 		});
+
+		// verb frames
+		VerbFrameRef[] verbFrames = synset.getVerbFrames();
+		if (verbFrames != null)
+		{
+			verbFrameCount += verbFrames.length;
+			for (VerbFrameRef verbFrameRef : verbFrames)
+			{
+				if (verbFrameRef.lemmas.length > 1)
+				{
+					verbFrameMultiSensesCount += verbFrameRef.lemmas.length;
+				}
+				else
+				{
+					verbFrameSingleSensesCount += verbFrameRef.lemmas.length;
+				}
+			}
+		}
 	};
 
 	private final Consumer<Sense> senseConsumer = sense -> senseCount++;
@@ -80,6 +103,9 @@ public class Counter
 		relationCount = 0;
 		synsetRelationCount = 0;
 		senseRelationCount = 0;
+		verbFrameCount = 0;
+		verbFrameMultiSensesCount = 0;
+		verbFrameSingleSensesCount = 0;
 	}
 
 	/**
@@ -108,6 +134,17 @@ public class Counter
 	public Counter reportCounts()
 	{
 		Tracing.psInfo.printf("%s synsets:%d senses:%d indexes:%d relations:%d synset_relations:%d sense_relations:%d%n", dir, synsetCount, senseCount, indexCount, relationCount, synsetRelationCount, senseRelationCount);
+		return this;
+	}
+
+	/**
+	 * Report
+	 *
+	 * @return this
+	 */
+	public Counter reportVerbFrameCounts()
+	{
+		Tracing.psInfo.printf("verbframes: %d single_senses: %d multi_senses: %d senses: %d%n", verbFrameCount, verbFrameMultiSensesCount, verbFrameSingleSensesCount, verbFrameMultiSensesCount + verbFrameSingleSensesCount);
 		return this;
 	}
 
@@ -156,7 +193,8 @@ public class Counter
 			File dir = new File(arg);
 			new Counter(dir).parseAll() //
 					.reportCounts() //
-					.reportRelationCounts();
+					.reportRelationCounts() //
+					.reportVerbFrameCounts();
 		}
 
 		// Timing
