@@ -50,7 +50,7 @@ public class Parser
 	/**
 	 * Main
 	 *
-	 * @param args cmd-line args
+	 * @param args command-line arguments
 	 * @throws ParsePojoException parse pojo exception
 	 * @throws IOException        io exception
 	 */

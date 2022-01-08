@@ -69,7 +69,7 @@ public class SenseParser1
 	/**
 	 * Main
 	 *
-	 * @param args cmd-line args
+	 * @param args command-line arguments
 	 * @throws IOException io exception
 	 */
 	public static void main(final String[] args) throws IOException
