@@ -47,5 +47,5 @@ If WNHOME20, WNHOME21, WNHOME30, WNHOME31, WNHOMEXX environment variables are de
 ## Maven Central
 
         <groupId>io.github.oewntk</groupId>
-        <artifactId>parse</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
+        <artifactId>parse_wndb</artifactId>
+        <version>2.0.0</version>
