@@ -1,23 +1,18 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.parse
 
-package org.oewntk.parse;
-
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 
 /**
  * Flags
  */
-public class Flags
-{
+object Flags {
 	/**
 	 * Character set for output files.
 	 */
-	public static final Charset charSet = StandardCharsets.UTF_8;
-
-	private Flags()
-	{
-	}
+	@JvmField
+	val charSet: Charset = StandardCharsets.UTF_8
 }

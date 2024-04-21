@@ -1,123 +1,69 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.parse
 
-package org.oewntk.parse;
-
-import org.oewntk.pojos.*;
-import org.oewntk.utils.Tracing;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.RandomAccessFile;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
+import org.oewntk.pojos.*
+import org.oewntk.utils.Tracing
+import java.io.File
+import java.io.IOException
+import java.io.RandomAccessFile
+import java.util.function.Consumer
 
 /**
  * Synset relation parser data.{noun|verb|adj|adv}
  *
+ * @property dir WNDB source dir
+ *
  * @author Bernard Bou
  */
-public class RelationParser
-{
-	private static final boolean THROW = false;
-
-	// PrintStreams
-
-	private static final PrintStream psl = Tracing.psInfo;
-	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? Tracing.psInfo : Tracing.psNull;
-	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? Tracing.psErr : Tracing.psNull;
-
+class RelationParser(
+	private val dir: File
+) {
 	// Maps
-
 	/**
 	 * Synset by id map
 	 */
-	private final Map<SynsetId, Synset> synsetsById = new HashMap<>();
+	private val synsetsById: MutableMap<SynsetId, Synset> = HashMap()
 
 	// Consumers
-
 	/**
 	 * Synset consumer
 	 */
-	private final Consumer<Synset> synsetConsumer = (synset) -> synsetsById.put(synset.getId(), synset);
+	private val synsetConsumer = Consumer { synset: Synset -> synsetsById[synset.id] = synset }
 
 	/**
 	 * Semantic relation consumer
 	 */
-	private final Consumer<Relation> relationConsumer = (relation) -> {
-
-		String type = relation.type.toString();
-		if (relation.fromSynsetId == null || relation.fromSynsetId.offset == 0L || relation.toSynsetId == null || relation.toSynsetId.offset == 0L)
-		{
-			throw new IllegalArgumentException(relation.toString());
+	private val relationConsumer = Consumer { relation: Relation ->
+		val type = relation.type.toString()
+		require(!(relation.fromSynsetId.offset == 0L || relation.toSynsetId.offset == 0L)) { relation.toString() }
+		if ((relation is LexRelation)) {
+			val toWord = relation.toWord
+			require(!(toWord.synsetId.offset == 0L || toWord.wordNum == 0)) { relation.toString() }
+			require(RelationType.SENSE_RELATIONS.contains(type)) { relation.toString() }
+			psi.printf("%-6s %s%n", "sense", relation)
+		} else {
+			require(RelationType.SYNSET_RELATIONS.contains(type)) { relation.toString() }
+			psi.printf("%-6s %s%n", "synset", relation)
 		}
-		if ((relation instanceof LexRelation))
-		{
-			LexRelation lexRelation = (LexRelation) relation;
-			LemmaRef toWord = lexRelation.toWord;
-			if (toWord == null || toWord.synsetId.offset == 0 || toWord.wordNum == 0)
-			{
-				throw new IllegalArgumentException(lexRelation.toString());
-			}
-			if (!RelationType.SENSE_RELATIONS.contains(type))
-			{
-				throw new IllegalArgumentException(lexRelation.toString());
-			}
-			psi.printf("%-6s %s%n", "sense", relation);
-		}
-		else
-		{
-			if (!RelationType.SYNSET_RELATIONS.contains(type))
-			{
-				throw new IllegalArgumentException(relation.toString());
-			}
-			psi.printf("%-6s %s%n", "synset", relation);
-		}
-	};
+	}
 
 	/**
 	 * Lexical relation consumer
 	 */
-	private final Consumer<LexRelation> lexRelationConsumer = (relation) -> {
-
-		String type = relation.type.toString();
-		if (relation.fromSynsetId == null || relation.fromSynsetId.offset == 0L || relation.toSynsetId == null || relation.toSynsetId.offset == 0L)
-		{
-			throw new IllegalArgumentException(relation.toString());
-		}
-		LemmaRef toWord = relation.toWord;
-		if (toWord == null || toWord.synsetId.offset == 0 || toWord.wordNum == 0)
-		{
-			throw new IllegalArgumentException(relation.toString());
-		}
-		if (!RelationType.SENSE_RELATIONS.contains(type))
-		{
-			throw new IllegalArgumentException(relation.toString());
-		}
+	private val lexRelationConsumer = Consumer { relation: LexRelation ->
+		val type = relation.type.toString()
+		require(!(relation.fromSynsetId.offset == 0L || relation.toSynsetId.offset == 0L)) { relation.toString() }
+		val toWord = relation.toWord
+		require(!(toWord.synsetId.offset == 0L || toWord.wordNum == 0)) { relation.toString() }
+		require(RelationType.SENSE_RELATIONS.contains(type)) { relation.toString() }
 		// psi.printf("%-6s %s%n", "sense", relation);
-		String resolvedToWord = resolveToWord(relation);
-		psi.printf("%-6s %s%n", "sense", relation.toString(resolvedToWord));
-	};
+		val resolvedToWord = resolveToWord(relation)
+		psi.printf("%-6s %s%n", "sense", relation.toString(resolvedToWord))
+	}
 
 	// Source
-
-	/**
-	 * WNDB source dir
-	 */
-	private final File dir;
-
-	/**
-	 * Constructor
-	 *
-	 * @param dir WNDB dir
-	 */
-	public RelationParser(final File dir)
-	{
-		this.dir = dir;
-	}
 
 	/**
 	 * Parse all synsets
@@ -126,136 +72,17 @@ public class RelationParser
 	 * @throws IOException        io exception
 	 * @throws ParsePojoException parse pojo exception
 	 */
-	@SuppressWarnings("UnusedReturnValue")
-	public RelationParser parseAllSynsets() throws IOException, ParsePojoException
-	{
+	@Throws(IOException::class, ParsePojoException::class)
+	fun parseAllSynsets(): RelationParser {
 		// make map for resolution
-		for (final String posName : new String[]{"noun", "verb", "adj", "adv"})
-		{
-			parseSynsets(dir, posName, synsetConsumer, null, null);
+		for (posName in arrayOf("noun", "verb", "adj", "adv")) {
+			parseSynsets(dir, posName, synsetConsumer, null, null)
 		}
 		// consume relations
-		for (final String posName : new String[]{"noun", "verb", "adj", "adv"})
-		{
-			parseSynsets(dir, posName, null, relationConsumer, lexRelationConsumer);
+		for (posName in arrayOf("noun", "verb", "adj", "adv")) {
+			parseSynsets(dir, posName, null, relationConsumer, lexRelationConsumer)
 		}
-		return this;
-	}
-
-	/**
-	 * Parse synsets
-	 *
-	 * @param dir                 WNDB dir
-	 * @param posName             pos
-	 * @param synsetConsumer      synset consumer
-	 * @param relationConsumer    relation consumer
-	 * @param lexRelationConsumer lex relation consumer
-	 * @return relation count
-	 * @throws ParsePojoException parse pojo exception
-	 * @throws IOException        io exception
-	 */
-	@SuppressWarnings("UnusedReturnValue")
-	public static long parseSynsets(final File dir, final String posName, final Consumer<Synset> synsetConsumer, final Consumer<Relation> relationConsumer, final Consumer<LexRelation> lexRelationConsumer) throws ParsePojoException, IOException
-	{
-		psl.println("* Synsets " + posName);
-
-		final boolean isAdj = posName.equals("adj");
-
-		// iterate on lines
-		final File file = new File(dir, "data." + posName);
-		try (RandomAccessFile raFile = new RandomAccessFile(file, "r"))
-		{
-			raFile.seek(0);
-
-			// iterate on lines
-			int lineCount = 0;
-			int nonCommentCount = 0;
-			int offsetErrorCount = 0;
-			int parseErrorCount = 0;
-			long relationCount = 0;
-
-			String rawLine;
-			long fileOffset = raFile.getFilePointer();
-			for (; (rawLine = raFile.readLine()) != null; fileOffset = raFile.getFilePointer())
-			{
-				lineCount++;
-				if (rawLine.isEmpty() || rawLine.charAt(0) == ' ')
-				{
-					continue;
-				}
-
-				// decode
-				String line = new String(rawLine.getBytes(Flags.charSet));
-				nonCommentCount++;
-
-				// split into fields
-				final String[] lineFields = line.split("\\s+");
-
-				// read offset
-				long readOffset = Long.parseLong(lineFields[0]);
-				if (fileOffset != readOffset)
-				{
-					pse.printf("Offset: data.%s:%d offset=%08d line=[%s]%n", posName, lineCount, fileOffset, line);
-					offsetErrorCount++;
-					continue;
-				}
-
-				// read
-				try
-				{
-					Synset synset = parseSynsetLine(line, isAdj);
-					if (synsetConsumer != null)
-					{
-						synsetConsumer.accept(synset);
-					}
-					if (relationConsumer == null && lexRelationConsumer == null)
-					{
-						continue;
-					}
-					Relation[] relations = synset.relations;
-					for (Relation relation : relations)
-					{
-						if (relation instanceof LexRelation && lexRelationConsumer != null)
-						{
-							lexRelationConsumer.accept((LexRelation) relation);
-						}
-						else if (relationConsumer != null)
-						{
-							relationConsumer.accept(relation);
-						}
-						relationCount++;
-					}
-				}
-				catch (final ParsePojoException e)
-				{
-					parseErrorCount++;
-					pse.printf("%n%s:%d offset=%08d line=[%s] except=%s", file.getName(), lineCount, fileOffset, line, e.getMessage());
-					if (THROW)
-					{
-						throw e;
-					}
-				}
-			}
-			String format = "%-50s %d%n";
-			psl.printf(format, "lines", nonCommentCount);
-			psl.printf(format, "parse successes", relationCount);
-			(offsetErrorCount > 0 ? pse : psl).printf(format, "offset errors", offsetErrorCount);
-			(parseErrorCount > 0 ? pse : psl).printf(format, "parse errors", parseErrorCount);
-			return relationCount;
-		}
-	}
-
-	/**
-	 * Parse synset line
-	 *
-	 * @param line  line
-	 * @param isAdj whether adjectives are being processed
-	 * @return synset
-	 * @throws ParsePojoException parse pojo exception
-	 */
-	private static Synset parseSynsetLine(final String line, final boolean isAdj) throws ParsePojoException
-	{
-		return Synset.parseSynsetLine(line, isAdj);
+		return this
 	}
 
 	/**
@@ -264,37 +91,145 @@ public class RelationParser
 	 * @param lr lexical relation
 	 * @return resolve target word
 	 */
-	private String resolveToWord(final LexRelation lr)
-	{
-		SynsetId toSynsetId = lr.toSynsetId;
-		Synset toSynset = synsetsById.get(toSynsetId);
-		LemmaRef toWordRef = lr.toWord;
-		return toWordRef.resolve(toSynset).toString();
+	private fun resolveToWord(lr: LexRelation): String {
+		val toSynsetId = lr.toSynsetId
+		val toSynset = synsetsById[toSynsetId]
+		val toWordRef = lr.toWord
+		return toWordRef.resolve(toSynset!!).toString()
 	}
 
-	/**
-	 * Main
-	 *
-	 * @param args command-line arguments
-	 * @throws ParsePojoException parse pojo exception
-	 * @throws IOException        io exception
-	 */
-	public static void main(final String[] args) throws ParsePojoException, IOException
-	{
-		// Timing
-		final long startTime = System.currentTimeMillis();
+	companion object {
+		private const val THROW = false
 
-		// Input
-		for (String arg : args)
-		{
-			File dir = new File(arg);
+		// PrintStreams
+		private val psl = Tracing.psInfo
+		private val psi = if (System.getProperties().containsKey("VERBOSE")) Tracing.psInfo else Tracing.psNull
+		private val pse = if (!System.getProperties().containsKey("SILENT")) Tracing.psErr else Tracing.psNull
 
-			// Process
-			new RelationParser(dir).parseAllSynsets();
+		/**
+		 * Parse synsets
+		 *
+		 * @param dir                 WNDB dir
+		 * @param posName             pos
+		 * @param synsetConsumer      synset consumer
+		 * @param relationConsumer    relation consumer
+		 * @param lexRelationConsumer lex relation consumer
+		 * @return relation count
+		 * @throws ParsePojoException parse pojo exception
+		 * @throws IOException        io exception
+		 */
+		@Throws(ParsePojoException::class, IOException::class)
+		fun parseSynsets(dir: File?, posName: String, synsetConsumer: Consumer<Synset>?, relationConsumer: Consumer<Relation>?, lexRelationConsumer: Consumer<LexRelation>?): Long {
+			psl.println("* Synsets $posName")
+
+			val isAdj = posName == "adj"
+
+			// iterate on lines
+			val file = File(dir, "data.$posName")
+			RandomAccessFile(file, "r").use { raFile ->
+				raFile.seek(0)
+				// iterate on lines
+				var lineCount = 0
+				var nonCommentCount = 0
+				var offsetErrorCount = 0
+				var parseErrorCount = 0
+				var relationCount: Long = 0
+
+				var rawLine: String
+				var fileOffset = raFile.filePointer
+				while ((raFile.readLine().also { rawLine = it }) != null) {
+					lineCount++
+					if (rawLine.isEmpty() || rawLine[0] == ' ') {
+						fileOffset = raFile.filePointer
+						continue
+					}
+
+					// decode
+					val line = String(rawLine.toByteArray(Flags.charSet))
+					nonCommentCount++
+
+					// split into fields
+					val lineFields = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+
+					// read offset
+					val readOffset = lineFields[0].toLong()
+					if (fileOffset != readOffset) {
+						pse.printf("Offset: data.%s:%d offset=%08d line=[%s]%n", posName, lineCount, fileOffset, line)
+						offsetErrorCount++
+						fileOffset = raFile.filePointer
+						continue
+					}
+
+					// read
+					try {
+						val synset = parseSynsetLine(line, isAdj)
+						synsetConsumer?.accept(synset)
+						if (relationConsumer == null && lexRelationConsumer == null) {
+							fileOffset = raFile.filePointer
+							continue
+						}
+						val relations = synset.relations
+						for (relation in relations!!) {
+							if (relation is LexRelation && lexRelationConsumer != null) {
+								lexRelationConsumer.accept(relation)
+							} else relationConsumer?.accept(relation)
+							relationCount++
+						}
+					} catch (e: ParsePojoException) {
+						parseErrorCount++
+						pse.printf("%n%s:%d offset=%08d line=[%s] except=%s", file.name, lineCount, fileOffset, line, e.message)
+						if (THROW) {
+							throw e
+						}
+					}
+					fileOffset = raFile.filePointer
+				}
+				val format = "%-50s %d%n"
+				psl.printf(format, "lines", nonCommentCount)
+				psl.printf(format, "parse successes", relationCount)
+				(if (offsetErrorCount > 0) pse else psl).printf(format, "offset errors", offsetErrorCount)
+				(if (parseErrorCount > 0) pse else psl).printf(format, "parse errors", parseErrorCount)
+				return relationCount
+			}
 		}
 
-		// Timing
-		final long endTime = System.currentTimeMillis();
-		psl.println("Total execution time: " + (endTime - startTime) / 1000 + "s");
+		/**
+		 * Parse synset line
+		 *
+		 * @param line  line
+		 * @param isAdj whether adjectives are being processed
+		 * @return synset
+		 * @throws ParsePojoException parse pojo exception
+		 */
+		@Throws(ParsePojoException::class)
+		private fun parseSynsetLine(line: String, isAdj: Boolean): Synset {
+			return Synset.parseSynsetLine(line, isAdj)
+		}
+
+		/**
+		 * Main
+		 *
+		 * @param args command-line arguments
+		 * @throws ParsePojoException parse pojo exception
+		 * @throws IOException        io exception
+		 */
+		@Throws(ParsePojoException::class, IOException::class)
+		@JvmStatic
+		fun main(args: Array<String>) {
+			// Timing
+			val startTime = System.currentTimeMillis()
+
+			// Input
+			for (arg in args) {
+				val dir = File(arg)
+
+				// Process
+				RelationParser(dir).parseAllSynsets()
+			}
+
+			// Timing
+			val endTime = System.currentTimeMillis()
+			psl.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
+		}
 	}
 }

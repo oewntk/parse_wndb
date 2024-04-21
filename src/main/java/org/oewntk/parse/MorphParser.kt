@@ -1,34 +1,30 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.parse
 
-package org.oewntk.parse;
-
-import org.oewntk.pojos.MorphMapping;
-import org.oewntk.pojos.ParsePojoException;
-import org.oewntk.pojos.Pos;
-import org.oewntk.utils.Tracing;
-
-import java.io.*;
-import java.util.function.Consumer;
+import org.oewntk.pojos.MorphMapping
+import org.oewntk.pojos.MorphMapping.Companion.parseMorphMapping
+import org.oewntk.pojos.ParsePojoException
+import org.oewntk.pojos.Pos.Companion.fromName
+import org.oewntk.utils.Tracing
+import java.io.*
+import java.util.function.Consumer
 
 /**
  * Morph Parser ({noun|verb|adj|adv|}.exc)
  *
  * @author Bernard Bou
  */
-public class MorphParser
-{
-	private static final boolean THROW = false;
+object MorphParser {
+	private const val THROW = false
 
 	// PrintStreams
-
-	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? Tracing.psInfo : Tracing.psNull;
-	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? Tracing.psErr : Tracing.psNull;
+	private val psi = if (System.getProperties().containsKey("VERBOSE")) Tracing.psInfo else Tracing.psNull
+	private val pse = if (!System.getProperties().containsKey("SILENT")) Tracing.psErr else Tracing.psNull
 
 	// Consumer
-
-	private static final Consumer<MorphMapping> consumer = psi::println;
+	private val consumer = Consumer<MorphMapping> { psi.println(it) }
 
 	/**
 	 * Parse morph mappings
@@ -38,12 +34,11 @@ public class MorphParser
 	 * @throws IOException        io exception
 	 * @throws ParsePojoException parse pojo exception
 	 */
-	public static void parseAllMorphs(final File dir, final Consumer<MorphMapping> consumer) throws IOException, ParsePojoException
-	{
+	@Throws(IOException::class, ParsePojoException::class)
+	fun parseAllMorphs(dir: File?, consumer: Consumer<MorphMapping>) {
 		// Process for all pos
-		for (final String posName : new String[]{"noun", "verb", "adj", "adv"})
-		{
-			parseMorphs(dir, posName, consumer);
+		for (posName in arrayOf("noun", "verb", "adj", "adv")) {
+			parseMorphs(dir, posName, consumer)
 		}
 	}
 
@@ -56,45 +51,39 @@ public class MorphParser
 	 * @throws IOException        io exception
 	 * @throws ParsePojoException parse pojo exception
 	 */
-	public static void parseMorphs(final File dir, String posName, final Consumer<MorphMapping> consumer) throws IOException, ParsePojoException
-	{
-		psi.println("* Morphs");
+	@Throws(IOException::class, ParsePojoException::class)
+	fun parseMorphs(dir: File?, posName: String, consumer: Consumer<MorphMapping>) {
+		psi.println("* Morphs")
 
-		Pos pos = Pos.fromName(posName);
+		val pos = fromName(posName)
 
 		// iterate on lines
-		final File file = new File(dir, posName + ".exc");
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), Flags.charSet)))
-		{
-			int lineCount = 0;
-			int parseErrorCount = 0;
-			long morphMappingCount = 0;
+		val file = File(dir, "$posName.exc")
+		BufferedReader(InputStreamReader(FileInputStream(file), Flags.charSet)).use { reader ->
+			var lineCount = 0
+			var parseErrorCount = 0
+			var morphMappingCount: Long = 0
 
-			String line;
-			while ((line = reader.readLine()) != null)
-			{
-				lineCount++;
+			var line: String?
+			while ((reader.readLine().also { line = it }) != null) {
+				lineCount++
 
-				try
-				{
-					MorphMapping morphMapping = MorphMapping.parseMorphMapping(line, pos);
-					morphMappingCount++;
-					consumer.accept(morphMapping);
-				}
-				catch (final ParsePojoException e)
-				{
-					parseErrorCount++;
-					pse.printf("%n%s:%d line=[%s] except=%s", file.getName(), lineCount, line, e);
-					if (THROW)
-					{
-						throw e;
+				try {
+					val morphMapping = parseMorphMapping(line!!, pos!!)
+					morphMappingCount++
+					consumer.accept(morphMapping)
+				} catch (e: ParsePojoException) {
+					parseErrorCount++
+					pse.printf("%n%s:%d line=[%s] except=%s", file.name, lineCount, line, e)
+					if (THROW) {
+						throw e
 					}
 				}
 			}
-			String format = "%-50s %d%n";
-			psi.printf(format, "lines", lineCount);
-			psi.printf(format, "parse successes", morphMappingCount);
-			(parseErrorCount > 0 ? pse : psi).printf(format, "parse errors", parseErrorCount);
+			val format = "%-50s %d%n"
+			psi.printf(format, "lines", lineCount)
+			psi.printf(format, "parse successes", morphMappingCount)
+			(if (parseErrorCount > 0) pse else psi).printf(format, "parse errors", parseErrorCount)
 		}
 	}
 
@@ -105,19 +94,20 @@ public class MorphParser
 	 * @throws ParsePojoException parse pojo exception
 	 * @throws IOException        io exception
 	 */
-	public static void main(String[] args) throws IOException, ParsePojoException
-	{
+	@Throws(IOException::class, ParsePojoException::class)
+	@JvmStatic
+	fun main(args: Array<String>) {
 		// Timing
-		final long startTime = System.currentTimeMillis();
+		val startTime = System.currentTimeMillis()
 
 		// Input
-		File dir = new File(args[0]);
+		val dir = File(args[0])
 
 		// Process
-		parseAllMorphs(dir, consumer);
+		parseAllMorphs(dir, consumer)
 
 		// Timing
-		final long endTime = System.currentTimeMillis();
-		psi.println("Total execution time: " + (endTime - startTime) / 1000 + "s");
+		val endTime = System.currentTimeMillis()
+		psi.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
 	}
 }

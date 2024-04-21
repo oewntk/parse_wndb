@@ -1,37 +1,32 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.parse
 
-package org.oewntk.parse;
-
-import org.oewntk.pojos.ParsePojoException;
-import org.oewntk.pojos.Synset;
-import org.oewntk.utils.Tracing;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.RandomAccessFile;
-import java.util.function.Consumer;
+import org.oewntk.pojos.ParsePojoException
+import org.oewntk.pojos.Synset
+import org.oewntk.utils.Tracing
+import java.io.File
+import java.io.IOException
+import java.io.RandomAccessFile
+import java.util.function.Consumer
 
 /**
  * Synset Parser data.{noun|verb|adj|adv}
  *
  * @author Bernard Bou
  */
-public class DataParser
-{
-	private static final boolean THROW = false;
+object DataParser {
+
+	private const val THROW = false
 
 	// PrintStreams
-
-	private static final PrintStream psl = Tracing.psNull;
-	private static final PrintStream psi = System.getProperties().containsKey("VERBOSE") ? Tracing.psInfo : Tracing.psNull;
-	private static final PrintStream pse = !System.getProperties().containsKey("SILENT") ? Tracing.psErr : Tracing.psNull;
+	private val psl = Tracing.psNull
+	private val psi = if (System.getProperties().containsKey("VERBOSE")) Tracing.psInfo else Tracing.psNull
+	private val pse = if (!System.getProperties().containsKey("SILENT")) Tracing.psErr else Tracing.psNull
 
 	// Consumer
-
-	private static final Consumer<Synset> consumer = psi::println;
+	private val consumer = Consumer<Synset> { psi.println(it) }
 
 	/**
 	 * Parse all synsets
@@ -42,14 +37,14 @@ public class DataParser
 	 * @throws IOException        io exception
 	 * @throws ParsePojoException parse pojo exception
 	 */
-	public static long parseAllSynsets(final File dir, final Consumer<Synset> consumer) throws IOException, ParsePojoException
-	{
-		long count = 0;
-		for (final String posName : new String[]{"noun", "verb", "adj", "adv"})
-		{
-			count += parseSynsets(dir, posName, consumer);
+	@JvmStatic
+	@Throws(IOException::class, ParsePojoException::class)
+	fun parseAllSynsets(dir: File?, consumer: Consumer<Synset>): Long {
+		var count: Long = 0
+		for (posName in arrayOf<String>("noun", "verb", "adj", "adv")) {
+			count += parseSynsets(dir, posName, consumer)
 		}
-		return count;
+		return count
 	}
 
 	/**
@@ -62,74 +57,68 @@ public class DataParser
 	 * @throws ParsePojoException parse pojo exception
 	 * @throws IOException        io exception
 	 */
-	public static long parseSynsets(final File dir, final String posName, final Consumer<Synset> consumer) throws ParsePojoException, IOException
-	{
-		psl.println("* Synsets " + posName);
+	@Throws(ParsePojoException::class, IOException::class)
+	fun parseSynsets(dir: File?, posName: String, consumer: Consumer<Synset>): Long {
+		psl.println("* Synsets $posName")
 
-		final boolean isAdj = posName.equals("adj");
+		val isAdj = posName == "adj"
 
 		// iterate on lines
-		final File file = new File(dir, "data." + posName);
-		try (RandomAccessFile raFile = new RandomAccessFile(file, "r"))
-		{
-			raFile.seek(0);
-
+		val file = File(dir, "data.$posName")
+		RandomAccessFile(file, "r").use { raFile ->
+			raFile.seek(0)
 			// iterate on lines
-			int lineCount = 0;
-			int nonCommentCount = 0;
-			int offsetErrorCount = 0;
-			int parseErrorCount = 0;
-			long synsetCount = 0;
+			var lineCount = 0
+			var nonCommentCount = 0
+			var offsetErrorCount = 0
+			var parseErrorCount = 0
+			var synsetCount: Long = 0
 
-			String rawLine;
-			long fileOffset = raFile.getFilePointer();
-			for (; (rawLine = raFile.readLine()) != null; fileOffset = raFile.getFilePointer())
-			{
-				lineCount++;
-				if (rawLine.isEmpty() || rawLine.charAt(0) == ' ')
-				{
-					continue;
+			var rawLine: String
+			var fileOffset = raFile.filePointer
+			while ((raFile.readLine().also { rawLine = it }) != null) {
+				lineCount++
+				if (rawLine.isEmpty() || rawLine[0] == ' ') {
+					fileOffset = raFile.filePointer
+					continue
 				}
 
 				// decode
-				String line = new String(rawLine.getBytes(Flags.charSet));
-				nonCommentCount++;
+				val line = String(rawLine.toByteArray(Flags.charSet))
+				nonCommentCount++
 
 				// split into fields
-				final String[] lineFields = line.split("\\s+");
+				val lineFields = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
 				// read offset
-				long readOffset = Long.parseLong(lineFields[0]);
-				if (fileOffset != readOffset)
-				{
-					pse.printf("Offset: data.%s:%d offset=%08d line=[%s]%n", posName, lineCount, fileOffset, line);
-					offsetErrorCount++;
-					continue;
+				val readOffset = lineFields[0].toLong()
+				if (fileOffset != readOffset) {
+					pse.printf("Offset: data.%s:%d offset=%08d line=[%s]%n", posName, lineCount, fileOffset, line)
+					offsetErrorCount++
+					fileOffset = raFile.filePointer
+					continue
 				}
 
 				// read
-				try
-				{
-					Synset synset = parseSynsetLine(line, isAdj);
-					synsetCount++;
-					consumer.accept(synset);
-				}
-				catch (final ParsePojoException e)
-				{
-					parseErrorCount++;
-					pse.printf("%n%s:%d offset=%08d line=[%s] except=%s", file.getName(), lineCount, fileOffset, line, e.getMessage());
-					if (THROW)
-					{
-						throw e;
+				try {
+					val synset = parseSynsetLine(line, isAdj)
+					synsetCount++
+					consumer.accept(synset)
+				} catch (e: ParsePojoException) {
+					parseErrorCount++
+					pse.printf("%n%s:%d offset=%08d line=[%s] except=%s", file.name, lineCount, fileOffset, line, e.message)
+					if (THROW) {
+						throw e
 					}
 				}
+				fileOffset = raFile.filePointer
 			}
-			String format = "%-50s %d%n";
-			psl.printf(format, "lines", nonCommentCount);
-			psl.printf(format, "parse successes", synsetCount);
-			(offsetErrorCount > 0 ? pse : psl).printf(format, "offset errors", offsetErrorCount);
-			(parseErrorCount > 0 ? pse : psl).printf(format, "parse errors", parseErrorCount);
-			return synsetCount;
+			val format = "%-50s %d%n"
+			psl.printf(format, "lines", nonCommentCount)
+			psl.printf(format, "parse successes", synsetCount)
+			(if (offsetErrorCount > 0) pse else psl).printf(format, "offset errors", offsetErrorCount)
+			(if (parseErrorCount > 0) pse else psl).printf(format, "parse errors", parseErrorCount)
+			return synsetCount
 		}
 	}
 
@@ -141,9 +130,9 @@ public class DataParser
 	 * @return synset
 	 * @throws ParsePojoException parse pojo exception
 	 */
-	private static Synset parseSynsetLine(final String line, final boolean isAdj) throws ParsePojoException
-	{
-		return Synset.parseSynsetLine(line, isAdj);
+	@Throws(ParsePojoException::class)
+	private fun parseSynsetLine(line: String, isAdj: Boolean): Synset {
+		return Synset.parseSynsetLine(line, isAdj)
 	}
 
 	/**
@@ -153,19 +142,20 @@ public class DataParser
 	 * @throws ParsePojoException parse pojo exception
 	 * @throws IOException        io exception
 	 */
-	public static void main(final String[] args) throws ParsePojoException, IOException
-	{
+	@Throws(ParsePojoException::class, IOException::class)
+	@JvmStatic
+	fun main(args: Array<String>) {
 		// Timing
-		final long startTime = System.currentTimeMillis();
+		val startTime = System.currentTimeMillis()
 
 		// Input
-		File dir = new File(args[0]);
+		val dir = File(args[0])
 
 		// Process
-		parseAllSynsets(dir, consumer);
+		parseAllSynsets(dir, consumer)
 
 		// Timing
-		final long endTime = System.currentTimeMillis();
-		psl.println("Total execution time: " + (endTime - startTime) / 1000 + "s");
+		val endTime = System.currentTimeMillis()
+		psl.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
 	}
 }

@@ -1,24 +1,23 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.parse
 
-package org.oewntk.parse;
-
-import org.oewntk.pojos.ParsePojoException;
-import org.oewntk.pojos.Synset;
-import org.oewntk.utils.Tracing;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import org.oewntk.pojos.ParsePojoException
+import org.oewntk.pojos.Synset
+import org.oewntk.pojos.Synset.Companion.parseSynsetLine
+import org.oewntk.utils.Tracing
+import java.io.File
+import java.io.IOException
+import java.io.RandomAccessFile
 
 /**
  * Parse synset in [arg1=noun|verb|adj|adv] part-of-speech at offset [arg2=num]
  *
  * @author Bernard Bou
  */
-public class DataParser1
-{
+object DataParser1 {
+
 	/**
 	 * Read line at given offset
 	 *
@@ -28,14 +27,13 @@ public class DataParser1
 	 * @return line
 	 * @throws IOException io exception
 	 */
-	public static String read(final String dir, final String posName, final long fileOffset) throws IOException
-	{
-		final File file = new File(dir, "data." + posName);
-		try (final RandomAccessFile raFile = new RandomAccessFile(file, "r"))
-		{
-			raFile.seek(fileOffset);
-			String rawString = raFile.readLine();
-			return new String(rawString.getBytes(Flags.charSet));
+	@Throws(IOException::class)
+	fun read(dir: String?, posName: String, fileOffset: Long): String {
+		val file = File(dir, "data.$posName")
+		RandomAccessFile(file, "r").use { raFile ->
+			raFile.seek(fileOffset)
+			val rawString = raFile.readLine()
+			return String(rawString.toByteArray(Flags.charSet))
 		}
 	}
 
@@ -47,9 +45,9 @@ public class DataParser1
 	 * @return synset
 	 * @throws ParsePojoException parse pojo exception
 	 */
-	public static Synset parseSynset(String line, boolean isAdj) throws ParsePojoException
-	{
-		return Synset.parseSynsetLine(line, isAdj);
+	@Throws(ParsePojoException::class)
+	fun parseSynset(line: String?, isAdj: Boolean): Synset {
+		return parseSynsetLine(line!!, isAdj)
 	}
 
 	/**
@@ -59,18 +57,19 @@ public class DataParser1
 	 * @throws ParsePojoException parse pojo exception
 	 * @throws IOException        io exception
 	 */
-	public static void main(String[] args) throws IOException, ParsePojoException
-	{
+	@Throws(IOException::class, ParsePojoException::class)
+	@JvmStatic
+	fun main(args: Array<String>) {
 		// Input
-		String dir = args[0];
-		String posName = args[1];
-		long fileOffset = Long.parseLong(args[2]);
-		final boolean isAdj = posName.equals("adj");
+		val dir = args[0]
+		val posName = args[1]
+		val fileOffset = args[2].toLong()
+		val isAdj = posName == "adj"
 
 		// Process
-		String line = read(dir, posName, fileOffset);
-		Tracing.psInfo.println(line);
-		Synset synset = parseSynset(line, isAdj);
-		Tracing.psInfo.println(synset.toPrettyString());
+		val line = read(dir, posName, fileOffset)
+		Tracing.psInfo.println(line)
+		val synset = parseSynset(line, isAdj)
+		Tracing.psInfo.println(synset.toPrettyString())
 	}
 }

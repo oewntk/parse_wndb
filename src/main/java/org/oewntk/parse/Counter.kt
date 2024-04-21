@@ -1,112 +1,77 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.parse
 
-package org.oewntk.parse;
-
-import org.oewntk.pojos.*;
-import org.oewntk.utils.Tracing;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.function.Consumer;
+import org.oewntk.parse.DataParser.parseAllSynsets
+import org.oewntk.parse.IndexParser.parseAllIndexes
+import org.oewntk.parse.SenseParser.parseSenses
+import org.oewntk.pojos.*
+import org.oewntk.utils.Tracing
+import java.io.File
+import java.io.IOException
+import java.util.*
+import java.util.function.Consumer
 
 /**
  * Counts
+ *
+ * @param dir WNDB source dir
  */
-public class Counter
-{
-	// PrintStreams
-
-	private static final PrintStream psi = !System.getProperties().containsKey("SILENT") ? Tracing.psInfo : Tracing.psNull;
-
+class Counter internal constructor(
+	private val dir: File
+) {
 	// Counts
-
-	private long synsetCount;
-	private long senseCount;
-	private long indexCount;
-	private long relationCount;
-	private long synsetRelationCount;
-	private long senseRelationCount;
-	private final Map<String, Long> synsetRelationByTypeCount = new TreeMap<>();
-	private final Map<String, Long> senseRelationByTypeCount = new TreeMap<>();
-	private long verbFrameCount;
-	private long verbFrameMultiSensesCount;
-	private long verbFrameSingleSensesCount;
+	private var synsetCount: Long = 0
+	private var senseCount: Long = 0
+	private var indexCount: Long = 0
+	private var relationCount: Long = 0
+	private var synsetRelationCount: Long = 0
+	private var senseRelationCount: Long = 0
+	private val synsetRelationByTypeCount: MutableMap<String, Long> = TreeMap()
+	private val senseRelationByTypeCount: MutableMap<String, Long> = TreeMap()
+	private var verbFrameCount: Long = 0
+	private var verbFrameMultiSensesCount: Long = 0
+	private var verbFrameSingleSensesCount: Long = 0
 
 	// Consumers
-
-	private final Consumer<Synset> synsetConsumer = synset -> {
-		synsetCount++;
-
+	private val synsetConsumer = Consumer<Synset> {
+		synsetCount++
 		// relations
-		Relation[] relations = synset.relations;
-		relationCount += relations.length;
-		Arrays.stream(relations).forEach(r -> {
-			var type = r.type.toString();
-			if (r instanceof LexRelation)
-			{
-				senseRelationCount++;
-				var val = senseRelationByTypeCount.computeIfAbsent(type, k -> 0L);
-				senseRelationByTypeCount.put(type, ++val);
+		val relations = it.relations
+		relationCount += relations!!.size.toLong()
+		it.relations.forEach { r: Relation ->
+			val type = r.type.toString()
+			if (r is LexRelation) {
+				senseRelationCount++
+				var v = senseRelationByTypeCount.computeIfAbsent(type) { 0L }
+				v += 1
+				senseRelationByTypeCount[type] = v
+			} else {
+				synsetRelationCount++
+				var v = synsetRelationByTypeCount.computeIfAbsent(type) { 0L }
+				v += 1
+				synsetRelationByTypeCount[type] = v
 			}
-			else
-			{
-				synsetRelationCount++;
-				var val = synsetRelationByTypeCount.computeIfAbsent(type, k -> 0L);
-				synsetRelationByTypeCount.put(type, ++val);
-			}
-		});
+		}
 
 		// verb frames
-		VerbFrameRef[] verbFrames = synset.getVerbFrames();
-		if (verbFrames != null)
-		{
-			verbFrameCount += verbFrames.length;
-			for (VerbFrameRef verbFrameRef : verbFrames)
-			{
-				if (verbFrameRef.lemmas.length > 1)
-				{
-					verbFrameMultiSensesCount += verbFrameRef.lemmas.length;
-				}
-				else
-				{
-					verbFrameSingleSensesCount += verbFrameRef.lemmas.length;
+		val verbFrames = it.verbFrames
+		if (verbFrames != null) {
+			verbFrameCount += verbFrames.size.toLong()
+			for (verbFrameRef in verbFrames) {
+				if (verbFrameRef.lemmas.size > 1) {
+					verbFrameMultiSensesCount += verbFrameRef.lemmas.size.toLong()
+				} else {
+					verbFrameSingleSensesCount += verbFrameRef.lemmas.size.toLong()
 				}
 			}
 		}
-	};
-
-	private final Consumer<Sense> senseConsumer = sense -> senseCount++;
-
-	private final Consumer<Index> indexConsumer = index -> indexCount++;
-
-	// Source
-
-	private final File dir;
-
-	/**
-	 * Constructor
-	 *
-	 * @param dir WNDB dir
-	 */
-	Counter(final File dir)
-	{
-		this.dir = dir;
-		synsetCount = 0;
-		senseCount = 0;
-		indexCount = 0;
-		relationCount = 0;
-		synsetRelationCount = 0;
-		senseRelationCount = 0;
-		verbFrameCount = 0;
-		verbFrameMultiSensesCount = 0;
-		verbFrameSingleSensesCount = 0;
 	}
+
+	private val senseConsumer = Consumer<Sense> { senseCount++ }
+
+	private val indexConsumer = Consumer<Index> { indexCount++ }
 
 	/**
 	 * Parse all
@@ -115,15 +80,15 @@ public class Counter
 	 * @throws IOException        io exception
 	 * @throws ParsePojoException parse pojo exception
 	 */
-	public Counter parseAll() throws IOException, ParsePojoException
-	{
-		long rSynsetCount = DataParser.parseAllSynsets(dir, synsetConsumer);
-		long rIndexCount = IndexParser.parseAllIndexes(dir, indexConsumer);
-		long rSenseCount = SenseParser.parseSenses(dir, senseConsumer);
-		assert rSynsetCount == synsetCount;
-		assert rSenseCount == senseCount;
-		assert rIndexCount == indexCount;
-		return this;
+	@Throws(IOException::class, ParsePojoException::class)
+	fun parseAll(): Counter {
+		val rSynsetCount = parseAllSynsets(dir, synsetConsumer)
+		val rIndexCount = parseAllIndexes(dir, indexConsumer)
+		val rSenseCount = parseSenses(dir, senseConsumer)
+		assert(rSynsetCount == synsetCount)
+		assert(rSenseCount == senseCount)
+		assert(rIndexCount == indexCount)
+		return this
 	}
 
 	/**
@@ -131,10 +96,9 @@ public class Counter
 	 *
 	 * @return this
 	 */
-	public Counter reportCounts()
-	{
-		Tracing.psInfo.printf("%s synsets:%d senses:%d indexes:%d relations:%d synset_relations:%d sense_relations:%d%n", dir, synsetCount, senseCount, indexCount, relationCount, synsetRelationCount, senseRelationCount);
-		return this;
+	fun reportCounts(): Counter {
+		Tracing.psInfo.printf("%s synsets:%d senses:%d indexes:%d relations:%d synset_relations:%d sense_relations:%d%n", dir, synsetCount, senseCount, indexCount, relationCount, synsetRelationCount, senseRelationCount)
+		return this
 	}
 
 	/**
@@ -142,10 +106,9 @@ public class Counter
 	 *
 	 * @return this
 	 */
-	public Counter reportVerbFrameCounts()
-	{
-		Tracing.psInfo.printf("verbframes: %d single_senses: %d multi_senses: %d senses: %d%n", verbFrameCount, verbFrameMultiSensesCount, verbFrameSingleSensesCount, verbFrameMultiSensesCount + verbFrameSingleSensesCount);
-		return this;
+	fun reportVerbFrameCounts(): Counter {
+		Tracing.psInfo.printf("verbframes: %d single_senses: %d multi_senses: %d senses: %d%n", verbFrameCount, verbFrameMultiSensesCount, verbFrameSingleSensesCount, verbFrameMultiSensesCount + verbFrameSingleSensesCount)
+		return this
 	}
 
 	/**
@@ -153,52 +116,55 @@ public class Counter
 	 *
 	 * @return this
 	 */
-	@SuppressWarnings("UnusedReturnValue")
-	public Counter reportRelationCounts()
-	{
-		long[] countSum = new long[2];
+	fun reportRelationCounts(): Counter {
+		val countSum = LongArray(2)
 
-		Tracing.psInfo.printf("synset relations: %s%n", synsetRelationCount);
-		synsetRelationByTypeCount.forEach((r, c) -> {
-			Tracing.psInfo.printf("\t%s: %d%n", r, c);
-			countSum[0] += c;
-		});
-		assert synsetRelationCount == countSum[0];
+		Tracing.psInfo.printf("synset relations: %s%n", synsetRelationCount)
+		synsetRelationByTypeCount.forEach { (r: String?, c: Long) ->
+			Tracing.psInfo.printf("\t%s: %d%n", r, c)
+			countSum[0] += c
+		}
+		assert(synsetRelationCount == countSum[0])
 
-		Tracing.psInfo.printf("sense relations: %s%n", senseRelationCount);
-		senseRelationByTypeCount.forEach((r, c) -> {
-			Tracing.psInfo.printf("\t%s: %d%n", r, c);
-			countSum[1] += c;
-		});
-		assert senseRelationCount == countSum[1];
+		Tracing.psInfo.printf("sense relations: %s%n", senseRelationCount)
+		senseRelationByTypeCount.forEach { (r: String?, c: Long) ->
+			Tracing.psInfo.printf("\t%s: %d%n", r, c)
+			countSum[1] += c
+		}
+		assert(senseRelationCount == countSum[1])
 
-		return this;
+		return this
 	}
 
-	/**
-	 * Main
-	 *
-	 * @param args args
-	 * @throws IOException        io exception
-	 * @throws ParsePojoException parse pojo exception
-	 */
-	public static void main(String[] args) throws IOException, ParsePojoException
-	{
-		// Timing
-		final long startTime = System.currentTimeMillis();
+	companion object {
+		// PrintStreams
+		private val psi = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
 
-		// Input
-		for (String arg : args)
-		{
-			File dir = new File(arg);
-			new Counter(dir).parseAll() //
+		/**
+		 * Main
+		 *
+		 * @param args args
+		 * @throws IOException        io exception
+		 * @throws ParsePojoException parse pojo exception
+		 */
+		@Throws(IOException::class, ParsePojoException::class)
+		@JvmStatic
+		fun main(args: Array<String>) {
+			// Timing
+			val startTime = System.currentTimeMillis()
+
+			// Input
+			for (arg in args) {
+				val dir = File(arg)
+				Counter(dir).parseAll() //
 					.reportCounts() //
 					.reportRelationCounts() //
-					.reportVerbFrameCounts();
-		}
+					.reportVerbFrameCounts()
+			}
 
-		// Timing
-		final long endTime = System.currentTimeMillis();
-		psi.println("Total execution time: " + (endTime - startTime) / 1000 + "s");
+			// Timing
+			val endTime = System.currentTimeMillis()
+			psi.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
+		}
 	}
 }
