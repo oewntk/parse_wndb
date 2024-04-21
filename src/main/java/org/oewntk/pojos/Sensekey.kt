@@ -1,52 +1,56 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.pojos
 
-package org.oewntk.pojos;
-
-import java.util.Objects;
-import java.util.regex.Pattern;
+import java.util.*
+import java.util.regex.Pattern
 
 /**
  * Sensekey
  *
+ * @property key key
+ * @property word normalized word
+ * @property type type
+ * @property domain domain
+ * @property lexId lex id
+ * @property headWord head word or null if none
+ * @property headLexId head lexid or -1 if none
+ *
  * @author Bernard Bou
  */
-public class Sensekey
-{
-	private static final Pattern patternBreak = Pattern.compile("(?<!\\u005C)%");
+class Sensekey {
+	private val key: String
 
-	//public static final String ESCAPED_PERCENT = "\\%";
-	public static final String ESCAPED_PERCENT = "~";
+	@JvmField
+	val word: NormalizedString // may contain uppercase
 
-	private final String key;
+	@JvmField
+	val type: Type
 
-	private final NormalizedString word; // may contain uppercase
+	@JvmField
+	val domain: Domain
+	val lexId: Int
 
-	private final Type type;
+	@JvmField
+	val headWord: NormalizedString? // or null
 
-	private final Domain domain;
-
-	private final int lexId;
-
-	private final NormalizedString headWord; // or null
-
-	private final int headLexId; // -1 for none
+	@JvmField
+	val headLexId: Int // -1 for none
 
 	/**
 	 * Copy constructor
 	 *
 	 * @param other other sensekey
 	 */
-	public Sensekey(final Sensekey other)
-	{
-		this.key = other.key;
-		this.word = other.word;
-		this.type = other.type;
-		this.domain = other.domain;
-		this.lexId = other.lexId;
-		this.headWord = other.headWord;
-		this.headLexId = other.headLexId;
+	constructor(other: Sensekey) {
+		this.key = other.key
+		this.word = other.word
+		this.type = other.type
+		this.domain = other.domain
+		this.lexId = other.lexId
+		this.headWord = other.headWord
+		this.headLexId = other.headLexId
 	}
 
 	/**
@@ -60,183 +64,43 @@ public class Sensekey
 	 * @param headLexId head lexid
 	 * @param key       sensekey
 	 */
-	private Sensekey(final NormalizedString word, final Type type, final Domain domain, final int lexId, final NormalizedString headWord, final int headLexId, final String key)
-	{
-		this.key = key.trim();
-		this.word = word;
-		this.type = type;
-		this.domain = domain;
-		this.lexId = lexId;
-		this.headWord = headWord;
-		this.headLexId = headLexId;
+	private constructor(word: NormalizedString, type: Type, domain: Domain, lexId: Int, headWord: NormalizedString?, headLexId: Int, key: String) {
+		this.key = key.trim { it <= ' ' }
+		this.word = word
+		this.type = type
+		this.domain = domain
+		this.lexId = lexId
+		this.headWord = headWord
+		this.headLexId = headLexId
 	}
 
-	/**
-	 * Parse sensekey from string
-	 *
-	 * @param str string
-	 * @return sensekey
-	 * @throws ParsePojoException parse exception
-	 */
-	public static Sensekey parseSensekey(final String str) throws ParsePojoException
-	{
-		if (str == null)
-		{
-			return null;
-		}
-		final String[] fields = decode(str);
-		if (fields.length < 4)
-		{
-			throw new ParsePojoException("Sensekey:" + str);
-		}
-		try
-		{
-			final NormalizedString word = new NormalizedString(fields[0]);
-			final Type type = Type.fromIndex(Integer.parseInt(fields[1]));
-			final Domain domain = Domain.parseDomainId(fields[2]);
-			final int lexid = Integer.parseInt(fields[3]);
-			final NormalizedString headWord = fields[4].isEmpty() ? null : new NormalizedString(fields[4]);
-			final int headLexid = fields[5].isEmpty() ? -1 : Integer.parseInt(fields[5]);
-			return new Sensekey(word, type, domain, lexid, headWord, headLexid, str);
-		}
-		catch (Exception e)
-		{
-			throw new ParsePojoException("Sensekey:" + str);
-		}
-	}
-
-	/**
-	 * Decode sensekey string into fields
-	 *
-	 * @param skStr sensekey string
-	 * @return fields, fields[0] lemma (not space-normalized), fields[1] pos, fields[2] lexfile, fields[3] lexid, fields[4] head lemma (or ""), not space-normalized, fields[5] head lexid (or "")
-	 */
-	public static String[] decode(String skStr)
-	{
-		String[] fields = new String[6];
-		String[] fields1 = patternBreak.split(skStr);
-		assert fields1.length == 2;
-		// lemma
-		fields[0] = fields1[0].replace(ESCAPED_PERCENT, "%");
-		// lexsense
-		String lexSense = fields1[1].replace(ESCAPED_PERCENT, "%");
-		// String typeFileLexid = lexSense.substring(0, 8);
-		fields[1] = lexSense.substring(0, 1); // pos
-		fields[2] = lexSense.substring(2, 4); // lexfile
-		fields[3] = lexSense.substring(5, 7); // lexid
-		int last = lexSense.lastIndexOf(':');
-		fields[4] = lexSense.substring(8, last); // head (or "")
-		fields[5] = lexSense.substring(last + 1); // head lexid (or "")
-		return fields;
-	}
-
-	/**
-	 * Get domain
-	 *
-	 * @return domain
-	 */
-	public Domain getDomain()
-	{
-		return this.domain;
-	}
-
-	/**
-	 * Get normalized word
-	 *
-	 * @return normalized word
-	 */
-	public NormalizedString getWord()
-	{
-		return this.word;
-	}
-
-	/**
-	 * Get lemma
-	 *
-	 * @return lemma
-	 */
-	public Lemma getLemma()
-	{
-		return new Lemma(this.word);
-	}
-
-	/**
-	 * Get lex id
-	 *
-	 * @return lexid
-	 */
-	public int getLexId()
-	{
-		return this.lexId;
-	}
-
-	/**
-	 * Get type
-	 *
-	 * @return type
-	 */
-	public Type getType()
-	{
-		return this.type;
-	}
-
-	/**
-	 * Get key
-	 *
-	 * @return key
-	 */
-	public String getKey()
-	{
-		return this.key;
-	}
-
-	/**
-	 * Get head word
-	 *
-	 * @return head word
-	 */
-	public NormalizedString getHeadWord()
-	{
-		return this.headWord;
-	}
-
-	/**
-	 * Get head lexid
-	 *
-	 * @return head lexid
-	 */
-	public int getHeadLexId()
-	{
-		return this.headLexId;
-	}
+	val lemma: Lemma
+		/**
+		 * Get lemma
+		 *
+		 * @return lemma
+		 */
+		get() = Lemma(this.word)
 
 	// I D E N T I T Y
 
-	@Override
-	public boolean equals(final Object o)
-	{
-		if (this == o)
-		{
-			return true;
+	override fun equals(other: Any?): Boolean {
+		if (this === other) {
+			return true
 		}
-		if (o == null || getClass() != o.getClass())
-		{
-			return false;
+		if (other == null || javaClass != other.javaClass) {
+			return false
 		}
-		Sensekey sensekey = (Sensekey) o;
-		return key.equals(sensekey.key);
+		val sensekey = other as Sensekey
+		return key == sensekey.key
 	}
 
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(key);
+	override fun hashCode(): Int {
+		return Objects.hash(key)
 	}
 
-	@Override
-	public String toString()
-	{
-		return this.key;
+	override fun toString(): String {
+		return this.key
 	}
 
 	/**
@@ -244,8 +108,68 @@ public class Sensekey
 	 *
 	 * @return parsed sensekey string
 	 */
-	public String toParsedString()
-	{
-		return "word=" + this.word + " lexid=" + this.lexId + " domain=" + this.domain + " type=" + this.type;
+	fun toParsedString(): String {
+		return "word=" + this.word + " lexid=" + this.lexId + " domain=" + this.domain + " type=" + this.type
+	}
+
+	companion object {
+		private val patternBreak: Pattern = Pattern.compile("(?<!\\u005C)%")
+
+		//public static final String ESCAPED_PERCENT = "\\%";
+		const val ESCAPED_PERCENT: String = "~"
+
+		/**
+		 * Parse sensekey from string
+		 *
+		 * @param str string
+		 * @return sensekey
+		 * @throws ParsePojoException parse exception
+		 */
+		@JvmStatic
+		@Throws(ParsePojoException::class)
+		fun parseSensekey(str: String?): Sensekey? {
+			if (str == null) {
+				return null
+			}
+			val fields = decode(str)
+			if (fields.size < 4) {
+				throw ParsePojoException("Sensekey:$str")
+			}
+			try {
+				val word = NormalizedString(fields[0])
+				val type = Type.fromIndex(fields[1].toInt())
+				val domain = Domain.parseDomainId(fields[2])
+				val lexid = fields[3].toInt()
+				val headWord = if (fields[4].isEmpty()) null else NormalizedString(fields[4])
+				val headLexid = if (fields[5].isEmpty()) -1 else fields[5].toInt()
+				return Sensekey(word, type, domain, lexid, headWord, headLexid, str)
+			} catch (e: Exception) {
+				throw ParsePojoException("Sensekey:$str")
+			}
+		}
+
+		/**
+		 * Decode sensekey string into fields
+		 *
+		 * @param skStr sensekey string
+		 * @return fields, fields[0] lemma (not space-normalized), fields[1] pos, fields[2] lexfile, fields[3] lexid, fields[4] head lemma (or ""), not space-normalized, fields[5] head lexid (or "")
+		 */
+		@JvmStatic
+		fun decode(skStr: String): Array<String> {
+			val fields1 = patternBreak.split(skStr)
+			assert(fields1.size == 2)
+			// lemma
+			val field0 = fields1[0].replace(ESCAPED_PERCENT, "%")
+			// lexsense
+			val lexSense = fields1[1].replace(ESCAPED_PERCENT, "%")
+			// String typeFileLexid = lexSense.substring(0, 8);
+			val field1 = lexSense.substring(0, 1) // pos
+			val field2 = lexSense.substring(2, 4) // lexfile
+			val field3 = lexSense.substring(5, 7) // lexid
+			val last = lexSense.lastIndexOf(':')
+			val field4 = lexSense.substring(8, last) // head (or "")
+			val field5 = lexSense.substring(last + 1) // head lexid (or "")
+			return arrayOf(field0, field1, field2, field3, field4, field5)
+		}
 	}
 }

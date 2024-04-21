@@ -44,7 +44,7 @@ public class Counter
 		synsetCount++;
 
 		// relations
-		Relation[] relations = synset.getRelations();
+		Relation[] relations = synset.relations;
 		relationCount += relations.length;
 		Arrays.stream(relations).forEach(r -> {
 			var type = r.type.toString();

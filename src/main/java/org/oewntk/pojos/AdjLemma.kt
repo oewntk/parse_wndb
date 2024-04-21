@@ -1,105 +1,73 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.pojos
 
-package org.oewntk.pojos;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.Pattern
 
 /**
  * Adjective Lemma annotation (suffix-stripped)
  *
  * @author Bernard Bou
  */
-public class AdjLemma extends Lemma
-{
-	private static final long serialVersionUID = -5052132990585778536L;
-
-	private static final String REGEX = "\\((a|p|ip)\\)";
-
-	private static final Pattern PATTERN = Pattern.compile(REGEX);
-
-	protected final AdjPosition adjPosition;
-
-	/**
-	 * Constructor
-	 *
-	 * @param normString normalized string
-	 */
-	private AdjLemma(final TrimmedNormalizedString normString, final AdjPosition adjPosition)
-	{
-		super(normString);
-		this.adjPosition = adjPosition;
-	}
-
-	/**
-	 * Constructor
-	 *
-	 * @param normalizedString normalized string
-	 * @return adj lemma if input matches pattern or standard lemma
-	 */
-	public static Lemma makeAdj(NormalizedString normalizedString)
-	{
-		// trailing adjective position
-
-		final Matcher matcher = PATTERN.matcher(normalizedString.toString());
-		if (matcher.find())
-		{
-			try
-			{
-				// parse position
-				AdjPosition adjPosition = AdjPosition.parseAdjPosition(matcher.group());
-
-				// strip position
-				return new AdjLemma(new TrimmedNormalizedString(normalizedString), adjPosition);
-			}
-			catch (ParsePojoException e)
-			{
-				//
-			}
-		}
-		return Lemma.make(normalizedString);
-	}
-
+class AdjLemma private constructor(normString: TrimmedNormalizedString, adjPosition: AdjPosition) : Lemma(normString) {
 	/**
 	 * Get position
 	 *
 	 * @return position
 	 */
-	public AdjPosition getPosition()
-	{
-		return this.adjPosition;
-	}
+	val position: AdjPosition = adjPosition
 
 	/**
 	 * Get position tag (to append to lemma)
 	 *
 	 * @return position string
 	 */
-	public String toPositionSuffix()
-	{
-		if (this.adjPosition == null)
-		{
-			return "";
-		}
-		return "(" + this.adjPosition.getId() + ")";
+	fun toPositionSuffix(): String {
+		return "(" + position.id + ")"
 	}
 
 	// I D E N T I T Y
 
-	@Override
-	public boolean equals(final Object obj)
-	{
-		// ignore position
-		return super.equals(obj);
-	}
+	//override fun equals(other: Any?): Boolean {
+	//	// ignore position
+	//	return super.equals(other)
+	//}
 
-	@SuppressWarnings("EmptyMethod")
-	@Override
-	public int hashCode()
-	{
-		// ignore position
-		return super.hashCode();
+	//override fun hashCode(): Int {
+	//	// ignore position
+	//	return super.hashCode()
+	//}
+
+	companion object {
+
+		private const val REGEX = "\\((a|p|ip)\\)"
+
+		private val PATTERN: Pattern = Pattern.compile(REGEX)
+
+		/**
+		 * Constructor
+		 *
+		 * @param normalizedString normalized string
+		 * @return adj lemma if input matches pattern or standard lemma
+		 */
+		@JvmStatic
+		fun makeAdj(normalizedString: NormalizedString): Lemma {
+			// trailing adjective position
+
+			val matcher = PATTERN.matcher(normalizedString.toString())
+			if (matcher.find()) {
+				try {
+					// parse position
+					val adjPosition = AdjPosition.parseAdjPosition(matcher.group())
+
+					// strip position
+					return AdjLemma(TrimmedNormalizedString(normalizedString), adjPosition)
+				} catch (e: ParsePojoException) {
+					//
+				}
+			}
+			return make(normalizedString)
+		}
 	}
 }

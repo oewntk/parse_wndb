@@ -1,50 +1,33 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.utils
 
-package org.oewntk.utils;
-
-import org.oewntk.pojos.Pos;
-import org.oewntk.pojos.SynsetId;
+import org.oewntk.pojos.Pos
+import org.oewntk.pojos.SynsetId
 
 /**
  * Synset UId, unique Id across parts-of-speech
  *
+ * @param uniqueId unique id
+ * @property synsetId synset id
+ *
  * @author Bernard Bou
  */
-public class SynsetUId
-{
-	private final SynsetId synsetId;
+class SynsetUId
+private constructor(uniqueId: Long) {
+	private var synsetId: SynsetId?
 
-	/**
-	 * Constructor from unique id
-	 *
-	 * @param uniqueId unique id
-	 */
-	private SynsetUId(final long uniqueId)
-	{
-		for (final Pos p : Pos.values())
-		{
-			if (uniqueId >= SynsetUId.getBaseUID(p.toChar()) && uniqueId < SynsetUId.getCeilingUID(p.toChar()))
-			{
-				final long relativeId = uniqueId - SynsetUId.getBaseUID(p.toChar());
-				this.synsetId = new SynsetId(p, relativeId);
-				return;
+	init {
+		for (p in Pos.entries) {
+			if (uniqueId >= getBaseUID(p.toChar()) && uniqueId < getCeilingUID(p.toChar())) {
+				val relativeId = uniqueId - getBaseUID(p.toChar())
+				this.synsetId = SynsetId(p, relativeId)
+				break
 			}
 		}
 		// never reached
-		this.synsetId = null;
-	}
-
-	/**
-	 * Make synset id fri unique id
-	 *
-	 * @param uniqueId unique id
-	 * @return synset
-	 */
-	public static SynsetUId make(final long uniqueId)
-	{
-		return new SynsetUId(uniqueId);
+		this.synsetId = null
 	}
 
 	/**
@@ -52,10 +35,9 @@ public class SynsetUId
 	 *
 	 * @return unique id
 	 */
-	public long toUID()
-	{
-		final long base = SynsetUId.getBaseUID(this.synsetId.getPos().toChar());
-		return base + this.synsetId.getOffset();
+	private fun toUID(): Long {
+		val base = getBaseUID(synsetId!!.pos.toChar())
+		return base + synsetId!!.offset
 	}
 
 	/**
@@ -63,45 +45,48 @@ public class SynsetUId
 	 *
 	 * @return unique id string
 	 */
-	public String toUIDString()
-	{
-		final long uid = toUID();
-		return Long.toString(uid);
+	fun toUIDString(): String {
+		val uid = toUID()
+		return uid.toString()
 	}
 
-	/**
-	 * Get base UID for pos
-	 *
-	 * @param pos part of speech
-	 * @return base uid for given pos
-	 */
-	private static long getBaseUID(final char pos)
-	{
-		switch (pos)
-		{
-			case 'n':
-				return 100000000;
-			case 'v':
-				return 200000000;
-			case 'a':
-			case 's':
-				return 300000000;
-			case 'r':
-				return 400000000;
-			default:
-				break;
+	companion object {
+
+		/**
+		 * Make synset id fri unique id
+		 *
+		 * @param uniqueId unique id
+		 * @return synset
+		 */
+		fun make(uniqueId: Long): SynsetUId {
+			return SynsetUId(uniqueId)
 		}
-		return 900000000; // invalid value
-	}
 
-	/**
-	 * Get ceiling UID for pos
-	 *
-	 * @param pos part of speech
-	 * @return ceiling uid for given pos
-	 */
-	private static long getCeilingUID(final char pos)
-	{
-		return SynsetUId.getBaseUID(pos) + 100000000 - 1;
+		/**
+		 * Get base UID for pos
+		 *
+		 * @param pos part of speech
+		 * @return base uid for given pos
+		 */
+		private fun getBaseUID(pos: Char): Long {
+			when (pos) {
+				'n' -> return 100000000
+				'v' -> return 200000000
+				'a', 's' -> return 300000000
+				'r' -> return 400000000
+				else -> {}
+			}
+			return 900000000 // invalid value
+		}
+
+		/**
+		 * Get ceiling UID for pos
+		 *
+		 * @param pos part of speech
+		 * @return ceiling uid for given pos
+		 */
+		private fun getCeilingUID(pos: Char): Long {
+			return getBaseUID(pos) + 100000000 - 1
+		}
 	}
 }

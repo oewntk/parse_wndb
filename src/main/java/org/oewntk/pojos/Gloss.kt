@@ -1,32 +1,26 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.pojos
 
-package org.oewntk.pojos;
-
-import org.oewntk.utils.Tracing;
-
-import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.oewntk.utils.Tracing
+import java.util.*
 
 /**
  * Gloss
  *
+ * @param gloss raw gloss
+ * @property splitGloss split gloss
+ *
  * @author Bernard Bou
  */
-public final class Gloss
-{
-	private final String[] splitGloss;
+class Gloss(
+	gloss: String
+) {
+	private val splitGloss: Array<String>
 
-	/**
-	 * Constructor
-	 *
-	 * @param gloss raw gloss
-	 */
-	public Gloss(final String gloss)
-	{
-		this.splitGloss = split(gloss.trim());
+	init {
+		this.splitGloss = split(gloss.trim { it <= ' ' })
 	}
 
 	/**
@@ -35,52 +29,47 @@ public final class Gloss
 	 * @param gloss gloss
 	 * @return fields
 	 */
-	private String[] split(final String gloss)
-	{
-		final String REGEX = "\"[^\"]*\"";
-		final Pattern pattern = Pattern.compile(REGEX);
+	private fun split(gloss: String): Array<String> {
+		val pattern = Regex("\"[^\"]*\"").toPattern()
 
-		int quoteCount = 0;
-		for (int p = 0; (p = gloss.indexOf('"', p + 1)) != -1; )
-		{
-			quoteCount++;
+		var quoteCount = 0
+		var p = 0
+		while ((gloss.indexOf('"', p + 1).also { p = it }) != -1) {
+			quoteCount++
 		}
-		if (quoteCount % 2 != 0)
-		{
-			Tracing.psErr.println("Uneven quotes in :" + gloss);
+		if (quoteCount % 2 != 0) {
+			Tracing.psErr.println("Uneven quotes in :$gloss")
 		}
 
-		final Matcher matcher = pattern.matcher(gloss); // get a matcher object
-		int count = 0;
-		int split = -1;
-		while (matcher.find())
-		{
-			if (count == 0)
-			{
-				split = matcher.start();
+		val matcher = pattern.matcher(gloss) // get a matcher object
+		var count = 0
+		var split = -1
+		while (matcher.find()) {
+			if (count == 0) {
+				split = matcher.start()
 			}
-			count++;
+			count++
 		}
 
-		final String[] result = new String[count + 1];
+		var definition = if (split == -1) gloss else gloss.substring(0, split)
+		definition = definition.replaceFirst("[;\\s]*$".toRegex(), "")
+		matcher.reset()
 
-		// [0] definition
-		String definition = split == -1 ? gloss : gloss.substring(0, split);
-		definition = definition.replaceFirst("[;\\s]*$", "");
-		result[0] = definition;
-
-		// [1-n] samples
-		matcher.reset();
-		for (count = 1; matcher.find(); count++)
-		{
-			String sample = matcher.group();
-			if (sample.startsWith("\"") && sample.endsWith("\""))
-			{
-				sample = sample.substring(1, sample.length() - 1);
+		val result = Array(count + 1) {
+			if (it == 0)
+				// [0] definition
+				definition
+			else {
+				// [1-n] samples
+				matcher.find()
+				var sample = matcher.group()
+				if (sample.startsWith("\"") && sample.endsWith("\"")) {
+					sample = sample.substring(1, sample.length - 1)
+				}
+				sample
 			}
-			result[count] = sample;
 		}
-		return result;
+		return result
 	}
 
 	/**
@@ -88,53 +77,42 @@ public final class Gloss
 	 *
 	 * @return definition
 	 */
-	public String getDefinition()
-	{
-		return this.splitGloss[0];
-	}
+	val definition: String
+		get() = splitGloss[0]
 
 	/**
 	 * Get samples
 	 *
 	 * @return samples
 	 */
-	public String[] getSamples()
-	{
-		return Arrays.copyOfRange(this.splitGloss, 1, this.splitGloss.length);
-	}
+	val samples: Array<String>
+		get() = Arrays.copyOfRange(this.splitGloss, 1, splitGloss.size)
 
 	/**
 	 * Get pretty string
 	 *
 	 * @return pretty string
 	 */
-	public String toPrettyString()
-	{
-		final StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < this.splitGloss.length; i++)
-		{
-			if (i != 0)
-			{
-				sb.append(";");
-				sb.append("\n\t");
+	fun toPrettyString(): String {
+		val sb = StringBuilder()
+		for (i in splitGloss.indices) {
+			if (i != 0) {
+				sb.append(";")
+				sb.append("\n\t")
 			}
-			sb.append(this.splitGloss[i]);
+			sb.append(splitGloss[i])
 		}
-		return sb.toString();
+		return sb.toString()
 	}
 
-	@Override
-	public String toString()
-	{
-		final StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < this.splitGloss.length; i++)
-		{
-			if (i != 0)
-			{
-				sb.append(";");
+	override fun toString(): String {
+		val sb = StringBuilder()
+		for (i in splitGloss.indices) {
+			if (i != 0) {
+				sb.append(";")
 			}
-			sb.append(this.splitGloss[i]);
+			sb.append(splitGloss[i])
 		}
-		return sb.toString();
+		return sb.toString()
 	}
 }

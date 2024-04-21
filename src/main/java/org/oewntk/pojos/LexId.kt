@@ -1,53 +1,33 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
-
-package org.oewntk.pojos;
+package org.oewntk.pojos
 
 /**
  * Lexid
  *
+ * @property id lex id
+ *
  * @author Bernard Bou
  */
-public class LexId
-{
-	private final int id;
+class LexId private constructor(
+	val id: Int
+) {
 
-	/**
-	 * Lex id
-	 *
-	 * @param id lex id
-	 */
-	private LexId(final int id)
-	{
-		this.id = id;
+	override fun toString(): String {
+		return id.toString()
 	}
 
-	/**
-	 * Factory
-	 *
-	 * @param sensekey sensekey
-	 * @return lexid
-	 */
-	public static LexId make(final Sensekey sensekey)
-	{
-		final int id = sensekey.getLexId();
-		return new LexId(id);
-	}
+	companion object {
 
-	/**
-	 * Get lexid
-	 *
-	 * @return lexid
-	 */
-	public int getId()
-	{
-		return this.id;
-	}
-
-	@Override
-	public String toString()
-	{
-		return Integer.toString(this.id);
+		/**
+		 * Factory
+		 *
+		 * @param sensekey sensekey
+		 * @return lexid
+		 */
+		fun make(sensekey: Sensekey): LexId {
+			return LexId(sensekey.lexId)
+		}
 	}
 }

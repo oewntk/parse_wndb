@@ -1,45 +1,41 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
-
-package org.oewntk.pojos;
+package org.oewntk.pojos
 
 /**
  * Type (part-of-speech, with adj split between heads and satellites)
  *
+ * @param id          char id
+ * @param name2       name
+ * @param description description
+ * @param pos         pos
+ *
  * @author Bernard Bou
  */
-public enum Type
-{
-	NOUN('n', "noun", "noun", Pos.NOUN), //
-	VERB('v', "verb", "verb", Pos.VERB), //
-	ADJHEAD('a', "adj_head", "adjective", Pos.ADJ), //
-	ADV('r', "adv", "adverb", Pos.ADV), //
+enum class Type(
+	id: Char,
+	name2: String,
+	description: String,
+	pos: Pos
+) {
+	NOUN('n', "noun", "noun", Pos.NOUN),  //
+	VERB('v', "verb", "verb", Pos.VERB),  //
+	ADJHEAD('a', "adj_head", "adjective", Pos.ADJ),  //
+	ADV('r', "adv", "adverb", Pos.ADV),  //
 	ADJSAT('s', "adj_sat", "adjective satellite", Pos.ADJ);
 
-	private final char id;
+	private val id: Char
+	private val name2: String
+	private val description: String
+	private val pos: Pos
 
-	private final String name;
-
-	private final String description;
-
-	private final Pos pos;
-
-	/**
-	 * Constructor
-	 *
-	 * @param id          char id
-	 * @param name        name
-	 * @param description description
-	 * @param pos         pos
-	 */
-	Type(final char id, final String name, final String description, final Pos pos)
-	{
-		assert id == 'n' || id == 'v' || id == 'a' || id == 'r' || id == 's';
-		this.id = id;
-		this.name = name;
-		this.description = description;
-		this.pos = pos;
+	init {
+		assert(id == 'n' || id == 'v' || id == 'a' || id == 'r' || id == 's')
+		this.id = id
+		this.name2 = name2
+		this.description = description
+		this.pos = pos
 	}
 
 	/**
@@ -47,29 +43,8 @@ public enum Type
 	 *
 	 * @return char id
 	 */
-	public char toChar()
-	{
-		return this.id;
-	}
-
-	/**
-	 * Get name
-	 *
-	 * @return name
-	 */
-	public String getName()
-	{
-		return this.name;
-	}
-
-	/**
-	 * Get description
-	 *
-	 * @return description
-	 */
-	public String getDescription()
-	{
-		return this.description;
+	fun toChar(): Char {
+		return this.id
 	}
 
 	/**
@@ -77,77 +52,68 @@ public enum Type
 	 *
 	 * @return pos
 	 */
-	public Pos toPos()
-	{
-		return this.pos;
+	fun toPos(): Pos {
+		return this.pos
 	}
 
-	/**
-	 * Parse type from character id
-	 *
-	 * @param id character id
-	 * @return type
-	 * @throws ParsePojoException parse exception
-	 */
-	public static Type parseType(final char id) throws ParsePojoException
-	{
-		for (final Type type : Type.values())
-		{
-			if (id == type.id)
-			{
-				return type;
+	val isAdj: Boolean
+		/**
+		 * Whether this synset has adj type
+		 *
+		 * @return whether this synset has adj type
+		 */
+		get() = this == ADJHEAD || (this == ADJSAT)
+
+	override fun toString(): String {
+		return id.toString()
+	}
+
+	companion object {
+
+		/**
+		 * Parse type from character id
+		 *
+		 * @param id character id
+		 * @return type
+		 * @throws ParsePojoException parse exception
+		 */
+		@Throws(ParsePojoException::class)
+		fun parseType(id: Char): Type {
+			for (type in entries) {
+				if (id == type.id) {
+					return type
+				}
 			}
+			throw ParsePojoException("Type:$id")
 		}
-		throw new ParsePojoException("Type:" + id);
-	}
 
-	/**
-	 * Make type from type index
-	 *
-	 * @param index0 index
-	 * @return type
-	 */
-	public static Type fromIndex(final int index0)
-	{
-		final int index = index0 - 1;
-		if (index >= 0 && index < Type.values().length)
-		{
-			return Type.values()[index];
-		}
-		throw new IllegalArgumentException("Type:" + index);
-	}
-
-	/**
-	 * Make type from name
-	 *
-	 * @param name name
-	 * @return type
-	 */
-	public static Type fromName(final String name)
-	{
-		for (final Type type : Type.values())
-		{
-			if (name.equals(type.name))
-			{
-				return type;
+		/**
+		 * Make type from type index
+		 *
+		 * @param index0 index
+		 * @return type
+		 */
+		fun fromIndex(index0: Int): Type {
+			val index = index0 - 1
+			if (index >= 0 && index < entries.size) {
+				return entries[index]
 			}
+			throw IllegalArgumentException("Type:$index")
 		}
-		return null;
-	}
 
-	/**
-	 * Whether this synset has adj type
-	 *
-	 * @return whether this synset has adj type
-	 */
-	public boolean isAdj()
-	{
-		return this.equals(Type.ADJHEAD) || this.equals(Type.ADJSAT);
-	}
-
-	@Override
-	public String toString()
-	{
-		return Character.toString(this.id);
+		/**
+		 * Make type from name
+		 *
+		 * @param name name
+		 * @return type
+		 */
+		fun fromName(name: String): Type? {
+			for (type in entries) {
+				if (name == type.name) {
+					return type
+				}
+			}
+			return null
+		}
 	}
 }

@@ -1,8 +1,7 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
-
-package org.oewntk.pojos;
+package org.oewntk.pojos
 
 /**
  * Normalized string with possible suffix (adj position) stripped
@@ -12,21 +11,16 @@ package org.oewntk.pojos;
  *
  * @author Bernard Bou
  */
-public class TrimmedNormalizedString extends NormalizedString
-{
-	private static final long serialVersionUID = 2771391035584386352L;
+class TrimmedNormalizedString : NormalizedString {
 
 	/**
 	 * Constructor
 	 *
 	 * @param normalized string with possible suffix
 	 */
-	public TrimmedNormalizedString(final NormalizedString normalized)
-	{
-		super(normalized);
-
+	constructor(normalized: NormalizedString?) : super(normalized!!) {
 		// remove possible trailing adj position between parentheses
-		this.normalized = strip(this.normalized);
+		this.normalized = strip(this.normalized)
 	}
 
 	/**
@@ -34,16 +28,15 @@ public class TrimmedNormalizedString extends NormalizedString
 	 *
 	 * @param raw string with possible suffix
 	 */
-	public TrimmedNormalizedString(final String raw)
-	{
-		super(raw);
-
+	constructor(raw: String?) : super(raw!!) {
 		// remove possible trailing adj position between parentheses
-		this.normalized = strip(this.normalized);
+		this.normalized = strip(this.normalized)
 	}
 
-	public static String strip(String str)
-	{
-		return str.replaceAll("\\(.*\\)", "");
+	companion object {
+
+		fun strip(str: String): String {
+			return str.replace("\\(.*\\)".toRegex(), "")
+		}
 	}
 }

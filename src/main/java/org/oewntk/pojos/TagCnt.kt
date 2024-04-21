@@ -1,68 +1,44 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
-
-package org.oewntk.pojos;
+package org.oewntk.pojos
 
 /**
  * Tag
  *
+ * @property tagCount tag count
+ * @property senseNum sense number (index)
+ *
  * @author Bernard Bou
  */
-public class TagCnt
-{
-	public final int tagCount;
+class TagCnt(
+	val tagCount: Int,
+	val senseNum: Int
+) {
 
-	public final int senseNum;
-
-	/**
-	 * Constructor
-	 *
-	 * @param tagCount tag count
-	 * @param senseNum sense number (index)
-	 */
-	public TagCnt(final int tagCount, final int senseNum)
-	{
-		this.tagCount = tagCount;
-		this.senseNum = senseNum;
+	override fun toString(): String {
+		return tagCount.toString()
 	}
 
-	/**
-	 * Parse tagcount from string
-	 *
-	 * @param str      string
-	 * @param senseNum senseNumber
-	 * @return tag count
-	 * @throws ParsePojoException parse exception
-	 */
-	public static TagCnt parseTagCnt(final String str, int senseNum) throws ParsePojoException
-	{
-		try
-		{
-			final int tagCount = Integer.parseInt(str);
-			return new TagCnt(tagCount, senseNum);
+	companion object {
+
+		/**
+		 * Parse tagcount from string
+		 *
+		 * @param str      string
+		 * @param senseNum senseNumber
+		 * @return tag count
+		 * @throws ParsePojoException parse exception
+		 */
+		@JvmOverloads
+		@Throws(ParsePojoException::class)
+		fun parseTagCnt(str: String, senseNum: Int = 0): TagCnt {
+			try {
+				val tagCount = str.toInt()
+				return TagCnt(tagCount, senseNum)
+			} catch (e: Exception) {
+				throw ParsePojoException(e)
+			}
 		}
-		catch (Exception e)
-		{
-			throw new ParsePojoException(e);
-		}
-	}
-
-	/**
-	 * Parse tagcount from string
-	 *
-	 * @param str string
-	 * @return tag count
-	 * @throws ParsePojoException parse exception
-	 */
-	public static TagCnt parseTagCnt(final String str) throws ParsePojoException
-	{
-		return parseTagCnt(str, 0);
-	}
-
-	@Override
-	public String toString()
-	{
-		return Integer.toString(this.tagCount);
 	}
 }

@@ -1,86 +1,41 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.pojos
 
-package org.oewntk.pojos;
-
-import java.util.Objects;
+import java.util.*
 
 /**
  * Synset Id
  *
+ * @param pos    part of speech
+ * @param offset offset in file, the offset value is guaranteed to be unique only relative to the part of speech
+ *
  * @author Bernard Bou
  */
-public class SynsetId
-{
-	/**
-	 * Part of speech
-	 */
-	private final Pos pos;
-
-	/**
-	 * The offset value is guaranteed to be unique only relative to the part of speech
-	 */
-	private final long offset;
-
-	/**
-	 * Constructor
-	 *
-	 * @param pos    part of speech
-	 * @param offset offset in file
-	 */
-	public SynsetId(final Pos pos, final long offset)
-	{
-		this.pos = pos;
-		this.offset = offset;
-	}
-
-	/**
-	 * Get file offset
-	 *
-	 * @return file offset
-	 */
-	public long getOffset()
-	{
-		return this.offset;
-	}
-
-	/**
-	 * Get part of speech
-	 *
-	 * @return part of speech
-	 */
-	public Pos getPos()
-	{
-		return this.pos;
-	}
+class SynsetId(
+	@JvmField val pos: Pos,
+	@JvmField val offset: Long
+) {
 
 	// I D E N T I T Y
 
-	@Override
-	public boolean equals(final Object o)
-	{
-		if (this == o)
-		{
-			return true;
+	override fun equals(other: Any?): Boolean {
+		if (this === other) {
+			return true
 		}
-		if (o == null || getClass() != o.getClass())
-		{
-			return false;
+		if (other == null || javaClass != other.javaClass) {
+			return false
 		}
-		SynsetId synsetId = (SynsetId) o;
-		return offset == synsetId.offset && pos == synsetId.pos;
+		val synsetId = other as SynsetId
+		return offset == synsetId.offset && pos == synsetId.pos
 	}
 
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(pos, offset);
+	override fun hashCode(): Int {
+		return Objects.hash(pos, offset)
 	}
 
-	@Override
-	public String toString()
-	{
-		return "" + getOffset() + '-' + getPos().toChar();
+	override fun toString(): String {
+		return "" + offset + '-' + pos.toChar()
 	}
 }

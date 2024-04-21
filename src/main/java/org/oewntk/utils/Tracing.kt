@@ -1,24 +1,24 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.utils
 
-package org.oewntk.utils;
+import java.io.OutputStream
+import java.io.PrintStream
 
-import java.io.OutputStream;
-import java.io.PrintStream;
+object Tracing {
 
-public class Tracing
-{
-	public static final PrintStream psInfo = System.out;
+	@JvmField
+	val psInfo: PrintStream = System.out
 
-	public static final PrintStream psErr = System.err;
+	@JvmField
+	val psErr: PrintStream = System.err
 
-	public static final PrintStream psNull = new PrintStream(new OutputStream()
-		{
-			@Override
-			public void write(final int i)
-			{
-				// do nothing
-			}
-		});
+	@JvmField
+	val psNull: PrintStream = PrintStream(object : OutputStream(
+	) {
+		override fun write(i: Int) {
+			// do nothing
+		}
+	})
 }

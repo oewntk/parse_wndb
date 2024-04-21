@@ -1,109 +1,88 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.pojos
 
-package org.oewntk.pojos;
-
-import java.io.Serializable;
-import java.util.Objects;
+import java.io.Serializable
+import java.util.*
 
 /**
  * Lemma (normalized, lower-cased)
  *
+ * @param normString normalized string
+ * @property lowerCasedNormalized lower-cased normalized string
+ *
  * @author Bernard Bou
  */
-public class Lemma /* extends NormalizedString */ implements Comparable<Lemma>, Serializable
-{
-	private static final long serialVersionUID = 1L;
+open class Lemma (
+	normString: NormalizedString
+) : Comparable<Lemma>, Serializable {
 
-	private final String lowerCasedNormalized;
-
-	/**
-	 * Constructor from normalized string
-	 *
-	 * @param normString normalized string
-	 */
-	@SuppressWarnings("CommentedOutCode")
-	protected Lemma(final NormalizedString normString)
-	{
-		// to lower case
-		this.lowerCasedNormalized = normString.normalized.toLowerCase();
-		//if (this.entry.matches(".*\\(.*\\)"))
-		//	throw new RuntimeException(this.entry);
-	}
-
-	// factory
-
-	/**
-	 * Make from bare normalized string
-	 *
-	 * @param bareNormalized normalized bare normalized string
-	 * @return lemma
-	 */
-	public static Lemma make(final TrimmedNormalizedString bareNormalized)
-	{
-		return new Lemma(bareNormalized);
-	}
-
-	/**
-	 * Make from normalized string
-	 *
-	 * @param normalized normalized string
-	 * @return lemma
-	 */
-	public static Lemma make(final NormalizedString normalized)
-	{
-		return new Lemma(normalized);
-	}
-
-	/**
-	 * Make from rawString
-	 *
-	 * @param rawString raw string
-	 * @return lemma
-	 */
-	public static Lemma make(final String rawString)
-	{
-		// normalize spaces then lowercase
-		return new Lemma(new NormalizedString(rawString));
-	}
+	private val lowerCasedNormalized = normString.normalized.lowercase(Locale.getDefault())
 
 	// I D E N T I T Y
 
-	@Override
-	public boolean equals(final Object o)
-	{
-		if (this == o)
-		{
-			return true;
+	override fun equals(other: Any?): Boolean {
+		if (this === other) {
+			return true
 		}
-		if (o == null || getClass() != o.getClass())
-		{
-			return false;
+		if (other == null || javaClass != other.javaClass) {
+			return false
 		}
-		Lemma lemma = (Lemma) o;
-		return lowerCasedNormalized.equals(lemma.lowerCasedNormalized);
+		val lemma = other as Lemma
+		return lowerCasedNormalized == lemma.lowerCasedNormalized
 	}
 
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(lowerCasedNormalized);
+	override fun hashCode(): Int {
+		return Objects.hash(lowerCasedNormalized)
 	}
 
 	// O R D E R I N G
 
-	@Override
-	public int compareTo(final Lemma that)
-	{
-		return this.lowerCasedNormalized.compareTo(that.lowerCasedNormalized);
+	override fun compareTo(other: Lemma): Int {
+		return lowerCasedNormalized.compareTo(other.lowerCasedNormalized)
 	}
 
 	// T O S T R I N G
 
-	@Override
-	public String toString()
-	{
-		return this.lowerCasedNormalized;
+	override fun toString(): String {
+		return this.lowerCasedNormalized
+	}
+
+	companion object {
+
+		// factories
+
+		/**
+		 * Make from bare normalized string
+		 *
+		 * @param bareNormalized normalized bare normalized string
+		 * @return lemma
+		 */
+		fun make(bareNormalized: TrimmedNormalizedString): Lemma {
+			return Lemma(bareNormalized)
+		}
+
+		/**
+		 * Make from normalized string
+		 *
+		 * @param normalized normalized string
+		 * @return lemma
+		 */
+		fun make(normalized: NormalizedString): Lemma {
+			return Lemma(normalized)
+		}
+
+		/**
+		 * Make from rawString
+		 *
+		 * @param rawString raw string
+		 * @return lemma
+		 */
+		@JvmStatic
+		fun make(rawString: String?): Lemma {
+			// normalize spaces then lowercase
+			return Lemma(NormalizedString(rawString!!))
+		}
 	}
 }

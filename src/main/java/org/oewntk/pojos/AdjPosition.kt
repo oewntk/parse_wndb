@@ -1,100 +1,66 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.pojos
 
-package org.oewntk.pojos;
+import org.oewntk.pojos.ParsePojoException
 
 /**
  * Adjective Position
  *
+ * @param id          position tag
+ * @param description position description
+ *
  * @author Bernard Bou
  */
-public enum AdjPosition
-{
-	PREDICATIVE("p", "predicate"), //
-	ATTRIBUTIVE("a", "attributive"), //
+enum class AdjPosition(
+	val id: String,
+	private val description: String
+) {
+	PREDICATIVE("p", "predicate"),  //
+	ATTRIBUTIVE("a", "attributive"),  //
 	POSTNOMINAL("ip", "immediately postnominal");
 
-	private final String id;
-
-	private final String description;
-
-	/**
-	 * Constructor
-	 *
-	 * @param id          position tag
-	 * @param description position description
-	 */
-	AdjPosition(final String id, final String description)
-	{
-		this.id = id;
-		this.description = description;
+	override fun toString(): String {
+		return "(" + this.id + "}"
 	}
 
-	/**
-	 * Find adj position from tag
-	 *
-	 * @param tag tag
-	 * @return adj position
-	 */
-	public static AdjPosition find(final String tag)
-	{
-		for (final AdjPosition position : AdjPosition.values())
-		{
-			if (position.id.equals(tag))
-			{
-				return position;
+	companion object {
+
+		/**
+		 * Find adj position from tag
+		 *
+		 * @param tag tag
+		 * @return adj position
+		 */
+		fun find(tag: String): AdjPosition? {
+			for (position in entries) {
+				if (position.id == tag) {
+					return position
+				}
 			}
+			return null
 		}
-		return null;
-	}
 
-	/**
-	 * Parse adj position from line
-	 *
-	 * @param suffix suffix = '(tag)'
-	 * @return adj position
-	 * @throws ParsePojoException parse exception
-	 */
-	public static AdjPosition parseAdjPosition(final String suffix) throws ParsePojoException
-	{
-		// remove parentheses
-		final String name = suffix.substring(1, suffix.length() - 1);
+		/**
+		 * Parse adj position from line
+		 *
+		 * @param suffix suffix = '(tag)'
+		 * @return adj position
+		 * @throws ParsePojoException parse exception
+		 */
+		@Throws(ParsePojoException::class)
+		fun parseAdjPosition(suffix: String): AdjPosition {
+			// remove parentheses
+			val name = suffix.substring(1, suffix.length - 1)
 
-		// look up
-		for (final AdjPosition adjPosition : AdjPosition.values())
-		{
-			if (name.equals(adjPosition.id))
-			{
-				return adjPosition;
+			// look up
+			for (adjPosition in entries) {
+				if (name == adjPosition.id) {
+					return adjPosition
+				}
 			}
+			throw ParsePojoException("AdjPosition:$name")
 		}
-		throw new ParsePojoException("AdjPosition:" + name);
-	}
-
-	/**
-	 * Get id
-	 *
-	 * @return id
-	 */
-	public String getId()
-	{
-		return this.id;
-	}
-
-	/**
-	 * Get description
-	 *
-	 * @return description
-	 */
-	public String getDescription()
-	{
-		return this.description;
-	}
-
-	@Override
-	public String toString()
-	{
-		return "(" + this.id + "}";
 	}
 }

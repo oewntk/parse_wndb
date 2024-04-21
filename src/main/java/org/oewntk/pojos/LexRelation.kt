@@ -1,58 +1,30 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.pojos
 
-package org.oewntk.pojos;
-
-import java.util.Objects;
-import java.util.function.Function;
+import java.util.*
 
 /**
  * Lexical Relation (a lexical relation is an extended semantical relation)
  *
+ * @param type         relation type
+ * @param fromSynsetId source synset id
+ * @param toSynsetId   target synset id
+ * @param fromWord     source word
+ * @param toWord       target word
+ * @property fromWord  case-sensitive source word
+ * @property toWord    unresolved word reference
+ *
  * @author Bernard Bou
  */
-public class LexRelation extends Relation
-{
-	public final LemmaCS fromWord;
-
-	private final LemmaRef toWord;
-
-	/**
-	 * Lex relation
-	 *
-	 * @param type         relation type
-	 * @param fromSynsetId source synset id
-	 * @param toSynsetId   target synset id
-	 * @param fromWord     source word
-	 * @param toWord       target word
-	 */
-	public LexRelation(final RelationQualifier type, final SynsetId fromSynsetId, final SynsetId toSynsetId, final LemmaCS fromWord, final LemmaRef toWord)
-	{
-		super(type, fromSynsetId, toSynsetId);
-		this.fromWord = fromWord;
-		this.toWord = toWord;
-	}
-
-	/**
-	 * Get (case-sensitive) source word
-	 *
-	 * @return (case - sensitive) source word
-	 */
-	public LemmaCS getFromWord()
-	{
-		return fromWord;
-	}
-
-	/**
-	 * Get target word reference
-	 *
-	 * @return target word (unresolved) reference
-	 */
-	public LemmaRef getToWord()
-	{
-		return toWord;
-	}
+class LexRelation(
+	type: RelationType,
+	fromSynsetId: SynsetId,
+	toSynsetId: SynsetId,
+	val fromWord: LemmaCS,
+	@JvmField val toWord: LemmaRef
+) : Relation(type, fromSynsetId, toSynsetId) {
 
 	/**
 	 * Resolve reference
@@ -60,47 +32,35 @@ public class LexRelation extends Relation
 	 * @param resolver resolver function
 	 * @return resolved word
 	 */
-
-	public Lemma resolveToWord(final Function<SynsetId, CoreSynset> resolver)
-	{
-		return this.toWord.resolve(resolver);
+	fun resolveToWord(resolver: (SynsetId) -> CoreSynset): Lemma {
+		return toWord.resolve(resolver)
 	}
 
 	// I D E N T I T Y
 
-	@Override
-	public boolean equals(final Object o)
-	{
-		if (this == o)
-		{
-			return true;
+	override fun equals(other: Any?): Boolean {
+		if (this === other) {
+			return true
 		}
-		if (o == null || getClass() != o.getClass())
-		{
-			return false;
+		if (other == null || javaClass != other.javaClass) {
+			return false
 		}
-		if (!super.equals(o))
-		{
-			return false;
+		if (!super.equals(other)) {
+			return false
 		}
-		LexRelation that = (LexRelation) o;
-		return fromWord.equals(that.fromWord) && toWord.equals(that.toWord);
+		val that = other as LexRelation
+		return fromWord == that.fromWord && toWord == that.toWord
 	}
 
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(super.hashCode(), fromWord, toWord);
+	override fun hashCode(): Int {
+		return Objects.hash(super.hashCode(), fromWord, toWord)
 	}
 
-	@Override
-	public String toString()
-	{
-		return String.format("%s: %s[%s] -> %s[%d]", this.type.getType(), this.fromSynsetId.toString(), this.fromWord, this.toSynsetId.toString(), this.toWord.getWordNum());
+	override fun toString(): String {
+		return String.format("%s: %s[%s] -> %s[%d]", type.type, fromSynsetId.toString(), this.fromWord, toSynsetId.toString(), toWord.wordNum)
 	}
 
-	public String toString(final String toWord)
-	{
-		return String.format("%s: %s[%s] -> %s[%s]", this.type.getType(), this.fromSynsetId.toString(), this.fromWord, this.toSynsetId.toString(), toWord);
+	fun toString(toWord: String?): String {
+		return String.format("%s: %s[%s] -> %s[%s]", type.type, fromSynsetId.toString(), this.fromWord, toSynsetId.toString(), toWord)
 	}
 }

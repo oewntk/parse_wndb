@@ -1,40 +1,44 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
-
-package org.oewntk.pojos;
+package org.oewntk.pojos
 
 /**
  * Pos (part of speech)
  *
+ * @param id          character id
+ * @param name2       name2
+ * @param description description
+ *
  * @author Bernard Bou
  */
-public enum Pos
-{
-	NOUN('n', "noun", "noun"), //
-	VERB('v', "verb", "verb"), //
-	ADJ('a', "adj", "adjective"), //
+enum class Pos(id: Char, name2: String, description: String) {
+	NOUN('n', "noun", "noun"),
+	VERB('v', "verb", "verb"),
+	ADJ('a', "adj", "adjective"),
 	ADV('r', "adv", "adverb");
 
-	private final char id;
-
-	private final String name;
-
-	private final String description;
+	private val id: Char
 
 	/**
-	 * Constructor
+	 * Get name
 	 *
-	 * @param id          character id
-	 * @param name        name
-	 * @param description description
+	 * @return name
 	 */
-	Pos(final char id, final String name, final String description)
-	{
-		assert id == 'n' || id == 'v' || id == 'a' || id == 'r';
-		this.id = id;
-		this.name = name;
-		this.description = description;
+	val name2: String
+
+	/**
+	 * Get description
+	 *
+	 * @return description
+	 */
+	private val description: String
+
+	init {
+		assert(id == 'n' || id == 'v' || id == 'a' || id == 'r')
+		this.id = id
+		this.name2 = name
+		this.description = description
 	}
 
 	/**
@@ -42,87 +46,62 @@ public enum Pos
 	 *
 	 * @return char id
 	 */
-	public char toChar()
-	{
-		return this.id;
+	fun toChar(): Char {
+		return this.id
 	}
 
-	/**
-	 * Get name
-	 *
-	 * @return name
-	 */
-	public String getName()
-	{
-		return this.name;
+	override fun toString(): String {
+		return id.toString()
 	}
 
-	/**
-	 * Get description
-	 *
-	 * @return description
-	 */
-	public String getDescription()
-	{
-		return this.description;
-	}
+	companion object {
 
-	/**
-	 * Parse pos from character id
-	 *
-	 * @param id character id
-	 * @return pos
-	 * @throws ParsePojoException parse exception
-	 */
-	public static Pos parsePos(final char id) throws ParsePojoException
-	{
-		for (final Pos pos : Pos.values())
-		{
-			if (id == pos.id)
-			{
-				return pos;
+		/**
+		 * Parse pos from character id
+		 *
+		 * @param id character id
+		 * @return pos
+		 * @throws ParsePojoException parse exception
+		 */
+		@JvmStatic
+		@Throws(ParsePojoException::class)
+		fun parsePos(id: Char): Pos {
+			for (pos in entries) {
+				if (id == pos.id) {
+					return pos
+				}
 			}
+			throw ParsePojoException("Pos:$id")
 		}
-		throw new ParsePojoException("Pos:" + id);
-	}
 
-	/**
-	 * Make pos from pos index
-	 *
-	 * @param index0 index
-	 * @return pos
-	 */
-	public static Pos fromIndex(final int index0)
-	{
-		final int index = index0 - 1;
-		if (index >= 0 && index < Pos.values().length)
-		{
-			return Pos.values()[index];
-		}
-		throw new IllegalArgumentException("Pos:" + index);
-	}
-
-	/**
-	 * Make pos from name
-	 *
-	 * @param name name
-	 * @return pos
-	 */
-	public static Pos fromName(final String name)
-	{
-		for (final Pos pos : Pos.values())
-		{
-			if (name.equals(pos.name))
-			{
-				return pos;
+		/**
+		 * Make pos from pos index
+		 *
+		 * @param index0 index
+		 * @return pos
+		 */
+		fun fromIndex(index0: Int): Pos {
+			val index = index0 - 1
+			if (index >= 0 && index < entries.size) {
+				return entries[index]
 			}
+			throw IllegalArgumentException("Pos:$index")
 		}
-		return null;
-	}
 
-	@Override
-	public String toString()
-	{
-		return Character.toString(this.id);
+		/**
+		 * Make pos from name
+		 *
+		 * @param name name
+		 * @return pos
+		 */
+		@JvmStatic
+		fun fromName(name: String): Pos? {
+			for (pos in entries) {
+				if (name == pos.name) {
+					return pos
+				}
+			}
+			return null
+		}
 	}
 }

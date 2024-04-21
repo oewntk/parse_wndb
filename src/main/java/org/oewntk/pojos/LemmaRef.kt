@@ -1,60 +1,22 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.pojos
 
-package org.oewntk.pojos;
-
-import java.util.Objects;
-import java.util.function.Function;
+import java.util.*
 
 /**
  * Lemma Reference (nth word in synset)
  *
+ * @property synsetId synsetId of the synset the lemma is member of
+ * @property wordNum  1-based number of the word in the lemma list
+ *
  * @author Bernard Bou
  */
-public class LemmaRef
-{
-	/**
-	 * SynsetId of the synset the lemma is member of
-	 */
-	private final SynsetId synsetId;
-
-	/**
-	 * 1-based number of the word in the lemma list
-	 */
-	private final int wordNum;
-
-	/**
-	 * Constructor
-	 *
-	 * @param synsetId synsetId of the synset the lemma is member of
-	 * @param wordNum  1-based number of the word in the lemma list
-	 */
-	protected LemmaRef(final SynsetId synsetId, final int wordNum)
-	{
-		this.synsetId = synsetId;
-		this.wordNum = wordNum;
-	}
-
-	/**
-	 * Get synset id
-	 *
-	 * @return synset id
-	 */
-	public SynsetId getSynsetId()
-	{
-		return synsetId;
-	}
-
-	/**
-	 * Get word num
-	 *
-	 * @return word num
-	 */
-	public int getWordNum()
-	{
-		return wordNum;
-	}
+class LemmaRef(
+	@JvmField val synsetId: SynsetId,
+	@JvmField val wordNum: Int
+) {
 
 	/**
 	 * Dereference / Resolve
@@ -62,10 +24,9 @@ public class LemmaRef
 	 * @param f functions that when applied to synsetId yields synset
 	 * @return lemma referred to by reference
 	 */
-	public Lemma resolve(final Function<SynsetId, CoreSynset> f)
-	{
-		final CoreSynset synset = f.apply(this.synsetId);
-		return synset.getCSLemmas()[this.wordNum - 1].lemma;
+	fun resolve(f: (SynsetId) -> CoreSynset): Lemma {
+		val synset = f.invoke(this.synsetId)
+		return synset.cSLemmas[wordNum - 1].lemma
 	}
 
 	/**
@@ -74,37 +35,28 @@ public class LemmaRef
 	 * @param synset synset
 	 * @return lemma referred to by reference
 	 */
-	public Lemma resolve(final CoreSynset synset)
-	{
-		return synset.getCSLemmas()[this.wordNum - 1].lemma;
+	fun resolve(synset: CoreSynset): Lemma {
+		return synset.cSLemmas[wordNum - 1].lemma
 	}
 
 	// I D E N T I T Y
 
-	@Override
-	public boolean equals(final Object o)
-	{
-		if (this == o)
-		{
-			return true;
+	override fun equals(other: Any?): Boolean {
+		if (this === other) {
+			return true
 		}
-		if (o == null || getClass() != o.getClass())
-		{
-			return false;
+		if (other == null || javaClass != other.javaClass) {
+			return false
 		}
-		LemmaRef lemmaRef = (LemmaRef) o;
-		return wordNum == lemmaRef.wordNum && synsetId.equals(lemmaRef.synsetId);
+		val lemmaRef = other as LemmaRef
+		return wordNum == lemmaRef.wordNum && synsetId == lemmaRef.synsetId
 	}
 
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(synsetId, wordNum);
+	override fun hashCode(): Int {
+		return Objects.hash(synsetId, wordNum)
 	}
 
-	@Override
-	public String toString()
-	{
-		return this.synsetId + "[" + this.wordNum + "]";
+	override fun toString(): String {
+		return synsetId.toString() + "[" + this.wordNum + "]"
 	}
 }

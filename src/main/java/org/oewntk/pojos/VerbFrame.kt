@@ -1,63 +1,43 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
-
-package org.oewntk.pojos;
+package org.oewntk.pojos
 
 /**
  * Verb Frame (in verb.Framestext)
  *
+ * @property id    frame id
+ * @property frame frame text
+ *
  * @author Bernard Bou
  */
-public class VerbFrame
-{
-	/**
-	 * Frame id
-	 */
-	public final int id;
+class VerbFrame private constructor(
+	val id: Int,
+	private val frame: String
+) {
 
-	/**
-	 * Frame text
-	 */
-	public final String frame;
-
-	/**
-	 * Constructor
-	 *
-	 * @param id    frame id
-	 * @param frame frame text
-	 */
-	private VerbFrame(final int id, final String frame)
-	{
-		super();
-		this.id = id;
-		this.frame = frame;
+	override fun toString(): String {
+		return "id=" + this.id + " frame=" + this.frame
 	}
 
-	/**
-	 * Parse from line
-	 *
-	 * @param line line
-	 * @return verb frame
-	 * @throws ParsePojoException parse exception
-	 */
-	public static VerbFrame parseVerbFrame(final String line) throws ParsePojoException
-	{
-		try
-		{
-			final int id = Integer.parseInt(line.split("\\s+")[0]);
-			final String text = line.substring(3);
-			return new VerbFrame(id, text);
-		}
-		catch (Exception e)
-		{
-			throw new ParsePojoException(e);
-		}
-	}
+	companion object {
 
-	@Override
-	public String toString()
-	{
-		return "id=" + this.id + " frame=" + this.frame;
+		/**
+		 * Parse from line
+		 *
+		 * @param line line
+		 * @return verb frame
+		 * @throws ParsePojoException parse exception
+		 */
+		@Throws(ParsePojoException::class)
+		fun parseVerbFrame(line: String): VerbFrame {
+			try {
+				val id = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0].toInt()
+				val text = line.substring(3)
+				return VerbFrame(id, text)
+			} catch (e: Exception) {
+				throw ParsePojoException(e)
+			}
+		}
 	}
 }

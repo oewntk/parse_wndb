@@ -50,19 +50,19 @@ public class RelationParser
 	private final Consumer<Relation> relationConsumer = (relation) -> {
 
 		String type = relation.type.toString();
-		if (relation.fromSynsetId == null || relation.fromSynsetId.getOffset() == 0L || relation.toSynsetId == null || relation.toSynsetId.getOffset() == 0L)
+		if (relation.fromSynsetId == null || relation.fromSynsetId.offset == 0L || relation.toSynsetId == null || relation.toSynsetId.offset == 0L)
 		{
 			throw new IllegalArgumentException(relation.toString());
 		}
 		if ((relation instanceof LexRelation))
 		{
 			LexRelation lexRelation = (LexRelation) relation;
-			LemmaRef toWord = lexRelation.getToWord();
-			if (toWord == null || toWord.getSynsetId().getOffset() == 0 || toWord.getWordNum() == 0)
+			LemmaRef toWord = lexRelation.toWord;
+			if (toWord == null || toWord.synsetId.offset == 0 || toWord.wordNum == 0)
 			{
 				throw new IllegalArgumentException(lexRelation.toString());
 			}
-			if (!RelationQualifier.SENSE_RELATIONS.contains(type))
+			if (!RelationType.SENSE_RELATIONS.contains(type))
 			{
 				throw new IllegalArgumentException(lexRelation.toString());
 			}
@@ -70,7 +70,7 @@ public class RelationParser
 		}
 		else
 		{
-			if (!RelationQualifier.SYNSET_RELATIONS.contains(type))
+			if (!RelationType.SYNSET_RELATIONS.contains(type))
 			{
 				throw new IllegalArgumentException(relation.toString());
 			}
@@ -84,16 +84,16 @@ public class RelationParser
 	private final Consumer<LexRelation> lexRelationConsumer = (relation) -> {
 
 		String type = relation.type.toString();
-		if (relation.fromSynsetId == null || relation.fromSynsetId.getOffset() == 0L || relation.toSynsetId == null || relation.toSynsetId.getOffset() == 0L)
+		if (relation.fromSynsetId == null || relation.fromSynsetId.offset == 0L || relation.toSynsetId == null || relation.toSynsetId.offset == 0L)
 		{
 			throw new IllegalArgumentException(relation.toString());
 		}
-		LemmaRef toWord = relation.getToWord();
-		if (toWord == null || toWord.getSynsetId().getOffset() == 0 || toWord.getWordNum() == 0)
+		LemmaRef toWord = relation.toWord;
+		if (toWord == null || toWord.synsetId.offset == 0 || toWord.wordNum == 0)
 		{
 			throw new IllegalArgumentException(relation.toString());
 		}
-		if (!RelationQualifier.SENSE_RELATIONS.contains(type))
+		if (!RelationType.SENSE_RELATIONS.contains(type))
 		{
 			throw new IllegalArgumentException(relation.toString());
 		}
@@ -212,7 +212,7 @@ public class RelationParser
 					{
 						continue;
 					}
-					Relation[] relations = synset.getRelations();
+					Relation[] relations = synset.relations;
 					for (Relation relation : relations)
 					{
 						if (relation instanceof LexRelation && lexRelationConsumer != null)
@@ -266,9 +266,9 @@ public class RelationParser
 	 */
 	private String resolveToWord(final LexRelation lr)
 	{
-		SynsetId toSynsetId = lr.getToSynsetId();
+		SynsetId toSynsetId = lr.toSynsetId;
 		Synset toSynset = synsetsById.get(toSynsetId);
-		LemmaRef toWordRef = lr.getToWord();
+		LemmaRef toWordRef = lr.toWord;
 		return toWordRef.resolve(toSynset).toString();
 	}
 

@@ -62,27 +62,27 @@ public class TestSensekey
 
 		Sensekey sk1 = Sensekey.parseSensekey(sensekeys[0]);
 		assertNotNull(sk1);
-		assertEquals("go to the dogs", sk1.getWord().toString());
+		assertEquals("go to the dogs", sk1.word.toString());
 		assertEquals("go to the dogs", sk1.getLemma().toString());
-		assertEquals(Type.VERB, sk1.getType());
-		assertEquals("verb.change", sk1.getDomain().getDomain());
-		assertNull(sk1.getHeadWord());
-		assertEquals(-1, sk1.getHeadLexId());
+		assertEquals(Type.VERB, sk1.type);
+		assertEquals("verb.change", sk1.domain.getDomain());
+		assertNull(sk1.headWord);
+		assertEquals(-1, sk1.headLexId);
 
 		Sensekey sk2 = Sensekey.parseSensekey(sensekeys[1]);
 		assertNotNull(sk2);
-		assertEquals("half-size", sk2.getWord().toString());
+		assertEquals("half-size", sk2.word.toString());
 		assertEquals("half-size", sk2.getLemma().toString());
-		assertEquals(Type.ADJSAT, sk2.getType());
-		assertEquals("adj.all", sk2.getDomain().getDomain());
-		assertEquals("small", sk2.getHeadWord().toString());
-		assertEquals(0, sk2.getHeadLexId());
+		assertEquals(Type.ADJSAT, sk2.type);
+		assertEquals("adj.all", sk2.domain.getDomain());
+		assertEquals("small", sk2.headWord.toString());
+		assertEquals(0, sk2.headLexId);
 
 		for (int i = 2; i < sensekeys.length; i++)
 		{
 			Sensekey sk = Sensekey.parseSensekey(sensekeys[i]);
 			assertNotNull(sk);
-			ps.println(sk.getWord().toString());
+			ps.println(sk.word.toString());
 		}
 	}
 
@@ -93,9 +93,9 @@ public class TestSensekey
 
 		Sensekey sk1 = Sensekey.parseSensekey(sensekey);
 		assertNotNull(sk1);
-		assertEquals("100%", sk1.getWord().toString());
+		assertEquals("100%", sk1.word.toString());
 		assertEquals("100%", sk1.getLemma().toString());
-		ps.println(sk1.getWord().toString());
+		ps.println(sk1.word.toString());
 	}
 
 	private static String generate(String lemma, @SuppressWarnings("SameParameterValue") int pos, @SuppressWarnings("SameParameterValue") int lexfile, @SuppressWarnings("SameParameterValue") int lexid, String head, @SuppressWarnings("SameParameterValue") int headid)
