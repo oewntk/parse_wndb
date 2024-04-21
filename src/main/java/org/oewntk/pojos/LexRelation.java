@@ -27,7 +27,7 @@ public class LexRelation extends Relation
 	 * @param fromWord     source word
 	 * @param toWord       target word
 	 */
-	public LexRelation(final RelationType type, final SynsetId fromSynsetId, final SynsetId toSynsetId, final LemmaCS fromWord, final LemmaRef toWord)
+	public LexRelation(final RelationQualifier type, final SynsetId fromSynsetId, final SynsetId toSynsetId, final LemmaCS fromWord, final LemmaRef toWord)
 	{
 		super(type, fromSynsetId, toSynsetId);
 		this.fromWord = fromWord;
@@ -96,11 +96,11 @@ public class LexRelation extends Relation
 	@Override
 	public String toString()
 	{
-		return String.format("%s: %s[%s] -> %s[%d]", this.type.getName(), this.fromSynsetId.toString(), this.fromWord, this.toSynsetId.toString(), this.toWord.getWordNum());
+		return String.format("%s: %s[%s] -> %s[%d]", this.type.getType(), this.fromSynsetId.toString(), this.fromWord, this.toSynsetId.toString(), this.toWord.getWordNum());
 	}
 
 	public String toString(final String toWord)
 	{
-		return String.format("%s: %s[%s] -> %s[%s]", this.type.getName(), this.fromSynsetId.toString(), this.fromWord, this.toSynsetId.toString(), toWord);
+		return String.format("%s: %s[%s] -> %s[%s]", this.type.getType(), this.fromSynsetId.toString(), this.fromWord, this.toSynsetId.toString(), toWord);
 	}
 }

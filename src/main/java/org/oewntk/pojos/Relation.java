@@ -13,7 +13,7 @@ import java.util.Objects;
  */
 public class Relation
 {
-	public final RelationType type;
+	public final RelationQualifier type;
 
 	public final SynsetId fromSynsetId;
 
@@ -26,7 +26,7 @@ public class Relation
 	 * @param fromSynsetId source synset id
 	 * @param toSynsetId   target synset id
 	 */
-	public Relation(final RelationType type, final SynsetId fromSynsetId, final SynsetId toSynsetId)
+	public Relation(final RelationQualifier type, final SynsetId fromSynsetId, final SynsetId toSynsetId)
 	{
 		this.type = type;
 		this.fromSynsetId = fromSynsetId;
@@ -38,7 +38,7 @@ public class Relation
 	 *
 	 * @return relation type
 	 */
-	public RelationType getType()
+	public RelationQualifier getType()
 	{
 		return type;
 	}
@@ -89,6 +89,6 @@ public class Relation
 	@Override
 	public String toString()
 	{
-		return String.format("%s: %s -> %s", this.type.getName(), this.fromSynsetId.toString(), this.toSynsetId.toString());
+		return String.format("%s: %s -> %s", this.type.getType(), this.fromSynsetId.toString(), this.toSynsetId.toString());
 	}
 }

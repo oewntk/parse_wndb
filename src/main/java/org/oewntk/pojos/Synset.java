@@ -96,7 +96,7 @@ public class Synset extends CoreSynset
 
 				// compute
 				final Type synsetType = Type.parseType(relationPosField.charAt(0));
-				final RelationType relationType = RelationType.parseRelationType(relationTypeField);
+				final RelationQualifier relationType = RelationQualifier.parseRelationType(relationTypeField);
 				final SynsetId toId = new SynsetId(synsetType.toPos(), relationSynsetId);
 
 				// create

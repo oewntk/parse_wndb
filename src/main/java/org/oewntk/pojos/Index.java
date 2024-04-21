@@ -6,7 +6,7 @@ package org.oewntk.pojos;
 
 public class Index extends CoreIndex
 {
-	final RelationType[] relationTypes;
+	final RelationQualifier[] relationTypes;
 
 	final TagCnt tagCnt;
 
@@ -19,7 +19,7 @@ public class Index extends CoreIndex
 	 * @param relationTypes relation types
 	 * @param tagCnt        tag count
 	 */
-	public Index(final Lemma lemma, final Pos pos, final BaseSense[] senses, final RelationType[] relationTypes, final TagCnt tagCnt)
+	public Index(final Lemma lemma, final Pos pos, final BaseSense[] senses, final RelationQualifier[] relationTypes, final TagCnt tagCnt)
 	{
 		super(lemma, pos, senses);
 		this.relationTypes = relationTypes;
@@ -70,10 +70,10 @@ public class Index extends CoreIndex
 			fieldPointer++;
 
 			// relation types
-			final RelationType[] relationTypes = new RelationType[relationTypesCount];
+			final RelationQualifier[] relationTypes = new RelationQualifier[relationTypesCount];
 			for (int i = 0; i < relationTypesCount; i++)
 			{
-				relationTypes[i] = RelationType.parseRelationType(fields[fieldPointer + i]);
+				relationTypes[i] = RelationQualifier.parseRelationType(fields[fieldPointer + i]);
 			}
 			fieldPointer += relationTypesCount;
 
