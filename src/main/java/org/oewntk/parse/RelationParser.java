@@ -62,7 +62,7 @@ public class RelationParser
 			{
 				throw new IllegalArgumentException(lexRelation.toString());
 			}
-			if (!RelationType.SENSE_RELATIONS.contains(type))
+			if (!RelationQualifier.SENSE_RELATIONS.contains(type))
 			{
 				throw new IllegalArgumentException(lexRelation.toString());
 			}
@@ -70,7 +70,7 @@ public class RelationParser
 		}
 		else
 		{
-			if (!RelationType.SYNSET_RELATIONS.contains(type))
+			if (!RelationQualifier.SYNSET_RELATIONS.contains(type))
 			{
 				throw new IllegalArgumentException(relation.toString());
 			}
@@ -93,7 +93,7 @@ public class RelationParser
 		{
 			throw new IllegalArgumentException(relation.toString());
 		}
-		if (!RelationType.SENSE_RELATIONS.contains(type))
+		if (!RelationQualifier.SENSE_RELATIONS.contains(type))
 		{
 			throw new IllegalArgumentException(relation.toString());
 		}
