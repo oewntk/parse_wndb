@@ -15,7 +15,7 @@ import java.util.*
  */
 class LemmaCS(
 	@JvmField val lemma: Lemma,
-	val cased: NormalizedString
+	private val cased: NormalizedString
 ) {
 
 	// I D E N T I T Y
@@ -28,7 +28,7 @@ class LemmaCS(
 			return false
 		}
 		val that = other as LemmaCS
-		return lemma.equals(that.lemma) && cased.equals(that.cased)
+		return lemma == that.lemma && cased == that.cased
 	}
 
 	override fun hashCode(): Int {
