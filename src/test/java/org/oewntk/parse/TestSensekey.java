@@ -75,6 +75,7 @@ public class TestSensekey
 		assertEquals("half-size", sk2.getLemma().toString());
 		assertEquals(Type.ADJSAT, sk2.type);
 		assertEquals("adj.all", sk2.domain.getDomain());
+		assert sk2.headWord != null;
 		assertEquals("small", sk2.headWord.toString());
 		assertEquals(0, sk2.headLexId);
 
@@ -82,7 +83,7 @@ public class TestSensekey
 		{
 			Sensekey sk = Sensekey.parseSensekey(sensekeys[i]);
 			assertNotNull(sk);
-			ps.println(sk.word.toString());
+			ps.println(sk.word);
 		}
 	}
 
@@ -95,7 +96,7 @@ public class TestSensekey
 		assertNotNull(sk1);
 		assertEquals("100%", sk1.word.toString());
 		assertEquals("100%", sk1.getLemma().toString());
-		ps.println(sk1.word.toString());
+		ps.println(sk1.word);
 	}
 
 	private static String generate(String lemma, @SuppressWarnings("SameParameterValue") int pos, @SuppressWarnings("SameParameterValue") int lexfile, @SuppressWarnings("SameParameterValue") int lexid, String head, @SuppressWarnings("SameParameterValue") int headid)
