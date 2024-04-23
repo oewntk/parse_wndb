@@ -7,7 +7,7 @@ package org.oewntk.pojos
  * Normalized string with possible suffix (adj position) stripped
  * - underscore converted to space
  * - double single quote converted to double quote
- * - adjective position (a,ip,p) trimmed
+ * - adjective position ```(a,ip,p)``` trimmed
  *
  * @author Bernard Bou
  */
