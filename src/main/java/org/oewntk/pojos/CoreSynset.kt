@@ -58,7 +58,7 @@ open class CoreSynset protected constructor(
 		sb.append(String.format("%08d", id.offset))
 		sb.append(" words={")
 		for ((i, lemma) in this.cSLemmas.withIndex()) {
-			if (i != 0) {
+			if (i > 0) {
 				sb.append(",")
 			}
 			sb.append(lemma.toString())

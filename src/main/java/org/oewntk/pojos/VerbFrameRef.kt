@@ -20,7 +20,7 @@ class VerbFrameRef(
 		val sb = StringBuilder()
 		sb.append("{")
 		for ((i, lemma) in this.lemmas.withIndex()) {
-			if (i != 0) {
+			if (i > 0) {
 				sb.append(",")
 			}
 			sb.append(lemma.toString())
