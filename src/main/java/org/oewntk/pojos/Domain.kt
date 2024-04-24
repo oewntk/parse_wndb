@@ -13,9 +13,9 @@ package org.oewntk.pojos
  * @author Bernard Bou
  */
 enum class Domain(
-	@JvmField val id: Int,
+	val id: Int,
 	val name2: String,
-	@JvmField val pos: Pos
+	val pos: Pos
 ) {
 	ADJ_ALL(0, "all", Pos.ADJ),
 	ADJ_PERT(1, "pert", Pos.ADJ),
@@ -67,7 +67,7 @@ enum class Domain(
 	 * Domain name
 	 */
 	val domain: String
-		get() = pos.name2 + '.' + this.name
+		get() = pos.name2 + '.' + this.name2
 
 	override fun toString(): String {
 		return id.toString()

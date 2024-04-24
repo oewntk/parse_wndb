@@ -12,33 +12,18 @@ package org.oewntk.pojos
  *
  * @author Bernard Bou
  */
-enum class Pos(id: Char, name2: String, description: String) {
+enum class Pos(
+	val id: Char,
+	val name2: String,
+	val description: String
+) {
 	NOUN('n', "noun", "noun"),
 	VERB('v', "verb", "verb"),
 	ADJ('a', "adj", "adjective"),
 	ADV('r', "adv", "adverb");
 
-	private val id: Char
-
-	/**
-	 * Get name
-	 *
-	 * @return name
-	 */
-	val name2: String
-
-	/**
-	 * Get description
-	 *
-	 * @return description
-	 */
-	private val description: String
-
 	init {
 		assert(id == 'n' || id == 'v' || id == 'a' || id == 'r')
-		this.id = id
-		this.name2 = name
-		this.description = description
 	}
 
 	/**
