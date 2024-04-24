@@ -134,10 +134,10 @@ class RelationParser(
 				var offsetErrorCount = 0
 				var parseErrorCount = 0
 				var relationCount: Long = 0
-
-				var rawLine: String
 				var fileOffset = raFile.filePointer
-				while ((raFile.readLine().also { rawLine = it }) != null) {
+
+				while (true) {
+					val rawLine = raFile.readLine() ?: break
 					lineCount++
 					if (rawLine.isEmpty() || rawLine[0] == ' ') {
 						fileOffset = raFile.filePointer

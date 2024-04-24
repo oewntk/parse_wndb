@@ -6,9 +6,7 @@ package org.oewntk.parse
 import org.oewntk.pojos.ParsePojoException
 import org.oewntk.pojos.Synset
 import org.oewntk.utils.Tracing
-import java.io.File
-import java.io.IOException
-import java.io.RandomAccessFile
+import java.io.*
 import java.util.function.Consumer
 
 /**
@@ -67,16 +65,18 @@ object DataParser {
 		val file = File(dir, "data.$posName")
 		RandomAccessFile(file, "r").use { raFile ->
 			raFile.seek(0)
+
 			// iterate on lines
 			var lineCount = 0
 			var nonCommentCount = 0
 			var offsetErrorCount = 0
 			var parseErrorCount = 0
 			var synsetCount: Long = 0
-
-			var rawLine: String
 			var fileOffset = raFile.filePointer
-			while ((raFile.readLine().also { rawLine = it }) != null) {
+
+			while (true) {
+				val rawLine = raFile.readLine() ?: break
+
 				lineCount++
 				if (rawLine.isEmpty() || rawLine[0] == ' ') {
 					fileOffset = raFile.filePointer

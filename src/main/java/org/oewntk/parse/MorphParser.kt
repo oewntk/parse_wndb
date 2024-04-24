@@ -63,20 +63,19 @@ object MorphParser {
 			var lineCount = 0
 			var parseErrorCount = 0
 			var morphMappingCount: Long = 0
-
-			var line: String?
-			while ((reader.readLine().also { line = it }) != null) {
-				lineCount++
-
-				try {
-					val morphMapping = parseMorphMapping(line!!, pos!!)
-					morphMappingCount++
-					consumer.accept(morphMapping)
-				} catch (e: ParsePojoException) {
-					parseErrorCount++
-					pse.printf("%n%s:%d line=[%s] except=%s", file.name, lineCount, line, e)
-					if (THROW) {
-						throw e
+			reader.useLines { lines ->
+				lines.forEach { line ->
+					lineCount++
+					try {
+						val morphMapping = parseMorphMapping(line, pos!!)
+						morphMappingCount++
+						consumer.accept(morphMapping)
+					} catch (e: ParsePojoException) {
+						parseErrorCount++
+						pse.printf("%n%s:%d line=[%s] except=%s", file.name, lineCount, line, e)
+						if (THROW) {
+							throw e
+						}
 					}
 				}
 			}

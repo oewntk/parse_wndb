@@ -28,12 +28,12 @@ object DataParser1 {
 	 * @throws IOException io exception
 	 */
 	@Throws(IOException::class)
-	fun read(dir: String?, posName: String, fileOffset: Long): String {
+	fun read(dir: String?, posName: String, fileOffset: Long): String? {
 		val file = File(dir, "data.$posName")
 		RandomAccessFile(file, "r").use { raFile ->
 			raFile.seek(fileOffset)
 			val rawString = raFile.readLine()
-			return String(rawString.toByteArray(Flags.charSet))
+			return if (rawString == null) null else String(rawString.toByteArray(Flags.charSet))
 		}
 	}
 

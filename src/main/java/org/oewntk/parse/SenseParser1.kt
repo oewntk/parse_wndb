@@ -30,17 +30,18 @@ object SenseParser1 {
 	fun read(dir: String?, target: String?) {
 		val file = File(dir, "index.sense")
 		BufferedReader(FileReader(file)).use { reader ->
-			var line: String
-			while ((reader.readLine().also { line = it }) != null) {
-				if (line.contains(target!!)) {
-					Tracing.psInfo.println(line)
-					var sense: Sense
-					try {
-						sense = parseSenseLine(line)
-						Tracing.psInfo.println(sense)
-					} catch (e: ParsePojoException) {
-						Tracing.psErr.printf("%s cause:%s%n", e.message, e.cause)
-						e.printStackTrace(Tracing.psErr)
+			reader.useLines { lines ->
+				lines.forEach { line ->
+					if (line.contains(target!!)) {
+						Tracing.psInfo.println(line)
+						val sense: Sense
+						try {
+							sense = parseSenseLine(line)
+							Tracing.psInfo.println(sense)
+						} catch (e: ParsePojoException) {
+							Tracing.psErr.printf("%s cause:%s%n", e.message, e.cause)
+							e.printStackTrace(Tracing.psErr)
+						}
 					}
 				}
 			}

@@ -45,20 +45,19 @@ object SenseParser {
 			var lineCount = 0
 			var parseErrorCount = 0
 			var senseCount: Long = 0
-
-			var line: String?
-			while ((reader.readLine().also { line = it }) != null) {
-				lineCount++
-
-				try {
-					val sense = parseSense(line!!)
-					senseCount++
-					consumer.accept(sense)
-				} catch (e: ParsePojoException) {
-					parseErrorCount++
-					pse.printf("%n%s:%d line=[%s] except=%s", file.name, lineCount, line, e)
-					if (THROW) {
-						throw e
+			reader.useLines { lines ->
+				lines.forEach { line ->
+					lineCount++
+					try {
+						val sense = parseSense(line)
+						senseCount++
+						consumer.accept(sense)
+					} catch (e: ParsePojoException) {
+						parseErrorCount++
+						pse.printf("%n%s:%d line=[%s] except=%s", file.name, lineCount, line, e)
+						if (THROW) {
+							throw e
+						}
 					}
 				}
 			}

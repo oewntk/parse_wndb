@@ -31,17 +31,18 @@ object IndexParser1 {
 	fun read(dir: String?, posName: String, target: String?) {
 		val file = File(dir, "index.$posName")
 		BufferedReader(FileReader(file)).use { reader ->
-			var line: String
-			while ((reader.readLine().also { line = it }) != null) {
-				if (line.contains(target!!)) {
-					Tracing.psInfo.println(line)
-					var index: CoreIndex
-					try {
-						index = parseIndexLine(line)
-						Tracing.psInfo.println(index)
-					} catch (e: ParsePojoException) {
-						Tracing.psErr.printf("%s cause:%s%n", e.message, e.cause)
-						e.printStackTrace(Tracing.psErr)
+			reader.useLines { lines ->
+				lines.forEach { line ->
+					if (line.contains(target!!)) {
+						Tracing.psInfo.println(line)
+						val index: CoreIndex
+						try {
+							index = parseIndexLine(line)
+							Tracing.psInfo.println(index)
+						} catch (e: ParsePojoException) {
+							Tracing.psErr.printf("%s cause:%s%n", e.message, e.cause)
+							e.printStackTrace(Tracing.psErr)
+						}
 					}
 				}
 			}

@@ -86,23 +86,23 @@ object IndexParser {
 			var nonCommentCount = 0
 			var indexCount: Long = 0
 			var parseErrorCount = 0
-			var line: String
-			while ((reader.readLine().also { line = it }) != null) {
-				lineCount++
-				if (line.isEmpty() || line[0] == ' ') {
-					continue
-				}
-				nonCommentCount++
-
-				try {
-					val index = parseIndex(line)
-					indexCount++
-					consumer.accept(index)
-				} catch (e: ParsePojoException) {
-					parseErrorCount++
-					pse.printf("%n%s:%d line=[%s] except=%s", file.name, lineCount, line, e)
-					if (THROW) {
-						throw e
+			reader.useLines { lines ->
+				lines.forEach { line ->
+					// Process each line here
+					lineCount++
+					if (line.isNotEmpty() && line[0] != ' ') {
+						nonCommentCount++
+						try {
+							val index = parseIndex(line)
+							indexCount++
+							consumer.accept(index)
+						} catch (e: ParsePojoException) {
+							parseErrorCount++
+							pse.printf("%n%s:%d line=[%s] except=%s", file.name, lineCount, line, e)
+							if (THROW) {
+								throw e
+							}
+						}
 					}
 				}
 			}
@@ -135,23 +135,22 @@ object IndexParser {
 			var nonCommentCount = 0
 			var indexCount: Long = 0
 			var parseErrorCount = 0
-			var line: String
-			while ((reader.readLine().also { line = it }) != null) {
-				lineCount++
-				if (line.isEmpty() || line[0] == ' ') {
-					continue
-				}
-				nonCommentCount++
-
-				try {
-					val index = parseCoreIndex(line)
-					indexCount++
-					consumer.accept(index)
-				} catch (e: ParsePojoException) {
-					parseErrorCount++
-					pse.printf("%n%s:%d line=[%s] except=%s", file.name, lineCount, line, e)
-					if (THROW) {
-						throw e
+			reader.useLines { lines ->
+				lines.forEach { line ->
+					lineCount++
+					if (line.isNotEmpty() || line[0] != ' ') {
+						nonCommentCount++
+						try {
+							val index = parseCoreIndex(line)
+							indexCount++
+							consumer.accept(index)
+						} catch (e: ParsePojoException) {
+							parseErrorCount++
+							pse.printf("%n%s:%d line=[%s] except=%s", file.name, lineCount, line, e)
+							if (THROW) {
+								throw e
+							}
+						}
 					}
 				}
 			}
