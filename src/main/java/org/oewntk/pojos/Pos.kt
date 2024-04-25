@@ -80,13 +80,13 @@ enum class Pos(
 		 * @return pos
 		 */
 		@JvmStatic
-		fun fromName(name: String): Pos? {
+		fun fromName(name: String): Pos {
 			for (pos in entries) {
-				if (name == pos.name) {
+				if (name == pos.name2) {
 					return pos
 				}
 			}
-			return null
+			throw IllegalArgumentException(name)
 		}
 	}
 }
