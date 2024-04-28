@@ -7,14 +7,14 @@ package org.oewntk.pojos
  * Relation type qualifier
  *
  * @property symbol   pointer symbol
- * @property type     relation name
+ * @property name2    relation name
  * @property recurses whether relation can recurse
  *
  * @author Bernard Bou
  */
 enum class RelationType(
 	private val symbol: String,
-	val type: String,
+	val name2: String,
 	private val recurses: Boolean
 ) {
 
@@ -114,8 +114,7 @@ enum class RelationType(
 		@JvmStatic
 		@Throws(ParsePojoException::class)
 		fun parseRelationType(str: String): RelationType {
-			val value = MAP[str] ?: throw ParsePojoException("Relation type: $str")
-			return value
+			return MAP[str] ?: throw ParsePojoException("Relation type: $str")
 		}
 	}
 }

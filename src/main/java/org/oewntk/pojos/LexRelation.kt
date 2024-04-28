@@ -57,10 +57,10 @@ class LexRelation(
 	}
 
 	override fun toString(): String {
-		return String.format("%s: %s[%s] -> %s[%d]", type.type, fromSynsetId.toString(), this.fromWord, toSynsetId.toString(), toWord.wordNum)
+		return String.format("%s: %s[%s] -> %s[%d]", type.name2, fromSynsetId.toString(), this.fromWord, toSynsetId.toString(), toWord.wordNum)
 	}
 
 	fun toString(toWord: String?): String {
-		return String.format("%s: %s[%s] -> %s[%s]", type.type, fromSynsetId.toString(), this.fromWord, toSynsetId.toString(), toWord)
+		return String.format("%s: %s[%s] -> %s[%s]", type.name2, fromSynsetId.toString(), this.fromWord, toSynsetId.toString(), toWord)
 	}
 }
