@@ -52,7 +52,7 @@ class TestParse31 {
 		@BeforeClass
 		fun init() {
 			if (wnHome == null) {
-				Tracing.psErr.println("Define WNDB source dir with -DSOURCE31=path%n")
+				Tracing.psErr.println("Define WNDB source dir with -DSOURCE31=path")
 				Tracing.psErr.println("When running Maven tests, define a WNHOME31 environment variable that points to WordNet 3.1 dict directory.")
 				Assert.fail()
 			}

@@ -51,7 +51,7 @@ class TestParseXX {
 		@BeforeClass
 		fun init() {
 			if (wnHome == null) {
-				Tracing.psErr.println("Define WNDB source dir with -DSOURCEXX=path%n")
+				Tracing.psErr.println("Define WNDB source dir with -DSOURCEXX=path")
 				Tracing.psErr.println("When running Maven tests, define a WNHOMEXX_compat environment variable that points to WordNet 2021 compat dict directory.")
 				Assert.fail()
 			}
