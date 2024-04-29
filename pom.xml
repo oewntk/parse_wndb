@@ -132,17 +132,9 @@
         <version>2.22.2</version>
         <configuration>
           <systemPropertyVariables>
-            <property>
-              <name>SOURCE31</name>
-              <value>${env.WNHOME31}/</value>
-            </property>
-            <property>
-              <name>SOURCEXX</name>
-              <value>${env.WNHOMEXX_compat}/</value>
-            </property>
-            <property>
-              <name>SILENT</name>
-            </property>
+            <SOURCE31>${env.WNHOME31}/</SOURCE31>
+            <SOURCEXX>${env.WNHOMEXX_compat}/</SOURCEXX>
+            <SILENT/>
           </systemPropertyVariables>
         </configuration>
       </plugin>
