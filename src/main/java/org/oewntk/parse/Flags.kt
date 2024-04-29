@@ -13,6 +13,5 @@ object Flags {
 	/**
 	 * Character set for output files.
 	 */
-	@JvmField
 	val charSet: Charset = StandardCharsets.UTF_8
 }

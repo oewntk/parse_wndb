@@ -14,7 +14,7 @@ import java.util.*
  * @author Bernard Bou
  */
 class LemmaCS(
-	@JvmField val lemma: Lemma,
+	val lemma: Lemma,
 	private val cased: NormalizedString
 ) {
 

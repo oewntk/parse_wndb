@@ -33,7 +33,6 @@ class Synset private constructor(
 	 *
 	 * @return relations
 	 */
-	@JvmField
 	val relations: Array<Relation>?
 
 	/**
@@ -126,7 +125,6 @@ class Synset private constructor(
 		 * @return synset
 		 * @throws ParsePojoException parse exception
 		 */
-		@JvmStatic
 		@Throws(ParsePojoException::class)
 		fun parseSynsetLine(line: String, isAdj: Boolean): Synset {
 			try {

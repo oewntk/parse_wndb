@@ -12,7 +12,7 @@ package org.oewntk.pojos
  * @author Bernard Bou
  */
 class VerbFrameRef(
-	@JvmField val lemmas: Array<Lemma>,
+	val lemmas: Array<Lemma>,
 	val frameId: Int
 ) {
 

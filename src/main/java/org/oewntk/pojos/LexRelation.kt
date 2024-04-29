@@ -23,7 +23,7 @@ class LexRelation(
 	fromSynsetId: SynsetId,
 	toSynsetId: SynsetId,
 	val fromWord: LemmaCS,
-	@JvmField val toWord: LemmaRef
+	val toWord: LemmaRef
 ) : Relation(type, fromSynsetId, toSynsetId) {
 
 	/**

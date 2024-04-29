@@ -51,7 +51,6 @@ class AdjLemma private constructor(normString: TrimmedNormalizedString, adjPosit
 		 * @param normalizedString normalized string
 		 * @return adj lemma if input matches pattern or standard lemma
 		 */
-		@JvmStatic
 		fun makeAdj(normalizedString: NormalizedString): Lemma {
 			// trailing adjective position
 

@@ -52,7 +52,6 @@ open class BaseSense protected constructor(
 		 * @param sensePosIndex  sense index in pos
 		 * @return base sense
 		 */
-		@JvmStatic
 		fun make(lemma: Lemma, pos: Pos, synsetIdString: String, sensePosIndex: Int): BaseSense {
 			return BaseSense(SynsetId(pos, synsetIdString.toLong()), lemma, sensePosIndex)
 		}

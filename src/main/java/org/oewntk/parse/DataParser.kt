@@ -35,7 +35,6 @@ object DataParser {
 	 * @throws IOException        io exception
 	 * @throws ParsePojoException parse pojo exception
 	 */
-	@JvmStatic
 	@Throws(IOException::class, ParsePojoException::class)
 	fun parseAllSynsets(dir: File?, consumer: Consumer<Synset>): Long {
 		var count: Long = 0
@@ -140,7 +139,6 @@ object DataParser {
 	 * @throws IOException        io exception
 	 */
 	@Throws(ParsePojoException::class, IOException::class)
-	@JvmStatic
 	fun main(args: Array<String>) {
 		// Timing
 		val startTime = System.currentTimeMillis()

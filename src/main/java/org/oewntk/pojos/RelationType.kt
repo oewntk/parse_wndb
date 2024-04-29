@@ -62,7 +62,6 @@ enum class RelationType(
 	}
 
 	companion object {
-		@JvmField
 		val SYNSET_RELATIONS: Set<String> = setOf(
 			"hypernym", "hyponym",
 			"instance_hypernym", "instance_hyponym",
@@ -80,7 +79,6 @@ enum class RelationType(
 			"also"
 		)
 
-		@JvmField
 		val SENSE_RELATIONS: Set<String> = setOf(
 			"antonym",
 			"similar",
@@ -111,7 +109,6 @@ enum class RelationType(
 		 * @return relation type
 		 * @throws ParsePojoException parse exception
 		 */
-		@JvmStatic
 		@Throws(ParsePojoException::class)
 		fun parseRelationType(str: String): RelationType {
 			return MAP[str] ?: throw ParsePojoException("Relation type: $str")

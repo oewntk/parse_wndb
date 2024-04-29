@@ -37,7 +37,6 @@ object IndexParser {
 	 * @throws IOException        io exception
 	 * @throws ParsePojoException parse pojo exception
 	 */
-	@JvmStatic
 	@Throws(IOException::class, ParsePojoException::class)
 	fun parseAllIndexes(dir: File?, consumer: Consumer<Index>): Long {
 		var count: Long = 0

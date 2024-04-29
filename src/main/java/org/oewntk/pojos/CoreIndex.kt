@@ -62,7 +62,6 @@ open class CoreIndex protected constructor(
 		 * @return core index
 		 * @throws ParsePojoException parse exception
 		 */
-		@JvmStatic
 		@Throws(ParsePojoException::class)
 		fun parseCoreIndex(line: String): CoreIndex {
 			try {

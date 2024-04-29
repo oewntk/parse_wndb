@@ -53,7 +53,6 @@ class MorphMapping private constructor(
 		 * mice mouse
 		 * ```
 		 */
-		@JvmStatic
 		@Throws(ParsePojoException::class)
 		fun parseMorphMapping(line: String, pos: Pos): MorphMapping {
 			try {

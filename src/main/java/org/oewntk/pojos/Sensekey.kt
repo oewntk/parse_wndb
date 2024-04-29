@@ -22,20 +22,15 @@ import java.util.regex.Pattern
 class Sensekey {
 	private val key: String
 
-	@JvmField
 	val word: NormalizedString // may contain uppercase
 
-	@JvmField
 	val type: Type
 
-	@JvmField
 	val domain: Domain
 	val lexId: Int
 
-	@JvmField
 	val headWord: NormalizedString? // or null
 
-	@JvmField
 	val headLexId: Int // -1 for none
 
 	/**
@@ -125,7 +120,6 @@ class Sensekey {
 		 * @return sensekey
 		 * @throws ParsePojoException parse exception
 		 */
-		@JvmStatic
 		@Throws(ParsePojoException::class)
 		fun parseSensekey(str: String?): Sensekey? {
 			if (str == null) {
@@ -154,7 +148,6 @@ class Sensekey {
 		 * @param skStr sensekey string
 		 * @return fields, fields[0] lemma (not space-normalized), fields[1] pos, fields[2] lexfile, fields[3] lexid, fields[4] head lemma (or ""), not space-normalized, fields[5] head lexid (or "")
 		 */
-		@JvmStatic
 		fun decode(skStr: String): Array<String> {
 			val fields1 = patternBreak.split(skStr)
 			assert(fields1.size == 2)

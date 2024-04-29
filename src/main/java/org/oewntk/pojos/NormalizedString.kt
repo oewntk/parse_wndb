@@ -16,7 +16,6 @@ import java.util.*
  * @author Bernard Bou
  */
 open class NormalizedString : Comparable<NormalizedString>, Serializable {
-	@JvmField
 	var normalized: String
 
 	/**

@@ -82,7 +82,6 @@ enum class Domain(
 		 * @return lex domain
 		 * @throws ParsePojoException parse exception
 		 */
-		@JvmStatic
 		@Throws(ParsePojoException::class)
 		fun parseDomain(str: String): Domain {
 			val name = str.replace('.', '_').uppercase()
@@ -100,7 +99,6 @@ enum class Domain(
 		 * @return lex domain
 		 * @throws ParsePojoException parse exception
 		 */
-		@JvmStatic
 		@Throws(ParsePojoException::class)
 		fun parseDomainId(str: String): Domain {
 			val id = str.toInt()

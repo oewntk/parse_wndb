@@ -34,7 +34,6 @@ object SenseParser {
 	 * @throws IOException io exception
 	 * @throws ParsePojoException parse pojo exception
 	 */
-	@JvmStatic
 	@Throws(IOException::class, ParsePojoException::class)
 	fun parseSenses(dir: File?, consumer: Consumer<Sense>): Long {
 		psl.println("* Senses")

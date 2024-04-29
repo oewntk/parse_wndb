@@ -33,7 +33,6 @@ class Sense(
 		 * @return sense
 		 * @throws ParsePojoException parse exception
 		 */
-		@JvmStatic
 		@Throws(ParsePojoException::class)
 		fun parseSense(line: String): Sense {
 			try {

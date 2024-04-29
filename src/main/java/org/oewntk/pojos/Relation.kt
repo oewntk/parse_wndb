@@ -15,9 +15,9 @@ import java.util.*
  * @author Bernard Bou
  */
 open class Relation(
-	@JvmField val type: RelationType,
-	@JvmField val fromSynsetId: SynsetId,
-	@JvmField val toSynsetId: SynsetId
+	val type: RelationType,
+	val fromSynsetId: SynsetId,
+	val toSynsetId: SynsetId
 ) {
 
 	// I D E N T I T Y

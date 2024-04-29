@@ -14,8 +14,8 @@ import java.util.*
  * @author Bernard Bou
  */
 class SynsetId(
-	@JvmField val pos: Pos,
-	@JvmField val offset: Long
+	val pos: Pos,
+	val offset: Long
 ) {
 
 	// I D E N T I T Y

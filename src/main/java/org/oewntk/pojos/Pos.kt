@@ -48,7 +48,6 @@ enum class Pos(
 		 * @return pos
 		 * @throws ParsePojoException parse exception
 		 */
-		@JvmStatic
 		@Throws(ParsePojoException::class)
 		fun parsePos(id: Char): Pos {
 			for (pos in entries) {
@@ -79,7 +78,6 @@ enum class Pos(
 		 * @param name name
 		 * @return pos
 		 */
-		@JvmStatic
 		fun fromName(name: String): Pos {
 			for (pos in entries) {
 				if (name == pos.name2) {

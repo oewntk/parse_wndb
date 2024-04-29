@@ -38,7 +38,6 @@ object Parser {
 	 * @throws IOException        io exception
 	 * @throws ParsePojoException parse pojo exception
 	 */
-	@JvmStatic
 	@Throws(IOException::class, ParsePojoException::class)
 	fun parseAll(dir: File?, synsetConsumer: Consumer<Synset>?, senseConsumer: Consumer<Sense>?, indexConsumer: Consumer<Index>?) {
 		parseAllSynsets(dir, synsetConsumer!!)

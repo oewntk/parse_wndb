@@ -49,7 +49,6 @@ class Index(
 		 * @return index
 		 * @throws ParsePojoException parse exception
 		 */
-		@JvmStatic
 		@Throws(ParsePojoException::class)
 		fun parseIndex(line: String): Index {
 			try {

@@ -21,9 +21,9 @@ import java.util.*
 open class CoreSynset protected constructor(
 	val id: SynsetId,
 	val cSLemmas: Array<LemmaCS>,
-	@JvmField val type: Type,
-	@JvmField val domain: Domain,
-	@JvmField val gloss: Gloss
+	val type: Type,
+	val domain: Domain,
+	val gloss: Gloss
 ) {
 	/**
 	 * Lemmas
@@ -83,7 +83,6 @@ open class CoreSynset protected constructor(
 		 * @return synset
 		 * @throws ParsePojoException parse exception
 		 */
-		@JvmStatic
 		@Throws(ParsePojoException::class)
 		fun parseCoreSynset(line: String, isAdj: Boolean): CoreSynset {
 			try {

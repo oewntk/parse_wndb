@@ -14,8 +14,8 @@ import java.util.*
  * @author Bernard Bou
  */
 class LemmaRef(
-	@JvmField val synsetId: SynsetId,
-	@JvmField val wordNum: Int
+	val synsetId: SynsetId,
+	val wordNum: Int
 ) {
 
 	/**
