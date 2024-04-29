@@ -67,7 +67,7 @@ object MorphParser {
 				lines.forEach { line ->
 					lineCount++
 					try {
-						val morphMapping = parseMorphMapping(line, pos!!)
+						val morphMapping = parseMorphMapping(line, pos)
 						morphMappingCount++
 						consumer.accept(morphMapping)
 					} catch (e: ParsePojoException) {
