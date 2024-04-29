@@ -72,14 +72,13 @@ object DataParser {
 			var offsetErrorCount = 0
 			var parseErrorCount = 0
 			var synsetCount: Long = 0
-			var fileOffset = raFile.filePointer
 
 			while (true) {
+				val fileOffset = raFile.filePointer
 				val rawLine = raFile.readLine() ?: break
 
 				lineCount++
 				if (rawLine.isEmpty() || rawLine[0] == ' ') {
-					fileOffset = raFile.filePointer
 					continue
 				}
 
@@ -95,7 +94,6 @@ object DataParser {
 				if (fileOffset != readOffset) {
 					pse.printf("Offset: data.%s:%d offset=%08d line=[%s]%n", posName, lineCount, fileOffset, line)
 					offsetErrorCount++
-					fileOffset = raFile.filePointer
 					continue
 				}
 
@@ -111,7 +109,6 @@ object DataParser {
 						throw e
 					}
 				}
-				fileOffset = raFile.filePointer
 			}
 			val format = "%-50s %d%n"
 			psl.printf(format, "lines", nonCommentCount)
