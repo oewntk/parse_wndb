@@ -18,220 +18,221 @@ import java.util.function.Consumer
  * @author Bernard Bou
  */
 class RelationParser(
-	private val dir: File
+    private val dir: File,
 ) {
-	// Maps
-	/**
-	 * Synset by id map
-	 */
-	private val synsetsById: MutableMap<SynsetId, Synset> = HashMap()
+    // Maps
+    /**
+     * Synset by id map
+     */
+    private val synsetsById: MutableMap<SynsetId, Synset> = HashMap()
 
-	// Consumers
-	/**
-	 * Synset consumer
-	 */
-	private val synsetConsumer = Consumer { synset: Synset -> synsetsById[synset.id] = synset }
+    // Consumers
+    /**
+     * Synset consumer
+     */
+    private val synsetConsumer = Consumer { synset: Synset -> synsetsById[synset.id] = synset }
 
-	/**
-	 * Semantic relation consumer
-	 */
-	private val relationConsumer = Consumer { relation: Relation ->
-		val type = relation.type.toString()
-		require(!(relation.fromSynsetId.offset == 0L || relation.toSynsetId.offset == 0L)) { relation.toString() }
-		if ((relation is LexRelation)) {
-			val toWord = relation.toWord
-			require(!(toWord.synsetId.offset == 0L || toWord.wordNum == 0)) { relation.toString() }
-			require(RelationType.SENSE_RELATIONS.contains(type)) { relation.toString() }
-			psi.printf("%-6s %s%n", "sense", relation)
-		} else {
-			require(RelationType.SYNSET_RELATIONS.contains(type)) { relation.toString() }
-			psi.printf("%-6s %s%n", "synset", relation)
-		}
-	}
+    /**
+     * Semantic relation consumer
+     */
+    private val relationConsumer = Consumer { relation: Relation ->
+        val type = relation.type.toString()
+        require(!(relation.fromSynsetId.offset == 0L || relation.toSynsetId.offset == 0L)) { relation.toString() }
+        if ((relation is LexRelation)) {
+            val toWord = relation.toWord
+            require(!(toWord.synsetId.offset == 0L || toWord.wordNum == 0)) { relation.toString() }
+            require(RelationType.SENSE_RELATIONS.contains(type)) { relation.toString() }
+            psi.printf("%-6s %s%n", "sense", relation)
+        } else {
+            require(RelationType.SYNSET_RELATIONS.contains(type)) { relation.toString() }
+            psi.printf("%-6s %s%n", "synset", relation)
+        }
+    }
 
-	/**
-	 * Lexical relation consumer
-	 */
-	private val lexRelationConsumer = Consumer { relation: LexRelation ->
-		val type = relation.type.toString()
-		require(!(relation.fromSynsetId.offset == 0L || relation.toSynsetId.offset == 0L)) { relation.toString() }
-		val toWord = relation.toWord
-		require(!(toWord.synsetId.offset == 0L || toWord.wordNum == 0)) { relation.toString() }
-		require(RelationType.SENSE_RELATIONS.contains(type)) { relation.toString() }
-		// psi.printf("%-6s %s%n", "sense", relation);
-		val resolvedToWord = resolveToWord(relation)
-		psi.printf("%-6s %s%n", "sense", relation.toString(resolvedToWord))
-	}
+    /**
+     * Lexical relation consumer
+     */
+    private val lexRelationConsumer = Consumer { relation: LexRelation ->
+        val type = relation.type.toString()
+        require(!(relation.fromSynsetId.offset == 0L || relation.toSynsetId.offset == 0L)) { relation.toString() }
+        val toWord = relation.toWord
+        require(!(toWord.synsetId.offset == 0L || toWord.wordNum == 0)) { relation.toString() }
+        require(RelationType.SENSE_RELATIONS.contains(type)) { relation.toString() }
+        // psi.printf("%-6s %s%n", "sense", relation);
+        val resolvedToWord = resolveToWord(relation)
+        psi.printf("%-6s %s%n", "sense", relation.toString(resolvedToWord))
+    }
 
-	// Source
+    // Source
 
-	/**
-	 * Parse all synsets
-	 *
-	 * @return this
-	 * @throws IOException        io exception
-	 * @throws ParsePojoException parse pojo exception
-	 */
-	@Throws(IOException::class, ParsePojoException::class)
-	fun parseAllSynsets(): RelationParser {
-		// make map for resolution
-		for (posName in arrayOf("noun", "verb", "adj", "adv")) {
-			parseSynsets(dir, posName, synsetConsumer, null, null)
-		}
-		// consume relations
-		for (posName in arrayOf("noun", "verb", "adj", "adv")) {
-			parseSynsets(dir, posName, null, relationConsumer, lexRelationConsumer)
-		}
-		return this
-	}
+    /**
+     * Parse all synsets
+     *
+     * @return this
+     * @throws IOException        io exception
+     * @throws ParsePojoException parse pojo exception
+     */
+    @Throws(IOException::class, ParsePojoException::class)
+    fun parseAllSynsets(): RelationParser {
+        // make map for resolution
+        for (posName in arrayOf("noun", "verb", "adj", "adv")) {
+            parseSynsets(dir, posName, synsetConsumer, null, null)
+        }
+        // consume relations
+        for (posName in arrayOf("noun", "verb", "adj", "adv")) {
+            parseSynsets(dir, posName, null, relationConsumer, lexRelationConsumer)
+        }
+        return this
+    }
 
-	/**
-	 * Resolve lexical relation to target word
-	 *
-	 * @param lr lexical relation
-	 * @return resolve target word
-	 */
-	private fun resolveToWord(lr: LexRelation): String {
-		val toSynsetId = lr.toSynsetId
-		val toSynset = synsetsById[toSynsetId]
-		val toWordRef = lr.toWord
-		return toWordRef.resolve(toSynset!!).toString()
-	}
+    /**
+     * Resolve lexical relation to target word
+     *
+     * @param lr lexical relation
+     * @return resolve target word
+     */
+    private fun resolveToWord(lr: LexRelation): String {
+        val toSynsetId = lr.toSynsetId
+        val toSynset = synsetsById[toSynsetId]
+        val toWordRef = lr.toWord
+        return toWordRef.resolve(toSynset!!).toString()
+    }
 
-	companion object {
-		private const val THROW = false
+    companion object {
 
-		// PrintStreams
-		private val psl = Tracing.psInfo
-		private val psi = if (System.getProperties().containsKey("VERBOSE")) Tracing.psInfo else Tracing.psNull
-		private val pse = if (!System.getProperties().containsKey("SILENT")) Tracing.psErr else Tracing.psNull
+        private const val THROW = false
 
-		/**
-		 * Parse synsets
-		 *
-		 * @param dir                 WNDB dir
-		 * @param posName             pos
-		 * @param synsetConsumer      synset consumer
-		 * @param relationConsumer    relation consumer
-		 * @param lexRelationConsumer lex relation consumer
-		 * @return relation count
-		 * @throws ParsePojoException parse pojo exception
-		 * @throws IOException        io exception
-		 */
-		@Throws(ParsePojoException::class, IOException::class)
-		fun parseSynsets(dir: File?, posName: String, synsetConsumer: Consumer<Synset>?, relationConsumer: Consumer<Relation>?, lexRelationConsumer: Consumer<LexRelation>?): Long {
-			psl.println("* Synsets $posName")
+        // PrintStreams
+        private val psl = Tracing.psInfo
+        private val psi = if (System.getProperties().containsKey("VERBOSE")) Tracing.psInfo else Tracing.psNull
+        private val pse = if (!System.getProperties().containsKey("SILENT")) Tracing.psErr else Tracing.psNull
 
-			val isAdj = posName == "adj"
+        /**
+         * Parse synsets
+         *
+         * @param dir                 WNDB dir
+         * @param posName             pos
+         * @param synsetConsumer      synset consumer
+         * @param relationConsumer    relation consumer
+         * @param lexRelationConsumer lex relation consumer
+         * @return relation count
+         * @throws ParsePojoException parse pojo exception
+         * @throws IOException        io exception
+         */
+        @Throws(ParsePojoException::class, IOException::class)
+        fun parseSynsets(dir: File?, posName: String, synsetConsumer: Consumer<Synset>?, relationConsumer: Consumer<Relation>?, lexRelationConsumer: Consumer<LexRelation>?): Long {
+            psl.println("* Synsets $posName")
 
-			// iterate on lines
-			val file = File(dir, "data.$posName")
-			RandomAccessFile(file, "r").use { raFile ->
-				raFile.seek(0)
+            val isAdj = posName == "adj"
 
-				// iterate on lines
-				var lineCount = 0
-				var nonCommentCount = 0
-				var offsetErrorCount = 0
-				var parseErrorCount = 0
-				var relationCount: Long = 0
+            // iterate on lines
+            val file = File(dir, "data.$posName")
+            RandomAccessFile(file, "r").use { raFile ->
+                raFile.seek(0)
 
-				while (true) {
-					// record current offset
-					val fileOffset = raFile.filePointer
+                // iterate on lines
+                var lineCount = 0
+                var nonCommentCount = 0
+                var offsetErrorCount = 0
+                var parseErrorCount = 0
+                var relationCount: Long = 0
 
-					// read a line
-					val rawLine = raFile.readLine() ?: break
-					lineCount++
+                while (true) {
+                    // record current offset
+                    val fileOffset = raFile.filePointer
 
-					// discard comment
-					if (rawLine.isEmpty() || rawLine[0] == ' ') {
-						continue
-					}
-					nonCommentCount++
+                    // read a line
+                    val rawLine = raFile.readLine() ?: break
+                    lineCount++
 
-					// decode
-					val line = String(rawLine.toByteArray(Flags.charSet))
+                    // discard comment
+                    if (rawLine.isEmpty() || rawLine[0] == ' ') {
+                        continue
+                    }
+                    nonCommentCount++
 
-					// split into fields
-					val lineFields = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                    // decode
+                    val line = String(rawLine.toByteArray(Flags.charSet))
 
-					// read offset
-					val readOffset = lineFields[0].toLong()
-					if (fileOffset != readOffset) {
-						pse.printf("Offset: data.%s:%d offset=%08d line=[%s]%n", posName, lineCount, fileOffset, line)
-						offsetErrorCount++
-						continue
-					}
+                    // split into fields
+                    val lineFields = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-					// read
-					try {
-						val synset = parseSynsetLine(line, isAdj)
-						synsetConsumer?.accept(synset)
-						if (relationConsumer == null && lexRelationConsumer == null) {
-							continue
-						}
-						val relations = synset.relations
-						for (relation in relations!!) {
-							if (relation is LexRelation && lexRelationConsumer != null) {
-								lexRelationConsumer.accept(relation)
-							} else relationConsumer?.accept(relation)
-							relationCount++
-						}
-					} catch (e: ParsePojoException) {
-						parseErrorCount++
-						pse.printf("%n%s:%d offset=%08d line=[%s] except=%s", file.name, lineCount, fileOffset, line, e.message)
-						if (THROW) {
-							throw e
-						}
-					}
-				}
-				val format = "%-50s %d%n"
-				psl.printf(format, "lines", nonCommentCount)
-				psl.printf(format, "parse successes", relationCount)
-				(if (offsetErrorCount > 0) pse else psl).printf(format, "offset errors", offsetErrorCount)
-				(if (parseErrorCount > 0) pse else psl).printf(format, "parse errors", parseErrorCount)
-				return relationCount
-			}
-		}
+                    // read offset
+                    val readOffset = lineFields[0].toLong()
+                    if (fileOffset != readOffset) {
+                        pse.printf("Offset: data.%s:%d offset=%08d line=[%s]%n", posName, lineCount, fileOffset, line)
+                        offsetErrorCount++
+                        continue
+                    }
 
-		/**
-		 * Parse synset line
-		 *
-		 * @param line  line
-		 * @param isAdj whether adjectives are being processed
-		 * @return synset
-		 * @throws ParsePojoException parse pojo exception
-		 */
-		@Throws(ParsePojoException::class)
-		private fun parseSynsetLine(line: String, isAdj: Boolean): Synset {
-			return Synset.parseSynsetLine(line, isAdj)
-		}
+                    // read
+                    try {
+                        val synset = parseSynsetLine(line, isAdj)
+                        synsetConsumer?.accept(synset)
+                        if (relationConsumer == null && lexRelationConsumer == null) {
+                            continue
+                        }
+                        val relations = synset.relations
+                        for (relation in relations!!) {
+                            if (relation is LexRelation && lexRelationConsumer != null) {
+                                lexRelationConsumer.accept(relation)
+                            } else relationConsumer?.accept(relation)
+                            relationCount++
+                        }
+                    } catch (e: ParsePojoException) {
+                        parseErrorCount++
+                        pse.printf("%n%s:%d offset=%08d line=[%s] except=%s", file.name, lineCount, fileOffset, line, e.message)
+                        if (THROW) {
+                            throw e
+                        }
+                    }
+                }
+                val format = "%-50s %d%n"
+                psl.printf(format, "lines", nonCommentCount)
+                psl.printf(format, "parse successes", relationCount)
+                (if (offsetErrorCount > 0) pse else psl).printf(format, "offset errors", offsetErrorCount)
+                (if (parseErrorCount > 0) pse else psl).printf(format, "parse errors", parseErrorCount)
+                return relationCount
+            }
+        }
 
-		/**
-		 * Main
-		 *
-		 * @param args command-line arguments
-		 * @throws ParsePojoException parse pojo exception
-		 * @throws IOException        io exception
-		 */
-		@Throws(ParsePojoException::class, IOException::class)
-		@JvmStatic
-		fun main(args: Array<String>) {
-			// Timing
-			val startTime = System.currentTimeMillis()
+        /**
+         * Parse synset line
+         *
+         * @param line  line
+         * @param isAdj whether adjectives are being processed
+         * @return synset
+         * @throws ParsePojoException parse pojo exception
+         */
+        @Throws(ParsePojoException::class)
+        private fun parseSynsetLine(line: String, isAdj: Boolean): Synset {
+            return Synset.parseSynsetLine(line, isAdj)
+        }
 
-			// Input
-			for (arg in args) {
-				val dir = File(arg)
+        /**
+         * Main
+         *
+         * @param args command-line arguments
+         * @throws ParsePojoException parse pojo exception
+         * @throws IOException        io exception
+         */
+        @Throws(ParsePojoException::class, IOException::class)
+        @JvmStatic
+        fun main(args: Array<String>) {
+            // Timing
+            val startTime = System.currentTimeMillis()
 
-				// Process
-				RelationParser(dir).parseAllSynsets()
-			}
+            // Input
+            for (arg in args) {
+                val dir = File(arg)
 
-			// Timing
-			val endTime = System.currentTimeMillis()
-			psl.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
-		}
-	}
+                // Process
+                RelationParser(dir).parseAllSynsets()
+            }
+
+            // Timing
+            val endTime = System.currentTimeMillis()
+            psl.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
+        }
+    }
 }

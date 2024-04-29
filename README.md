@@ -4,7 +4,8 @@
 
 ## WNDB parser
 
-This library parses WNDB(5WN) files into Plain Old Java Objects. These objects are not a model but come in handy when it comes to building one.
+This library parses WNDB(5WN) files into Plain Old Java Objects. These objects are not a model but come in handy when it
+comes to building one.
 
 Project [parse](https://github.com/oewntk/parse)
 
@@ -42,7 +43,8 @@ parse the WNDB database at expected *offset* of *data.{noun|verb|adj|adv}*
 
 [OFS] offset
 
-If WNHOME20, WNHOME21, WNHOME30, WNHOME31, WNHOMEXX environment variables are defined, you can refer to them by 20, 21, 30, 31, 00 respectively, instead of the full path.
+If WNHOME20, WNHOME21, WNHOME30, WNHOME31, WNHOMEXX environment variables are defined, you can refer to them by 20, 21,
+30, 31, 00 respectively, instead of the full path.
 
 ## Maven Central
 

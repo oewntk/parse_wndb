@@ -19,61 +19,61 @@ import java.io.IOException
  */
 object SenseParser1 {
 
-	/**
-	 * Read lines for target
-	 *
-	 * @param dir    WNDB dir
-	 * @param target target for lines to contain to be selected
-	 * @throws IOException io exception
-	 */
-	@Throws(IOException::class)
-	fun read(dir: String?, target: String?) {
-		val file = File(dir, "index.sense")
-		BufferedReader(FileReader(file)).use { reader ->
-			reader.useLines { lines ->
-				lines.forEach { line ->
-					if (line.contains(target!!)) {
-						Tracing.psInfo.println(line)
-						val sense: Sense
-						try {
-							sense = parseSenseLine(line)
-							Tracing.psInfo.println(sense)
-						} catch (e: ParsePojoException) {
-							Tracing.psErr.printf("%s cause:%s%n", e.message, e.cause)
-							e.printStackTrace(Tracing.psErr)
-						}
-					}
-				}
-			}
-		}
-	}
+    /**
+     * Read lines for target
+     *
+     * @param dir    WNDB dir
+     * @param target target for lines to contain to be selected
+     * @throws IOException io exception
+     */
+    @Throws(IOException::class)
+    fun read(dir: String?, target: String?) {
+        val file = File(dir, "index.sense")
+        BufferedReader(FileReader(file)).use { reader ->
+            reader.useLines { lines ->
+                lines.forEach { line ->
+                    if (line.contains(target!!)) {
+                        Tracing.psInfo.println(line)
+                        val sense: Sense
+                        try {
+                            sense = parseSenseLine(line)
+                            Tracing.psInfo.println(sense)
+                        } catch (e: ParsePojoException) {
+                            Tracing.psErr.printf("%s cause:%s%n", e.message, e.cause)
+                            e.printStackTrace(Tracing.psErr)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-	/**
-	 * Parse sense line
-	 *
-	 * @param line line
-	 * @return sense
-	 * @throws ParsePojoException parse pojo exception
-	 */
-	@Throws(ParsePojoException::class)
-	private fun parseSenseLine(line: String): Sense {
-		return parseSense(line)
-	}
+    /**
+     * Parse sense line
+     *
+     * @param line line
+     * @return sense
+     * @throws ParsePojoException parse pojo exception
+     */
+    @Throws(ParsePojoException::class)
+    private fun parseSenseLine(line: String): Sense {
+        return parseSense(line)
+    }
 
-	/**
-	 * Main
-	 *
-	 * @param args command-line arguments
-	 * @throws IOException io exception
-	 */
-	@Throws(IOException::class)
-	@JvmStatic
-	fun main(args: Array<String>) {
-		// Input
-		val dir = args[0]
-		val target = args[1]
+    /**
+     * Main
+     *
+     * @param args command-line arguments
+     * @throws IOException io exception
+     */
+    @Throws(IOException::class)
+    @JvmStatic
+    fun main(args: Array<String>) {
+        // Input
+        val dir = args[0]
+        val target = args[1]
 
-		// Process
-		read(dir, target)
-	}
+        // Process
+        read(dir, target)
+    }
 }

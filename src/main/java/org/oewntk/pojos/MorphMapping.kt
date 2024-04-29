@@ -15,64 +15,64 @@ import org.oewntk.pojos.Lemma.Companion.make
  * @author Bernard Bou
  */
 class MorphMapping private constructor(
-	val morph: NormalizedString,
-	val lemmas: Collection<Lemma>,
-	val pos: Pos
+    val morph: NormalizedString,
+    val lemmas: Collection<Lemma>,
+    val pos: Pos,
 ) {
 
-	override fun toString(): String {
-		val sb = StringBuilder()
-		sb.append(morph.toString())
-		sb.append(' ')
-		sb.append(pos.toChar())
-		sb.append("<-")
-		var first = true
-		for (lemma in this.lemmas) {
-			if (first) {
-				first = false
-			} else {
-				sb.append(' ')
-			}
-			sb.append(lemma)
-		}
-		return sb.toString()
-	}
+    override fun toString(): String {
+        val sb = StringBuilder()
+        sb.append(morph.toString())
+        sb.append(' ')
+        sb.append(pos.toChar())
+        sb.append("<-")
+        var first = true
+        for (lemma in this.lemmas) {
+            if (first) {
+                first = false
+            } else {
+                sb.append(' ')
+            }
+            sb.append(lemma)
+        }
+        return sb.toString()
+    }
 
-	companion object {
+    companion object {
 
-		/**
-		 * Parse morph mapping from line
-		 *
-		 * @param line line
-		 * @param pos  part of speech
-		 * @return morph mapping
-		 * @throws ParsePojoException parse exception
-		 * ```
-		 * an inflected form of a word or collocation, followed by one or more base forms
-		 * auspices auspex auspice (2 lemmas)
-		 * mice mouse
-		 * ```
-		 */
-		@Throws(ParsePojoException::class)
-		fun parseMorphMapping(line: String, pos: Pos): MorphMapping {
-			try {
-				val fields = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        /**
+         * Parse morph mapping from line
+         *
+         * @param line line
+         * @param pos  part of speech
+         * @return morph mapping
+         * @throws ParsePojoException parse exception
+         * ```
+         * an inflected form of a word or collocation, followed by one or more base forms
+         * auspices auspex auspice (2 lemmas)
+         * mice mouse
+         * ```
+         */
+        @Throws(ParsePojoException::class)
+        fun parseMorphMapping(line: String, pos: Pos): MorphMapping {
+            try {
+                val fields = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
-				// morph
-				val morph = NormalizedString(fields[0])
+                // morph
+                val morph = NormalizedString(fields[0])
 
-				// lemmas
-				val lemmas: MutableCollection<Lemma> = ArrayList()
-				if (fields.size > 1) {
-					for (i in 1 until fields.size) {
-						val lemma = make(fields[i])
-						lemmas.add(lemma)
-					}
-				}
-				return MorphMapping(morph, lemmas, pos)
-			} catch (e: Exception) {
-				throw ParsePojoException(e)
-			}
-		}
-	}
+                // lemmas
+                val lemmas: MutableCollection<Lemma> = ArrayList()
+                if (fields.size > 1) {
+                    for (i in 1 until fields.size) {
+                        val lemma = make(fields[i])
+                        lemmas.add(lemma)
+                    }
+                }
+                return MorphMapping(morph, lemmas, pos)
+            } catch (e: Exception) {
+                throw ParsePojoException(e)
+            }
+        }
+    }
 }

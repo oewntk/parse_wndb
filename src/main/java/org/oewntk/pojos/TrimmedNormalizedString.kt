@@ -13,30 +13,30 @@ package org.oewntk.pojos
  */
 class TrimmedNormalizedString : NormalizedString {
 
-	/**
-	 * Constructor
-	 *
-	 * @param normalized string with possible suffix
-	 */
-	constructor(normalized: NormalizedString?) : super(normalized!!) {
-		// remove possible trailing adj position between parentheses
-		this.normalized = strip(this.normalized)
-	}
+    /**
+     * Constructor
+     *
+     * @param normalized string with possible suffix
+     */
+    constructor(normalized: NormalizedString?) : super(normalized!!) {
+        // remove possible trailing adj position between parentheses
+        this.normalized = strip(this.normalized)
+    }
 
-	/**
-	 * Constructor
-	 *
-	 * @param raw string with possible suffix
-	 */
-	constructor(raw: String?) : super(raw!!) {
-		// remove possible trailing adj position between parentheses
-		this.normalized = strip(this.normalized)
-	}
+    /**
+     * Constructor
+     *
+     * @param raw string with possible suffix
+     */
+    constructor(raw: String?) : super(raw!!) {
+        // remove possible trailing adj position between parentheses
+        this.normalized = strip(this.normalized)
+    }
 
-	companion object {
+    companion object {
 
-		fun strip(str: String): String {
-			return str.replace("\\(.*\\)".toRegex(), "")
-		}
-	}
+        fun strip(str: String): String {
+            return str.replace("\\(.*\\)".toRegex(), "")
+        }
+    }
 }

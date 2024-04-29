@@ -14,53 +14,54 @@ import org.oewntk.pojos.ParsePojoException
  * @author Bernard Bou
  */
 enum class AdjPosition(
-	val id: String,
-	private val description: String
+    val id: String,
+    private val description: String,
 ) {
-	PREDICATIVE("p", "predicate"),  //
-	ATTRIBUTIVE("a", "attributive"),  //
-	POSTNOMINAL("ip", "immediately postnominal");
 
-	override fun toString(): String {
-		return "(" + this.id + "}"
-	}
+    PREDICATIVE("p", "predicate"),  //
+    ATTRIBUTIVE("a", "attributive"),  //
+    POSTNOMINAL("ip", "immediately postnominal");
 
-	companion object {
+    override fun toString(): String {
+        return "(" + this.id + "}"
+    }
 
-		/**
-		 * Find adj position from tag
-		 *
-		 * @param tag tag
-		 * @return adj position
-		 */
-		fun find(tag: String): AdjPosition? {
-			for (position in entries) {
-				if (position.id == tag) {
-					return position
-				}
-			}
-			return null
-		}
+    companion object {
 
-		/**
-		 * Parse adj position from line
-		 *
-		 * @param suffix suffix = '(tag)'
-		 * @return adj position
-		 * @throws ParsePojoException parse exception
-		 */
-		@Throws(ParsePojoException::class)
-		fun parseAdjPosition(suffix: String): AdjPosition {
-			// remove parentheses
-			val name = suffix.substring(1, suffix.length - 1)
+        /**
+         * Find adj position from tag
+         *
+         * @param tag tag
+         * @return adj position
+         */
+        fun find(tag: String): AdjPosition? {
+            for (position in entries) {
+                if (position.id == tag) {
+                    return position
+                }
+            }
+            return null
+        }
 
-			// look up
-			for (adjPosition in entries) {
-				if (name == adjPosition.id) {
-					return adjPosition
-				}
-			}
-			throw ParsePojoException("AdjPosition:$name")
-		}
-	}
+        /**
+         * Parse adj position from line
+         *
+         * @param suffix suffix = '(tag)'
+         * @return adj position
+         * @throws ParsePojoException parse exception
+         */
+        @Throws(ParsePojoException::class)
+        fun parseAdjPosition(suffix: String): AdjPosition {
+            // remove parentheses
+            val name = suffix.substring(1, suffix.length - 1)
+
+            // look up
+            for (adjPosition in entries) {
+                if (name == adjPosition.id) {
+                    return adjPosition
+                }
+            }
+            throw ParsePojoException("AdjPosition:$name")
+        }
+    }
 }

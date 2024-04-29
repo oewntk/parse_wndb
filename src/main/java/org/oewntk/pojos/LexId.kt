@@ -11,23 +11,23 @@ package org.oewntk.pojos
  * @author Bernard Bou
  */
 class LexId private constructor(
-	val id: Int
+    val id: Int,
 ) {
 
-	override fun toString(): String {
-		return id.toString()
-	}
+    override fun toString(): String {
+        return id.toString()
+    }
 
-	companion object {
+    companion object {
 
-		/**
-		 * Factory
-		 *
-		 * @param sensekey sensekey
-		 * @return lexid
-		 */
-		fun make(sensekey: Sensekey): LexId {
-			return LexId(sensekey.lexId)
-		}
-	}
+        /**
+         * Factory
+         *
+         * @param sensekey sensekey
+         * @return lexid
+         */
+        fun make(sensekey: Sensekey): LexId {
+            return LexId(sensekey.lexId)
+        }
+    }
 }

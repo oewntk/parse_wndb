@@ -13,78 +13,79 @@ package org.oewntk.pojos
  * @author Bernard Bou
  */
 enum class Pos(
-	val id: Char,
-	val name2: String,
-	val description: String
+    val id: Char,
+    val name2: String,
+    val description: String,
 ) {
-	NOUN('n', "noun", "noun"),
-	VERB('v', "verb", "verb"),
-	ADJ('a', "adj", "adjective"),
-	ADV('r', "adv", "adverb");
 
-	init {
-		assert(id == 'n' || id == 'v' || id == 'a' || id == 'r')
-	}
+    NOUN('n', "noun", "noun"),
+    VERB('v', "verb", "verb"),
+    ADJ('a', "adj", "adjective"),
+    ADV('r', "adv", "adverb");
 
-	/**
-	 * Get char id
-	 *
-	 * @return char id
-	 */
-	fun toChar(): Char {
-		return this.id
-	}
+    init {
+        assert(id == 'n' || id == 'v' || id == 'a' || id == 'r')
+    }
 
-	override fun toString(): String {
-		return id.toString()
-	}
+    /**
+     * Get char id
+     *
+     * @return char id
+     */
+    fun toChar(): Char {
+        return this.id
+    }
 
-	companion object {
+    override fun toString(): String {
+        return id.toString()
+    }
 
-		/**
-		 * Parse pos from character id
-		 *
-		 * @param id character id
-		 * @return pos
-		 * @throws ParsePojoException parse exception
-		 */
-		@Throws(ParsePojoException::class)
-		fun parsePos(id: Char): Pos {
-			for (pos in entries) {
-				if (id == pos.id) {
-					return pos
-				}
-			}
-			throw ParsePojoException("Pos:$id")
-		}
+    companion object {
 
-		/**
-		 * Make pos from pos index
-		 *
-		 * @param index0 index
-		 * @return pos
-		 */
-		fun fromIndex(index0: Int): Pos {
-			val index = index0 - 1
-			if (index >= 0 && index < entries.size) {
-				return entries[index]
-			}
-			throw IllegalArgumentException("Pos:$index")
-		}
+        /**
+         * Parse pos from character id
+         *
+         * @param id character id
+         * @return pos
+         * @throws ParsePojoException parse exception
+         */
+        @Throws(ParsePojoException::class)
+        fun parsePos(id: Char): Pos {
+            for (pos in entries) {
+                if (id == pos.id) {
+                    return pos
+                }
+            }
+            throw ParsePojoException("Pos:$id")
+        }
 
-		/**
-		 * Make pos from name
-		 *
-		 * @param name name
-		 * @return pos
-		 */
-		fun fromName(name: String): Pos {
-			for (pos in entries) {
-				if (name == pos.name2) {
-					return pos
-				}
-			}
-			throw IllegalArgumentException(name)
-		}
-	}
+        /**
+         * Make pos from pos index
+         *
+         * @param index0 index
+         * @return pos
+         */
+        fun fromIndex(index0: Int): Pos {
+            val index = index0 - 1
+            if (index >= 0 && index < entries.size) {
+                return entries[index]
+            }
+            throw IllegalArgumentException("Pos:$index")
+        }
+
+        /**
+         * Make pos from name
+         *
+         * @param name name
+         * @return pos
+         */
+        fun fromName(name: String): Pos {
+            for (pos in entries) {
+                if (name == pos.name2) {
+                    return pos
+                }
+            }
+            throw IllegalArgumentException(name)
+        }
+    }
 }

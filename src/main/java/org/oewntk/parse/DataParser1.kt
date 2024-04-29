@@ -18,58 +18,58 @@ import java.io.RandomAccessFile
  */
 object DataParser1 {
 
-	/**
-	 * Read line at given offset
-	 *
-	 * @param dir        WNDB dir
-	 * @param posName    pos
-	 * @param fileOffset file offset
-	 * @return line
-	 * @throws IOException io exception
-	 */
-	@Throws(IOException::class)
-	fun read(dir: String?, posName: String, fileOffset: Long): String? {
-		val file = File(dir, "data.$posName")
-		RandomAccessFile(file, "r").use { raFile ->
-			raFile.seek(fileOffset)
-			val rawString = raFile.readLine()
-			return if (rawString == null) null else String(rawString.toByteArray(Flags.charSet))
-		}
-	}
+    /**
+     * Read line at given offset
+     *
+     * @param dir        WNDB dir
+     * @param posName    pos
+     * @param fileOffset file offset
+     * @return line
+     * @throws IOException io exception
+     */
+    @Throws(IOException::class)
+    fun read(dir: String?, posName: String, fileOffset: Long): String? {
+        val file = File(dir, "data.$posName")
+        RandomAccessFile(file, "r").use { raFile ->
+            raFile.seek(fileOffset)
+            val rawString = raFile.readLine()
+            return if (rawString == null) null else String(rawString.toByteArray(Flags.charSet))
+        }
+    }
 
-	/**
-	 * Parse synset from line
-	 *
-	 * @param line  line
-	 * @param isAdj whether adjs are being processed
-	 * @return synset
-	 * @throws ParsePojoException parse pojo exception
-	 */
-	@Throws(ParsePojoException::class)
-	fun parseSynset(line: String?, isAdj: Boolean): Synset {
-		return parseSynsetLine(line!!, isAdj)
-	}
+    /**
+     * Parse synset from line
+     *
+     * @param line  line
+     * @param isAdj whether adjs are being processed
+     * @return synset
+     * @throws ParsePojoException parse pojo exception
+     */
+    @Throws(ParsePojoException::class)
+    fun parseSynset(line: String?, isAdj: Boolean): Synset {
+        return parseSynsetLine(line!!, isAdj)
+    }
 
-	/**
-	 * Main
-	 *
-	 * @param args command-line arguments
-	 * @throws ParsePojoException parse pojo exception
-	 * @throws IOException        io exception
-	 */
-	@Throws(IOException::class, ParsePojoException::class)
-	@JvmStatic
-	fun main(args: Array<String>) {
-		// Input
-		val dir = args[0]
-		val posName = args[1]
-		val fileOffset = args[2].toLong()
-		val isAdj = posName == "adj"
+    /**
+     * Main
+     *
+     * @param args command-line arguments
+     * @throws ParsePojoException parse pojo exception
+     * @throws IOException        io exception
+     */
+    @Throws(IOException::class, ParsePojoException::class)
+    @JvmStatic
+    fun main(args: Array<String>) {
+        // Input
+        val dir = args[0]
+        val posName = args[1]
+        val fileOffset = args[2].toLong()
+        val isAdj = posName == "adj"
 
-		// Process
-		val line = read(dir, posName, fileOffset)
-		Tracing.psInfo.println(line)
-		val synset = parseSynset(line, isAdj)
-		Tracing.psInfo.println(synset.toPrettyString())
-	}
+        // Process
+        val line = read(dir, posName, fileOffset)
+        Tracing.psInfo.println(line)
+        val synset = parseSynset(line, isAdj)
+        Tracing.psInfo.println(synset.toPrettyString())
+    }
 }

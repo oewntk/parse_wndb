@@ -12,33 +12,33 @@ package org.oewntk.pojos
  * @author Bernard Bou
  */
 class VerbTemplate private constructor(
-	val id: Int,
-	private val template: String
+    val id: Int,
+    private val template: String,
 ) {
 
-	override fun toString(): String {
-		return "id=" + this.id + " template=" + this.template
-	}
+    override fun toString(): String {
+        return "id=" + this.id + " template=" + this.template
+    }
 
-	companion object {
+    companion object {
 
-		/**
-		 * Parse from line
-		 *
-		 * @param line line
-		 * @return verb template
-		 * @throws ParsePojoException parse exception
-		 */
-		@Throws(ParsePojoException::class)
-		fun parseVerbTemplate(line: String): VerbTemplate {
-			try {
-				val fields = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-				val id = fields[0].toInt()
-				val text = line.substring(fields[0].length + 1)
-				return VerbTemplate(id, text)
-			} catch (e: Exception) {
-				throw ParsePojoException(e)
-			}
-		}
-	}
+        /**
+         * Parse from line
+         *
+         * @param line line
+         * @return verb template
+         * @throws ParsePojoException parse exception
+         */
+        @Throws(ParsePojoException::class)
+        fun parseVerbTemplate(line: String): VerbTemplate {
+            try {
+                val fields = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                val id = fields[0].toInt()
+                val text = line.substring(fields[0].length + 1)
+                return VerbTemplate(id, text)
+            } catch (e: Exception) {
+                throw ParsePojoException(e)
+            }
+        }
+    }
 }

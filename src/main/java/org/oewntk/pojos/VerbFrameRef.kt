@@ -12,21 +12,21 @@ package org.oewntk.pojos
  * @author Bernard Bou
  */
 class VerbFrameRef(
-	val lemmas: Array<Lemma>,
-	val frameId: Int
+    val lemmas: Array<Lemma>,
+    val frameId: Int,
 ) {
 
-	override fun toString(): String {
-		val sb = StringBuilder()
-		sb.append("{")
-		for ((i, lemma) in this.lemmas.withIndex()) {
-			if (i > 0) {
-				sb.append(",")
-			}
-			sb.append(lemma.toString())
-		}
-		sb.append("}:")
-		sb.append(this.frameId)
-		return sb.toString()
-	}
+    override fun toString(): String {
+        val sb = StringBuilder()
+        sb.append("{")
+        for ((i, lemma) in this.lemmas.withIndex()) {
+            if (i > 0) {
+                sb.append(",")
+            }
+            sb.append(lemma.toString())
+        }
+        sb.append("}:")
+        sb.append(this.frameId)
+        return sb.toString()
+    }
 }

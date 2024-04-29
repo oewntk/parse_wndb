@@ -19,63 +19,63 @@ import java.io.IOException
  */
 object IndexParser1 {
 
-	/**
-	 * Read lines for target
-	 *
-	 * @param dir     WNDB dir
-	 * @param posName pos
-	 * @param target  target for line to include to be selected
-	 * @throws IOException io exception
-	 */
-	@Throws(IOException::class)
-	fun read(dir: String?, posName: String, target: String?) {
-		val file = File(dir, "index.$posName")
-		BufferedReader(FileReader(file)).use { reader ->
-			reader.useLines { lines ->
-				lines.forEach { line ->
-					if (line.contains(target!!)) {
-						Tracing.psInfo.println(line)
-						val index: CoreIndex
-						try {
-							index = parseIndexLine(line)
-							Tracing.psInfo.println(index)
-						} catch (e: ParsePojoException) {
-							Tracing.psErr.printf("%s cause:%s%n", e.message, e.cause)
-							e.printStackTrace(Tracing.psErr)
-						}
-					}
-				}
-			}
-		}
-	}
+    /**
+     * Read lines for target
+     *
+     * @param dir     WNDB dir
+     * @param posName pos
+     * @param target  target for line to include to be selected
+     * @throws IOException io exception
+     */
+    @Throws(IOException::class)
+    fun read(dir: String?, posName: String, target: String?) {
+        val file = File(dir, "index.$posName")
+        BufferedReader(FileReader(file)).use { reader ->
+            reader.useLines { lines ->
+                lines.forEach { line ->
+                    if (line.contains(target!!)) {
+                        Tracing.psInfo.println(line)
+                        val index: CoreIndex
+                        try {
+                            index = parseIndexLine(line)
+                            Tracing.psInfo.println(index)
+                        } catch (e: ParsePojoException) {
+                            Tracing.psErr.printf("%s cause:%s%n", e.message, e.cause)
+                            e.printStackTrace(Tracing.psErr)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-	/**
-	 * Parse index line
-	 *
-	 * @param line line
-	 * @return core index
-	 * @throws ParsePojoException parse pojo exception
-	 */
-	@Throws(ParsePojoException::class)
-	private fun parseIndexLine(line: String): CoreIndex {
-		return parseCoreIndex(line)
-	}
+    /**
+     * Parse index line
+     *
+     * @param line line
+     * @return core index
+     * @throws ParsePojoException parse pojo exception
+     */
+    @Throws(ParsePojoException::class)
+    private fun parseIndexLine(line: String): CoreIndex {
+        return parseCoreIndex(line)
+    }
 
-	/**
-	 * Main
-	 *
-	 * @param args command-line arguments
-	 * @throws IOException io exception
-	 */
-	@Throws(IOException::class)
-	@JvmStatic
-	fun main(args: Array<String>) {
-		// Input
-		val dir = args[0]
-		val posName = args[1]
-		val target = args[2]
+    /**
+     * Main
+     *
+     * @param args command-line arguments
+     * @throws IOException io exception
+     */
+    @Throws(IOException::class)
+    @JvmStatic
+    fun main(args: Array<String>) {
+        // Input
+        val dir = args[0]
+        val posName = args[1]
+        val target = args[2]
 
-		// Process
-		read(dir, posName, target)
-	}
+        // Process
+        read(dir, posName, target)
+    }
 }

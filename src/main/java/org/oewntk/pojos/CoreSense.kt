@@ -14,13 +14,13 @@ package org.oewntk.pojos
  * @author Bernard Bou
  */
 open class CoreSense(
-	synsetId: SynsetId,
-	lemma: Lemma,
-	sensePosIndex: Int,
-	val sensekey: Sensekey
+    synsetId: SynsetId,
+    lemma: Lemma,
+    sensePosIndex: Int,
+    val sensekey: Sensekey,
 ) : BaseSense(synsetId, lemma, sensePosIndex) {
 
-	override fun toString(): String {
-		return super.toString() + " k=" + sensekey.toString()
-	}
+    override fun toString(): String {
+        return super.toString() + " k=" + sensekey.toString()
+    }
 }

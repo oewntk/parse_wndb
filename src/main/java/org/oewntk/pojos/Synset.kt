@@ -19,211 +19,212 @@ import org.oewntk.pojos.RelationType.Companion.parseRelationType
  * @author Bernard Bou
  */
 class Synset private constructor(
-	synsetId: SynsetId,
-	lemmas: Array<LemmaCS>,
-	type: Type,
-	domain: Domain,
-	gloss: Gloss,
-	relations: Array<Relation>,
-	verbFrames: Array<VerbFrameRef>?
+    synsetId: SynsetId,
+    lemmas: Array<LemmaCS>,
+    type: Type,
+    domain: Domain,
+    gloss: Gloss,
+    relations: Array<Relation>,
+    verbFrames: Array<VerbFrameRef>?,
 ) : CoreSynset(synsetId, lemmas, type, domain, gloss) {
 
-	/**
-	 * Get relations
-	 *
-	 * @return relations
-	 */
-	val relations: Array<Relation>?
+    /**
+     * Get relations
+     *
+     * @return relations
+     */
+    val relations: Array<Relation>?
 
-	/**
-	 * Get verb frames
-	 *
-	 * @return verb frames
-	 */
-	val verbFrames: Array<VerbFrameRef>?
+    /**
+     * Get verb frames
+     *
+     * @return verb frames
+     */
+    val verbFrames: Array<VerbFrameRef>?
 
-	/**
-	 * Constructor
-	 */
-	init {
-		this.relations = relations
-		this.verbFrames = verbFrames
-	}
+    /**
+     * Constructor
+     */
+    init {
+        this.relations = relations
+        this.verbFrames = verbFrames
+    }
 
-	override fun toString(): String {
-		val sb = StringBuilder()
-		sb.append(super.toString())
-		if (this.relations != null) {
-			sb.append(" relations={")
-			for (i in relations.indices) {
-				if (i != 0) {
-					sb.append(",")
-				}
-				sb.append(relations[i].toString())
-			}
-			sb.append("}")
-		}
-		if (this.verbFrames != null) {
-			sb.append(" frames={")
-			for (i in verbFrames.indices) {
-				if (i != 0) {
-					sb.append(",")
-				}
-				sb.append(verbFrames[i].toString())
-			}
-			sb.append("}")
-		}
-		return sb.toString()
-	}
+    override fun toString(): String {
+        val sb = StringBuilder()
+        sb.append(super.toString())
+        if (this.relations != null) {
+            sb.append(" relations={")
+            for (i in relations.indices) {
+                if (i != 0) {
+                    sb.append(",")
+                }
+                sb.append(relations[i].toString())
+            }
+            sb.append("}")
+        }
+        if (this.verbFrames != null) {
+            sb.append(" frames={")
+            for (i in verbFrames.indices) {
+                if (i != 0) {
+                    sb.append(",")
+                }
+                sb.append(verbFrames[i].toString())
+            }
+            sb.append("}")
+        }
+        return sb.toString()
+    }
 
-	/**
-	 * Pretty string
-	 *
-	 * @return pretty string
-	 */
-	fun toPrettyString(): String {
-		val sb = StringBuilder()
-		sb.append(super.toString())
-		sb.append('\n')
-		sb.append(gloss.toPrettyString())
+    /**
+     * Pretty string
+     *
+     * @return pretty string
+     */
+    fun toPrettyString(): String {
+        val sb = StringBuilder()
+        sb.append(super.toString())
+        sb.append('\n')
+        sb.append(gloss.toPrettyString())
 
-		if (this.relations != null) {
-			sb.append('\n')
-			sb.append("relations={")
-			sb.append('\n')
-			for (i in relations.indices) {
-				if (i != 0) {
-					sb.append(",")
-					sb.append('\n')
-				}
-				sb.append('\t')
-				sb.append(relations[i].toString())
-			}
-			sb.append('\n')
-			sb.append("}")
-		}
-		if (this.verbFrames != null) {
-			sb.append('\n')
-			sb.append("frames={")
-			for (i in verbFrames.indices) {
-				if (i != 0) {
-					sb.append(",")
-				}
-				sb.append(verbFrames[i].toString())
-			}
-			sb.append("}")
-		}
-		return sb.toString()
-	}
+        if (this.relations != null) {
+            sb.append('\n')
+            sb.append("relations={")
+            sb.append('\n')
+            for (i in relations.indices) {
+                if (i != 0) {
+                    sb.append(",")
+                    sb.append('\n')
+                }
+                sb.append('\t')
+                sb.append(relations[i].toString())
+            }
+            sb.append('\n')
+            sb.append("}")
+        }
+        if (this.verbFrames != null) {
+            sb.append('\n')
+            sb.append("frames={")
+            for (i in verbFrames.indices) {
+                if (i != 0) {
+                    sb.append(",")
+                }
+                sb.append(verbFrames[i].toString())
+            }
+            sb.append("}")
+        }
+        return sb.toString()
+    }
 
-	companion object {
-		/**
-		 * Parse from line
-		 *
-		 * @param line  line
-		 * @param isAdj whether adj synsets are being parsed
-		 * @return synset
-		 * @throws ParsePojoException parse exception
-		 */
-		@Throws(ParsePojoException::class)
-		fun parseSynsetLine(line: String, isAdj: Boolean): Synset {
-			try {
-				// core subparse
-				val protoSynset = parseCoreSynset(line, isAdj)
+    companion object {
 
-				// copy data from proto
-				val type = protoSynset.type
-				val csLemmas = protoSynset.cSLemmas
-				val synsetId = protoSynset.id
-				val domain = protoSynset.domain
-				val gloss = protoSynset.gloss
+        /**
+         * Parse from line
+         *
+         * @param line  line
+         * @param isAdj whether adj synsets are being parsed
+         * @return synset
+         * @throws ParsePojoException parse exception
+         */
+        @Throws(ParsePojoException::class)
+        fun parseSynsetLine(line: String, isAdj: Boolean): Synset {
+            try {
+                // core subparse
+                val protoSynset = parseCoreSynset(line, isAdj)
 
-				// split into fields
-				val fields = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-				var fieldPointer = 0
+                // copy data from proto
+                val type = protoSynset.type
+                val csLemmas = protoSynset.cSLemmas
+                val synsetId = protoSynset.id
+                val domain = protoSynset.domain
+                val gloss = protoSynset.gloss
 
-				// data
-				val relations: Array<Relation>
-				var frames: Array<VerbFrameRef>? = null
+                // split into fields
+                val fields = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                var fieldPointer = 0
 
-				// offset
-				fieldPointer++
+                // data
+                val relations: Array<Relation>
+                var frames: Array<VerbFrameRef>? = null
 
-				// domain
-				fieldPointer++
+                // offset
+                fieldPointer++
 
-				// part-of-speech
-				fieldPointer++
+                // domain
+                fieldPointer++
 
-				// lemma count
-				fieldPointer++
+                // part-of-speech
+                fieldPointer++
 
-				// lemma set
-				fieldPointer += 2 * csLemmas.size
+                // lemma count
+                fieldPointer++
 
-				// relation count
-				val relationCount = fields[fieldPointer].toInt(10)
-				fieldPointer++
+                // lemma set
+                fieldPointer += 2 * csLemmas.size
 
-				// relations
-				relations = Array(relationCount) {
+                // relation count
+                val relationCount = fields[fieldPointer].toInt(10)
+                fieldPointer++
 
-					// read data
-					val relationTypeField = fields[fieldPointer++]
-					val relationSynsetIdField = fields[fieldPointer++]
-					val relationPosField = fields[fieldPointer++]
-					val relationSourceTargetField = fields[fieldPointer++]
-					val relationSynsetId = relationSynsetIdField.toLong()
-					val relationSourceTarget = relationSourceTargetField.toInt(16)
+                // relations
+                relations = Array(relationCount) {
 
-					// compute
-					val synsetType = Type.parseType(relationPosField[0])
-					val relationType = parseRelationType(relationTypeField)
-					val toId = SynsetId(synsetType.toPos(), relationSynsetId)
+                    // read data
+                    val relationTypeField = fields[fieldPointer++]
+                    val relationSynsetIdField = fields[fieldPointer++]
+                    val relationPosField = fields[fieldPointer++]
+                    val relationSourceTargetField = fields[fieldPointer++]
+                    val relationSynsetId = relationSynsetIdField.toLong()
+                    val relationSourceTarget = relationSourceTargetField.toInt(16)
 
-					// create
-					if (relationSourceTarget != 0) {
-						val fromWordIndex = relationSourceTarget shr 8
-						val toWordIndex = relationSourceTarget and 0xff
-						val fromLemma = csLemmas[fromWordIndex - 1]
-						val toLemma = LemmaRef(toId, toWordIndex)
-						LexRelation(relationType, synsetId, toId, fromLemma, toLemma)
-					} else {
-						Relation(relationType, synsetId, toId)
-					}
-				}
+                    // compute
+                    val synsetType = Type.parseType(relationPosField[0])
+                    val relationType = parseRelationType(relationTypeField)
+                    val toId = SynsetId(synsetType.toPos(), relationSynsetId)
 
-				// frames
-				if (type.toChar() == 'v' && fields[fieldPointer] != "|") {
-					// frame count
-					val frameCount = fields[fieldPointer].toInt(10)
-					fieldPointer++
+                    // create
+                    if (relationSourceTarget != 0) {
+                        val fromWordIndex = relationSourceTarget shr 8
+                        val toWordIndex = relationSourceTarget and 0xff
+                        val fromLemma = csLemmas[fromWordIndex - 1]
+                        val toLemma = LemmaRef(toId, toWordIndex)
+                        LexRelation(relationType, synsetId, toId, fromLemma, toLemma)
+                    } else {
+                        Relation(relationType, synsetId, toId)
+                    }
+                }
 
-					// frames
-					frames = Array(frameCount) {
-						// read data
-						fieldPointer++ // '+'
-						val frameIdField = fields[fieldPointer++]
-						val wordIndexField = fields[fieldPointer++]
+                // frames
+                if (type.toChar() == 'v' && fields[fieldPointer] != "|") {
+                    // frame count
+                    val frameCount = fields[fieldPointer].toInt(10)
+                    fieldPointer++
 
-						// compute
-						val frameId = frameIdField.toInt()
-						val wordIndex = wordIndexField.toInt(16)
+                    // frames
+                    frames = Array(frameCount) {
+                        // read data
+                        fieldPointer++ // '+'
+                        val frameIdField = fields[fieldPointer++]
+                        val wordIndexField = fields[fieldPointer++]
 
-						// create
-						val frameLemmas = if (wordIndex != 0) {
-							arrayOf(csLemmas[wordIndex - 1].lemma)
-						} else  // 0 means all
-						{
-							protoSynset.lemmas
-						}
-						VerbFrameRef(frameLemmas, frameId)
-					}
-				}
-				return Synset(synsetId, csLemmas, type, domain, gloss, relations, frames)
-			} catch (e: Exception) {
-				throw ParsePojoException(e)
-			}
-		}
-	}
+                        // compute
+                        val frameId = frameIdField.toInt()
+                        val wordIndex = wordIndexField.toInt(16)
+
+                        // create
+                        val frameLemmas = if (wordIndex != 0) {
+                            arrayOf(csLemmas[wordIndex - 1].lemma)
+                        } else  // 0 means all
+                        {
+                            protoSynset.lemmas
+                        }
+                        VerbFrameRef(frameLemmas, frameId)
+                    }
+                }
+                return Synset(synsetId, csLemmas, type, domain, gloss, relations, frames)
+            } catch (e: Exception) {
+                throw ParsePojoException(e)
+            }
+        }
+    }
 }

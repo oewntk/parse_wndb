@@ -14,74 +14,74 @@ import java.util.*
  *
  * @author Bernard Bou
  */
-open class Lemma (
-	normString: NormalizedString
+open class Lemma(
+    normString: NormalizedString,
 ) : Comparable<Lemma>, Serializable {
 
-	private val lowerCasedNormalized = normString.normalized.lowercase(Locale.getDefault())
+    private val lowerCasedNormalized = normString.normalized.lowercase(Locale.getDefault())
 
-	// I D E N T I T Y
+    // I D E N T I T Y
 
-	override fun equals(other: Any?): Boolean {
-		if (this === other) {
-			return true
-		}
-		if (other == null || javaClass != other.javaClass) {
-			return false
-		}
-		val lemma = other as Lemma
-		return lowerCasedNormalized == lemma.lowerCasedNormalized
-	}
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+        if (other == null || javaClass != other.javaClass) {
+            return false
+        }
+        val lemma = other as Lemma
+        return lowerCasedNormalized == lemma.lowerCasedNormalized
+    }
 
-	override fun hashCode(): Int {
-		return Objects.hash(lowerCasedNormalized)
-	}
+    override fun hashCode(): Int {
+        return Objects.hash(lowerCasedNormalized)
+    }
 
-	// O R D E R I N G
+    // O R D E R I N G
 
-	override fun compareTo(other: Lemma): Int {
-		return lowerCasedNormalized.compareTo(other.lowerCasedNormalized)
-	}
+    override fun compareTo(other: Lemma): Int {
+        return lowerCasedNormalized.compareTo(other.lowerCasedNormalized)
+    }
 
-	// T O S T R I N G
+    // T O S T R I N G
 
-	override fun toString(): String {
-		return this.lowerCasedNormalized
-	}
+    override fun toString(): String {
+        return this.lowerCasedNormalized
+    }
 
-	companion object {
+    companion object {
 
-		// factories
+        // factories
 
-		/**
-		 * Make from bare normalized string
-		 *
-		 * @param bareNormalized normalized bare normalized string
-		 * @return lemma
-		 */
-		fun make(bareNormalized: TrimmedNormalizedString): Lemma {
-			return Lemma(bareNormalized)
-		}
+        /**
+         * Make from bare normalized string
+         *
+         * @param bareNormalized normalized bare normalized string
+         * @return lemma
+         */
+        fun make(bareNormalized: TrimmedNormalizedString): Lemma {
+            return Lemma(bareNormalized)
+        }
 
-		/**
-		 * Make from normalized string
-		 *
-		 * @param normalized normalized string
-		 * @return lemma
-		 */
-		fun make(normalized: NormalizedString): Lemma {
-			return Lemma(normalized)
-		}
+        /**
+         * Make from normalized string
+         *
+         * @param normalized normalized string
+         * @return lemma
+         */
+        fun make(normalized: NormalizedString): Lemma {
+            return Lemma(normalized)
+        }
 
-		/**
-		 * Make from rawString
-		 *
-		 * @param rawString raw string
-		 * @return lemma
-		 */
-		fun make(rawString: String?): Lemma {
-			// normalize spaces then lowercase
-			return Lemma(NormalizedString(rawString!!))
-		}
-	}
+        /**
+         * Make from rawString
+         *
+         * @param rawString raw string
+         * @return lemma
+         */
+        fun make(rawString: String?): Lemma {
+            // normalize spaces then lowercase
+            return Lemma(NormalizedString(rawString!!))
+        }
+    }
 }
