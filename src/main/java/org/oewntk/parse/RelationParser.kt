@@ -128,25 +128,30 @@ class RelationParser(
 			val file = File(dir, "data.$posName")
 			RandomAccessFile(file, "r").use { raFile ->
 				raFile.seek(0)
+
 				// iterate on lines
 				var lineCount = 0
 				var nonCommentCount = 0
 				var offsetErrorCount = 0
 				var parseErrorCount = 0
 				var relationCount: Long = 0
-				var fileOffset = raFile.filePointer
 
 				while (true) {
+					// record current offset
+					val fileOffset = raFile.filePointer
+
+					// read a line
 					val rawLine = raFile.readLine() ?: break
 					lineCount++
+
+					// discard comment
 					if (rawLine.isEmpty() || rawLine[0] == ' ') {
-						fileOffset = raFile.filePointer
 						continue
 					}
+					nonCommentCount++
 
 					// decode
 					val line = String(rawLine.toByteArray(Flags.charSet))
-					nonCommentCount++
 
 					// split into fields
 					val lineFields = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -156,7 +161,6 @@ class RelationParser(
 					if (fileOffset != readOffset) {
 						pse.printf("Offset: data.%s:%d offset=%08d line=[%s]%n", posName, lineCount, fileOffset, line)
 						offsetErrorCount++
-						fileOffset = raFile.filePointer
 						continue
 					}
 
@@ -165,7 +169,6 @@ class RelationParser(
 						val synset = parseSynsetLine(line, isAdj)
 						synsetConsumer?.accept(synset)
 						if (relationConsumer == null && lexRelationConsumer == null) {
-							fileOffset = raFile.filePointer
 							continue
 						}
 						val relations = synset.relations
@@ -182,7 +185,6 @@ class RelationParser(
 							throw e
 						}
 					}
-					fileOffset = raFile.filePointer
 				}
 				val format = "%-50s %d%n"
 				psl.printf(format, "lines", nonCommentCount)
