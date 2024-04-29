@@ -30,7 +30,6 @@ class TagCnt(
          * @return tag count
          * @throws ParsePojoException parse exception
          */
-        @JvmOverloads
         @Throws(ParsePojoException::class)
         fun parseTagCnt(str: String, senseNum: Int = 0): TagCnt {
             try {
