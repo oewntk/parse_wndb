@@ -18,8 +18,8 @@ enum class AdjPosition(
     private val description: String,
 ) {
 
-    PREDICATIVE("p", "predicate"),  //
-    ATTRIBUTIVE("a", "attributive"),  //
+    PREDICATIVE("p", "predicate"),  
+    ATTRIBUTIVE("a", "attributive"),  
     POSTNOMINAL("ip", "immediately postnominal");
 
     override fun toString(): String {

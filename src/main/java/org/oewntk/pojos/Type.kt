@@ -20,10 +20,10 @@ enum class Type(
     pos: Pos,
 ) {
 
-    NOUN('n', "noun", "noun", Pos.NOUN),  //
-    VERB('v', "verb", "verb", Pos.VERB),  //
-    ADJHEAD('a', "adj_head", "adjective", Pos.ADJ),  //
-    ADV('r', "adv", "adverb", Pos.ADV),  //
+    NOUN('n', "noun", "noun", Pos.NOUN),  
+    VERB('v', "verb", "verb", Pos.VERB),  
+    ADJHEAD('a', "adj_head", "adjective", Pos.ADJ),  
+    ADV('r', "adv", "adverb", Pos.ADV),  
     ADJSAT('s', "adj_sat", "adjective satellite", Pos.ADJ);
 
     private val id: Char

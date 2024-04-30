@@ -158,9 +158,9 @@ class Counter internal constructor(
             // Input
             for (arg in args) {
                 val dir = File(arg)
-                Counter(dir).parseAll() //
-                    .reportCounts() //
-                    .reportRelationCounts() //
+                Counter(dir).parseAll() 
+                    .reportCounts() 
+                    .reportRelationCounts() 
                     .reportVerbFrameCounts()
             }
 
