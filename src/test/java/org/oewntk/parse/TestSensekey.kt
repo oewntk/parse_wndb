@@ -4,6 +4,7 @@
 
 package org.oewntk.parse
 
+import junit.framework.TestCase.assertEquals
 import org.junit.Assert
 import org.junit.Test
 import org.oewntk.pojos.ParsePojoException
@@ -26,16 +27,16 @@ class TestSensekey {
                 ps.printf("%s%n", sensekey)
 
                 val decoded = decode(sensekey)
-                Assert.assertEquals(6, decoded.size.toLong())
-                Assert.assertEquals(lemma, decoded[0])
-                Assert.assertEquals(String.format("%01d", POS), decoded[1])
-                Assert.assertEquals(String.format("%02d", LEXFILE), decoded[2])
-                Assert.assertEquals(String.format("%02d", LEXID), decoded[3])
-                Assert.assertEquals(head, decoded[4])
+                assertEquals(6, decoded.size.toLong())
+                assertEquals(lemma, decoded[0])
+                assertEquals(String.format("%01d", POS), decoded[1])
+                assertEquals(String.format("%02d", LEXFILE), decoded[2])
+                assertEquals(String.format("%02d", LEXID), decoded[3])
+                assertEquals(head, decoded[4])
                 if (head.isEmpty()) {
-                    Assert.assertEquals("", decoded[5])
+                    assertEquals("", decoded[5])
                 } else {
-                    Assert.assertEquals(String.format("%02d", HEADID), decoded[5])
+                    assertEquals(String.format("%02d", HEADID), decoded[5])
                 }
             }
         }
@@ -58,22 +59,22 @@ class TestSensekey {
 
         val sk1 = parseSensekey(sensekeys[0])
         Assert.assertNotNull(sk1)
-        Assert.assertEquals("go to the dogs", sk1!!.word.toString())
-        Assert.assertEquals("go to the dogs", sk1.lemma.toString())
-        Assert.assertEquals(Type.VERB, sk1.type)
-        Assert.assertEquals("verb.change", sk1.domain.domain)
+        assertEquals("go to the dogs", sk1!!.word.toString())
+        assertEquals("go to the dogs", sk1.lemma.toString())
+        assertEquals(Type.VERB, sk1.type)
+        assertEquals("verb.change", sk1.domain.domain)
         Assert.assertNull(sk1.headWord)
-        Assert.assertEquals(-1, sk1.headLexId.toLong())
+        assertEquals(-1, sk1.headLexId.toLong())
 
         val sk2 = parseSensekey(sensekeys[1])
         Assert.assertNotNull(sk2)
-        Assert.assertEquals("half-size", sk2!!.word.toString())
-        Assert.assertEquals("half-size", sk2.lemma.toString())
-        Assert.assertEquals(Type.ADJSAT, sk2.type)
-        Assert.assertEquals("adj.all", sk2.domain.domain)
+        assertEquals("half-size", sk2!!.word.toString())
+        assertEquals("half-size", sk2.lemma.toString())
+        assertEquals(Type.ADJSAT, sk2.type)
+        assertEquals("adj.all", sk2.domain.domain)
         checkNotNull(sk2.headWord)
-        Assert.assertEquals("small", sk2.headWord.toString())
-        Assert.assertEquals(0, sk2.headLexId.toLong())
+        assertEquals("small", sk2.headWord.toString())
+        assertEquals(0, sk2.headLexId.toLong())
 
         for (i in 2 until sensekeys.size) {
             val sk = parseSensekey(sensekeys[i])
@@ -89,8 +90,8 @@ class TestSensekey {
 
         val sk1 = parseSensekey(sensekey)
         Assert.assertNotNull(sk1)
-        Assert.assertEquals("100%", sk1!!.word.toString())
-        Assert.assertEquals("100%", sk1.lemma.toString())
+        assertEquals("100%", sk1!!.word.toString())
+        assertEquals("100%", sk1.lemma.toString())
         ps.println(sk1.word)
     }
 

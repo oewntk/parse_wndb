@@ -38,6 +38,6 @@ open class Relation(
     }
 
     override fun toString(): String {
-        return String.format("%s: %s -> %s", type.name2, fromSynsetId.toString(), toSynsetId.toString())
+        return "${type.name2}: $fromSynsetId -> $toSynsetId"
     }
 }
