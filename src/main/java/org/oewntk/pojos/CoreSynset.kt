@@ -54,25 +54,13 @@ open class CoreSynset protected constructor(
     }
 
     override fun toString(): String {
-        val sb = StringBuilder()
-        sb.append("id=")
-        sb.append(String.format("%08d", id.offset))
-        sb.append(" words={")
-        for ((i, lemma) in this.cSLemmas.withIndex()) {
-            if (i > 0) {
-                sb.append(",")
-            }
-            sb.append(lemma.toString())
-            if (lemma.lemma is AdjLemma) {
-                val adjLemma = lemma.lemma
-                sb.append(adjLemma.toPositionSuffix())
-            }
+        val offset = String.format("%08d", id.offset)
+        val words = cSLemmas.joinToString(",") {
+            if (it.lemma is AdjLemma) {
+                it.toString() + it.lemma.toPositionSuffix()
+            } else it.toString()
         }
-        sb.append("} type=")
-        sb.append(this.type)
-        sb.append(" domain=")
-        sb.append(this.domain)
-        return sb.toString()
+        return "id=$offset words={$words} type=$type domain=$domain"
     }
 
     companion object {
