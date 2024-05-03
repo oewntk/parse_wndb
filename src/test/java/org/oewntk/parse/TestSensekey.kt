@@ -59,7 +59,7 @@ class TestSensekey {
 
         val sk1 = parseSensekey(sensekeys[0])
         Assert.assertNotNull(sk1)
-        assertEquals("go to the dogs", sk1!!.word.toString())
+        assertEquals("go to the dogs", sk1.word.toString())
         assertEquals("go to the dogs", sk1.lemma.toString())
         assertEquals(Type.VERB, sk1.type)
         assertEquals("verb.change", sk1.domain.domain)
@@ -68,7 +68,7 @@ class TestSensekey {
 
         val sk2 = parseSensekey(sensekeys[1])
         Assert.assertNotNull(sk2)
-        assertEquals("half-size", sk2!!.word.toString())
+        assertEquals("half-size", sk2.word.toString())
         assertEquals("half-size", sk2.lemma.toString())
         assertEquals(Type.ADJSAT, sk2.type)
         assertEquals("adj.all", sk2.domain.domain)
@@ -79,7 +79,7 @@ class TestSensekey {
         for (i in 2 until sensekeys.size) {
             val sk = parseSensekey(sensekeys[i])
             Assert.assertNotNull(sk)
-            ps.println(sk!!.word)
+            ps.println(sk.word)
         }
     }
 
@@ -90,7 +90,7 @@ class TestSensekey {
 
         val sk1 = parseSensekey(sensekey)
         Assert.assertNotNull(sk1)
-        assertEquals("100%", sk1!!.word.toString())
+        assertEquals("100%", sk1.word.toString())
         assertEquals("100%", sk1.lemma.toString())
         ps.println(sk1.word)
     }

@@ -64,7 +64,7 @@ class AdjLemma private constructor(normString: TrimmedNormalizedString, adjPosit
                     // strip position
                     return AdjLemma(TrimmedNormalizedString(normalizedString), adjPosition)
                 } catch (e: ParsePojoException) {
-                    
+
                 }
             }
             return make(normalizedString)

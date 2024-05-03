@@ -40,8 +40,8 @@ class Counter internal constructor(
         synsetCount++
         // relations
         val relations = it.relations
-        relationCount += relations!!.size.toLong()
-        it.relations.forEach { r: Relation ->
+        relationCount += relations?.size?.toLong() ?: 0
+        it.relations?.forEach { r: Relation ->
             val type = r.type.toString()
             if (r is LexRelation) {
                 senseRelationCount++
@@ -121,16 +121,16 @@ class Counter internal constructor(
         val countSum = LongArray(2)
 
         Tracing.psInfo.printf("synset relations: %s%n", synsetRelationCount)
-        synsetRelationByTypeCount.forEach { (r: String?, c: Long) ->
-            Tracing.psInfo.printf("\t%s: %d%n", r, c)
-            countSum[0] += c
+        synsetRelationByTypeCount.forEach { (relation, count) ->
+            Tracing.psInfo.printf("\t%s: %d%n", relation, count)
+            countSum[0] += count
         }
         assert(synsetRelationCount == countSum[0])
 
         Tracing.psInfo.printf("sense relations: %s%n", senseRelationCount)
-        senseRelationByTypeCount.forEach { (r: String?, c: Long) ->
-            Tracing.psInfo.printf("\t%s: %d%n", r, c)
-            countSum[1] += c
+        senseRelationByTypeCount.forEach { (relation, count) ->
+            Tracing.psInfo.printf("\t%s: %d%n", relation, count)
+            countSum[1] += count
         }
         assert(senseRelationCount == countSum[1])
 
@@ -158,9 +158,9 @@ class Counter internal constructor(
             // Input
             for (arg in args) {
                 val dir = File(arg)
-                Counter(dir).parseAll() 
-                    .reportCounts() 
-                    .reportRelationCounts() 
+                Counter(dir).parseAll()
+                    .reportCounts()
+                    .reportRelationCounts()
                     .reportVerbFrameCounts()
             }
 

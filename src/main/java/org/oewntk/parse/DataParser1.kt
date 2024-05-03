@@ -28,7 +28,7 @@ object DataParser1 {
      * @throws IOException io exception
      */
     @Throws(IOException::class)
-    fun read(dir: String?, posName: String, fileOffset: Long): String? {
+    fun read(dir: String, posName: String, fileOffset: Long): String? {
         val file = File(dir, "data.$posName")
         RandomAccessFile(file, "r").use { raFile ->
             raFile.seek(fileOffset)
@@ -46,8 +46,8 @@ object DataParser1 {
      * @throws ParsePojoException parse pojo exception
      */
     @Throws(ParsePojoException::class)
-    fun parseSynset(line: String?, isAdj: Boolean): Synset {
-        return parseSynsetLine(line!!, isAdj)
+    fun parseSynset(line: String, isAdj: Boolean): Synset {
+        return parseSynsetLine(line, isAdj)
     }
 
     /**
@@ -69,7 +69,9 @@ object DataParser1 {
         // Process
         val line = read(dir, posName, fileOffset)
         Tracing.psInfo.println(line)
-        val synset = parseSynset(line, isAdj)
-        Tracing.psInfo.println(synset.toPrettyString())
+        if (line != null) {
+            val synset = parseSynset(line, isAdj)
+            Tracing.psInfo.println(synset.toPrettyString())
+        }
     }
 }

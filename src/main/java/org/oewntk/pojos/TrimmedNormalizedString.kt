@@ -18,7 +18,7 @@ class TrimmedNormalizedString : NormalizedString {
      *
      * @param normalized string with possible suffix
      */
-    constructor(normalized: NormalizedString?) : super(normalized!!) {
+    constructor(normalized: NormalizedString) : super(normalized) {
         // remove possible trailing adj position between parentheses
         this.normalized = strip(this.normalized)
     }
@@ -28,7 +28,7 @@ class TrimmedNormalizedString : NormalizedString {
      *
      * @param raw string with possible suffix
      */
-    constructor(raw: String?) : super(raw!!) {
+    constructor(raw: String) : super(raw) {
         // remove possible trailing adj position between parentheses
         this.normalized = strip(this.normalized)
     }

@@ -36,7 +36,7 @@ object SenseParser {
      * @throws ParsePojoException parse pojo exception
      */
     @Throws(IOException::class, ParsePojoException::class)
-    fun parseSenses(dir: File?, consumer: Consumer<Sense>): Long {
+    fun parseSenses(dir: File, consumer: Consumer<Sense>): Long {
         psl.println("* Senses")
 
         // iterate on lines

@@ -17,7 +17,7 @@ import org.oewntk.pojos.SynsetId
 class SynsetUId
 private constructor(uniqueId: Long) {
 
-    private var synsetId: SynsetId?
+    private lateinit var synsetId: SynsetId
 
     init {
         for (p in Pos.entries) {
@@ -27,8 +27,6 @@ private constructor(uniqueId: Long) {
                 break
             }
         }
-        // never reached
-        this.synsetId = null
     }
 
     /**
@@ -37,8 +35,8 @@ private constructor(uniqueId: Long) {
      * @return unique id
      */
     private fun toUID(): Long {
-        val base = getBaseUID(synsetId!!.pos.toChar())
-        return base + synsetId!!.offset
+        val base = getBaseUID(synsetId.pos.toChar())
+        return base + synsetId.offset
     }
 
     /**

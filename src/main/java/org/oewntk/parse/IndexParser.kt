@@ -39,7 +39,7 @@ object IndexParser {
      * @throws ParsePojoException parse pojo exception
      */
     @Throws(IOException::class, ParsePojoException::class)
-    fun parseAllIndexes(dir: File?, consumer: Consumer<Index>): Long {
+    fun parseAllIndexes(dir: File, consumer: Consumer<Index>): Long {
         var count: Long = 0
         for (posName in arrayOf("noun", "verb", "adj", "adv")) {
             count += parseIndexes(dir, posName, consumer)
@@ -57,7 +57,7 @@ object IndexParser {
      * @throws ParsePojoException parse pojo exception
      */
     @Throws(IOException::class, ParsePojoException::class)
-    fun parseAllCoreIndexes(dir: File?, consumer: Consumer<CoreIndex?>): Long {
+    fun parseAllCoreIndexes(dir: File, consumer: Consumer<CoreIndex>): Long {
         var count: Long = 0
         for (posName in arrayOf("noun", "verb", "adj", "adv")) {
             count += parseCoreIndexes(dir, posName, consumer)
@@ -76,7 +76,7 @@ object IndexParser {
      * @throws ParsePojoException parse pojo exception
      */
     @Throws(IOException::class, ParsePojoException::class)
-    fun parseIndexes(dir: File?, posName: String, consumer: Consumer<Index>): Long {
+    fun parseIndexes(dir: File, posName: String, consumer: Consumer<Index>): Long {
         psl.println("* Indexes $posName")
 
         // iterate on lines
@@ -125,7 +125,7 @@ object IndexParser {
      * @throws ParsePojoException parse pojo exception
      */
     @Throws(IOException::class, ParsePojoException::class)
-    fun parseCoreIndexes(dir: File?, posName: String, consumer: Consumer<CoreIndex?>): Long {
+    fun parseCoreIndexes(dir: File, posName: String, consumer: Consumer<CoreIndex>): Long {
         psl.println("* Indexes $posName")
 
         // iterate on lines

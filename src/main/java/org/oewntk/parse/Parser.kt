@@ -39,10 +39,10 @@ object Parser {
      * @throws ParsePojoException parse pojo exception
      */
     @Throws(IOException::class, ParsePojoException::class)
-    fun parseAll(dir: File?, synsetConsumer: Consumer<Synset>?, senseConsumer: Consumer<Sense>?, indexConsumer: Consumer<Index>?) {
-        parseAllSynsets(dir, synsetConsumer!!)
-        parseAllIndexes(dir, indexConsumer!!)
-        parseSenses(dir, senseConsumer!!)
+    fun parseAll(dir: File, synsetConsumer: Consumer<Synset>, senseConsumer: Consumer<Sense>, indexConsumer: Consumer<Index>) {
+        parseAllSynsets(dir, synsetConsumer)
+        parseAllIndexes(dir, indexConsumer)
+        parseSenses(dir, senseConsumer)
     }
 
     /**

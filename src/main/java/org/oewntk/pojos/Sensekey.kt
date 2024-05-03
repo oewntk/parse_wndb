@@ -123,10 +123,7 @@ class Sensekey {
          * @throws ParsePojoException parse exception
          */
         @Throws(ParsePojoException::class)
-        fun parseSensekey(str: String?): Sensekey? {
-            if (str == null) {
-                return null
-            }
+        fun parseSensekey(str: String): Sensekey {
             val fields = decode(str)
             if (fields.size < 4) {
                 throw ParsePojoException("Sensekey:$str")

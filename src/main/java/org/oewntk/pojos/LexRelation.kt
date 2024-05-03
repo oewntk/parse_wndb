@@ -58,5 +58,5 @@ class LexRelation(
 
     override fun toString() = "${type.name2}: $fromSynsetId[$fromWord] -> $toSynsetId[${toWord.wordNum}]"
 
-    fun toString(toWord: String?): String = "${type.name2}: $fromSynsetId[$fromWord] -> $toSynsetId[$toWord]"
+    fun toString(toWord: String): String = "${type.name2}: $fromSynsetId[$fromWord] -> $toSynsetId[$toWord]"
 }

@@ -120,7 +120,7 @@ class RelationParser(
          * @throws IOException        io exception
          */
         @Throws(ParsePojoException::class, IOException::class)
-        fun parseSynsets(dir: File?, posName: String, synsetConsumer: Consumer<Synset>?, relationConsumer: Consumer<Relation>?, lexRelationConsumer: Consumer<LexRelation>?): Long {
+        fun parseSynsets(dir: File, posName: String, synsetConsumer: Consumer<Synset>?, relationConsumer: Consumer<Relation>?, lexRelationConsumer: Consumer<LexRelation>?): Long {
             psl.println("* Synsets $posName")
 
             val isAdj = posName == "adj"
@@ -174,8 +174,8 @@ class RelationParser(
                         }
                         val relations = synset.relations
                         for (relation in relations!!) {
-                            if (relation is LexRelation && lexRelationConsumer != null) {
-                                lexRelationConsumer.accept(relation)
+                            if (relation is LexRelation) {
+                                lexRelationConsumer?.accept(relation)
                             } else relationConsumer?.accept(relation)
                             relationCount++
                         }

@@ -15,6 +15,8 @@ import org.oewntk.pojos.RelationType.Companion.parseRelationType
  * @param gloss      gloss
  * @param relations  relations
  * @param verbFrames verb frames
+ * @property relations  relations
+ * @property verbFrames verb frames
  *
  * @author Bernard Bou
  */
@@ -24,56 +26,14 @@ class Synset private constructor(
     type: Type,
     domain: Domain,
     gloss: Gloss,
-    relations: Array<Relation>,
-    verbFrames: Array<VerbFrameRef>?,
+    var relations: Array<Relation>?,
+    val verbFrames: Array<VerbFrameRef>?,
 ) : CoreSynset(synsetId, lemmas, type, domain, gloss) {
 
-    /**
-     * Get relations
-     *
-     * @return relations
-     */
-    val relations: Array<Relation>?
-
-    /**
-     * Get verb frames
-     *
-     * @return verb frames
-     */
-    val verbFrames: Array<VerbFrameRef>?
-
-    /**
-     * Constructor
-     */
-    init {
-        this.relations = relations
-        this.verbFrames = verbFrames
-    }
-
     override fun toString(): String {
-        val sb = StringBuilder()
-        sb.append(super.toString())
-        if (this.relations != null) {
-            sb.append(" relations={")
-            for (i in relations.indices) {
-                if (i != 0) {
-                    sb.append(",")
-                }
-                sb.append(relations[i].toString())
-            }
-            sb.append("}")
-        }
-        if (this.verbFrames != null) {
-            sb.append(" frames={")
-            for (i in verbFrames.indices) {
-                if (i != 0) {
-                    sb.append(",")
-                }
-                sb.append(verbFrames[i].toString())
-            }
-            sb.append("}")
-        }
-        return sb.toString()
+        val r = relations?.joinToString(separator = ",", prefix = " relations={", postfix = "}")
+        val f = verbFrames?.joinToString(separator = ",", prefix = " relations={", postfix = "}")
+        return super.toString() + (r ?: "") + (f ?: "")
     }
 
     /**
@@ -82,38 +42,9 @@ class Synset private constructor(
      * @return pretty string
      */
     fun toPrettyString(): String {
-        val sb = StringBuilder()
-        sb.append(super.toString())
-        sb.append('\n')
-        sb.append(gloss.toPrettyString())
-
-        if (this.relations != null) {
-            sb.append('\n')
-            sb.append("relations={")
-            sb.append('\n')
-            for (i in relations.indices) {
-                if (i != 0) {
-                    sb.append(",")
-                    sb.append('\n')
-                }
-                sb.append('\t')
-                sb.append(relations[i].toString())
-            }
-            sb.append('\n')
-            sb.append("}")
-        }
-        if (this.verbFrames != null) {
-            sb.append('\n')
-            sb.append("frames={")
-            for (i in verbFrames.indices) {
-                if (i != 0) {
-                    sb.append(",")
-                }
-                sb.append(verbFrames[i].toString())
-            }
-            sb.append("}")
-        }
-        return sb.toString()
+        val r = relations?.joinToString(separator = ",\n\t", prefix = "\nrelations={\n\t", postfix = "\n}")
+        val f = verbFrames?.joinToString(separator = ",\n\t", prefix = "\nframes={\n\t", postfix = "\n}")
+        return super.toString() + '\n' + gloss.toPrettyString() + (r ?: "") + (f ?: "")
     }
 
     companion object {
@@ -143,10 +74,6 @@ class Synset private constructor(
                 val fields = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 var fieldPointer = 0
 
-                // data
-                val relations: Array<Relation>
-                var frames: Array<VerbFrameRef>? = null
-
                 // offset
                 fieldPointer++
 
@@ -167,35 +94,39 @@ class Synset private constructor(
                 fieldPointer++
 
                 // relations
-                relations = Array(relationCount) {
+                val relations = if (relationCount == 0) null else {
+                    Array(relationCount) {
 
-                    // read data
-                    val relationTypeField = fields[fieldPointer++]
-                    val relationSynsetIdField = fields[fieldPointer++]
-                    val relationPosField = fields[fieldPointer++]
-                    val relationSourceTargetField = fields[fieldPointer++]
-                    val relationSynsetId = relationSynsetIdField.toLong()
-                    val relationSourceTarget = relationSourceTargetField.toInt(16)
+                        // read data
+                        val relationTypeField = fields[fieldPointer++]
+                        val relationSynsetIdField = fields[fieldPointer++]
+                        val relationPosField = fields[fieldPointer++]
+                        val relationSourceTargetField = fields[fieldPointer++]
+                        val relationSynsetId = relationSynsetIdField.toLong()
+                        val relationSourceTarget = relationSourceTargetField.toInt(16)
 
-                    // compute
-                    val synsetType = Type.parseType(relationPosField[0])
-                    val relationType = parseRelationType(relationTypeField)
-                    val toId = SynsetId(synsetType.toPos(), relationSynsetId)
+                        // compute
+                        val synsetType = Type.parseType(relationPosField[0])
+                        val relationType = parseRelationType(relationTypeField)
+                        val toId = SynsetId(synsetType.toPos(), relationSynsetId)
 
-                    // create
-                    if (relationSourceTarget != 0) {
-                        val fromWordIndex = relationSourceTarget shr 8
-                        val toWordIndex = relationSourceTarget and 0xff
-                        val fromLemma = csLemmas[fromWordIndex - 1]
-                        val toLemma = LemmaRef(toId, toWordIndex)
-                        LexRelation(relationType, synsetId, toId, fromLemma, toLemma)
-                    } else {
-                        Relation(relationType, synsetId, toId)
+                        // create
+                        if (relationSourceTarget != 0) {
+                            val fromWordIndex = relationSourceTarget shr 8
+                            val toWordIndex = relationSourceTarget and 0xff
+                            val fromLemma = csLemmas[fromWordIndex - 1]
+                            val toLemma = LemmaRef(toId, toWordIndex)
+                            LexRelation(relationType, synsetId, toId, fromLemma, toLemma)
+                        } else {
+                            Relation(relationType, synsetId, toId)
+                        }
                     }
                 }
 
                 // frames
+                var frames: Array<VerbFrameRef>? = null
                 if (type.toChar() == 'v' && fields[fieldPointer] != "|") {
+
                     // frame count
                     val frameCount = fields[fieldPointer].toInt(10)
                     fieldPointer++

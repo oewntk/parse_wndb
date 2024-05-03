@@ -36,7 +36,7 @@ object DataParser {
      * @throws ParsePojoException parse pojo exception
      */
     @Throws(IOException::class, ParsePojoException::class)
-    fun parseAllSynsets(dir: File?, consumer: Consumer<Synset>): Long {
+    fun parseAllSynsets(dir: File, consumer: Consumer<Synset>): Long {
         var count: Long = 0
         for (posName in arrayOf("noun", "verb", "adj", "adv")) {
             count += parseSynsets(dir, posName, consumer)
@@ -55,7 +55,7 @@ object DataParser {
      * @throws IOException        io exception
      */
     @Throws(ParsePojoException::class, IOException::class)
-    fun parseSynsets(dir: File?, posName: String, consumer: Consumer<Synset>): Long {
+    fun parseSynsets(dir: File, posName: String, consumer: Consumer<Synset>): Long {
         psl.println("* Synsets $posName")
 
         val isAdj = posName == "adj"

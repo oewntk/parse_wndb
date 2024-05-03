@@ -79,9 +79,9 @@ open class Lemma(
          * @param rawString raw string
          * @return lemma
          */
-        fun make(rawString: String?): Lemma {
+        fun make(rawString: String): Lemma {
             // normalize spaces then lowercase
-            return Lemma(NormalizedString(rawString!!))
+            return Lemma(NormalizedString(rawString))
         }
     }
 }

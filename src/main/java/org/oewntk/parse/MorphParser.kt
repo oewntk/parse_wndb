@@ -36,7 +36,7 @@ object MorphParser {
      * @throws ParsePojoException parse pojo exception
      */
     @Throws(IOException::class, ParsePojoException::class)
-    fun parseAllMorphs(dir: File?, consumer: Consumer<MorphMapping>) {
+    fun parseAllMorphs(dir: File, consumer: Consumer<MorphMapping>) {
         // Process for all pos
         for (posName in arrayOf("noun", "verb", "adj", "adv")) {
             parseMorphs(dir, posName, consumer)
@@ -53,7 +53,7 @@ object MorphParser {
      * @throws ParsePojoException parse pojo exception
      */
     @Throws(IOException::class, ParsePojoException::class)
-    fun parseMorphs(dir: File?, posName: String, consumer: Consumer<MorphMapping>) {
+    fun parseMorphs(dir: File, posName: String, consumer: Consumer<MorphMapping>) {
         psi.println("* Morphs")
 
         val pos = fromName(posName)

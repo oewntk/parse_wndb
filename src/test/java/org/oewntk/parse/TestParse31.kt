@@ -24,25 +24,25 @@ class TestParse31 {
     @Test
     @Throws(IOException::class, ParsePojoException::class)
     fun parse() {
-        parseAll(wnDir, { x: Synset? -> ps.println(x) }, { x: Sense? -> ps.println(x) }, { x: Index? -> ps.println(x) })
+        parseAll(wnDir!!, { synset -> ps.println(synset) }, { sense -> ps.println(sense) }, { index -> ps.println(index) })
     }
 
     @Test
     @Throws(IOException::class, ParsePojoException::class)
     fun indexParse() {
-        parseAllIndexes(wnDir) { x: Index? -> ps.println(x) }
+        parseAllIndexes(wnDir!!) { ps.println(it) }
     }
 
     @Test
     @Throws(IOException::class, ParsePojoException::class)
     fun dataParse() {
-        parseAllSynsets(wnDir) { x: Synset? -> ps.println(x) }
+        parseAllSynsets(wnDir!!) { ps.println(it) }
     }
 
     @Test
     @Throws(IOException::class, ParsePojoException::class)
     fun senseParse() {
-        parseSenses(wnDir) { x: Sense? -> ps.println(x) }
+        parseSenses(wnDir!!) { ps.println(it) }
     }
 
     companion object {

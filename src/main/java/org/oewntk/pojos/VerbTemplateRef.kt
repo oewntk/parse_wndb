@@ -14,7 +14,7 @@ import org.oewntk.pojos.Sensekey.Companion.parseSensekey
  * @author Bernard Bou
  */
 class VerbTemplateRef private constructor(
-    val sensekey: Sensekey?,
+    val sensekey: Sensekey,
     val id: Int,
 ) {
 
@@ -32,7 +32,7 @@ class VerbTemplateRef private constructor(
          * @throws ParsePojoException parse exception
          */
         @Throws(ParsePojoException::class)
-        fun parseVerbTemplateRef(line: String): Array<VerbTemplateRef?>? {
+        fun parseVerbTemplateRef(line: String): Array<VerbTemplateRef>? {
             try {
                 val fields = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 if (fields.size <= 1) {
@@ -46,10 +46,9 @@ class VerbTemplateRef private constructor(
                 val count = subFields.size
 
                 // pair sensekey with id for each id
-                val refs = arrayOfNulls<VerbTemplateRef>(count)
-                for (i in 0 until count) {
-                    val id = subFields[i].toInt()
-                    refs[i] = VerbTemplateRef(sensekey, id)
+                val refs = Array(count) {
+                    val id = subFields[it].toInt()
+                    VerbTemplateRef(sensekey, id)
                 }
                 return refs
             } catch (e: Exception) {

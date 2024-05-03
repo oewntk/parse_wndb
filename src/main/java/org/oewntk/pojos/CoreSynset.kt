@@ -156,7 +156,7 @@ open class CoreSynset protected constructor(
          * @throws ParsePojoException parse exception
          */
         @Throws(ParsePojoException::class)
-        fun parseMembers(line: String): Array<TrimmedNormalizedString?> {
+        fun parseMembers(line: String): Array<TrimmedNormalizedString> {
             // split into fields
             val fields = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             return parseMembers(fields)
@@ -170,7 +170,7 @@ open class CoreSynset protected constructor(
          * @throws ParsePojoException parse exception
          */
         @Throws(ParsePojoException::class)
-        private fun parseMembers(fields: Array<String>): Array<TrimmedNormalizedString?> {
+        private fun parseMembers(fields: Array<String>): Array<TrimmedNormalizedString> {
             try {
                 // data
                 var fieldPointer = 3
@@ -180,13 +180,14 @@ open class CoreSynset protected constructor(
                 fieldPointer++
 
                 // members
-                val members = arrayOfNulls<TrimmedNormalizedString>(count)
-                for (i in 0 until count) {
-                    members[i] = TrimmedNormalizedString(fields[fieldPointer])
+                val members = Array<TrimmedNormalizedString>(count) {
+                    val member = TrimmedNormalizedString(fields[fieldPointer])
                     fieldPointer++
 
                     // lexid skipped
                     fieldPointer++
+
+                    member
                 }
                 return members
             } catch (e: Exception) {

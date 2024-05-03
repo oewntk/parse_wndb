@@ -28,16 +28,15 @@ object IndexParser1 {
      * @throws IOException io exception
      */
     @Throws(IOException::class)
-    fun read(dir: String?, posName: String, target: String?) {
+    fun read(dir: String, posName: String, target: String) {
         val file = File(dir, "index.$posName")
         BufferedReader(FileReader(file)).use { reader ->
             reader.useLines { lines ->
                 lines.forEach { line ->
-                    if (line.contains(target!!)) {
+                    if (line.contains(target)) {
                         Tracing.psInfo.println(line)
-                        val index: CoreIndex
                         try {
-                            index = parseIndexLine(line)
+                            val index = parseIndexLine(line)
                             Tracing.psInfo.println(index)
                         } catch (e: ParsePojoException) {
                             Tracing.psErr.printf("%s cause:%s%n", e.message, e.cause)

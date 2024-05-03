@@ -27,7 +27,7 @@ object SenseParser1 {
      * @throws IOException io exception
      */
     @Throws(IOException::class)
-    fun read(dir: String?, target: String?) {
+    fun read(dir: String, target: String?) {
         val file = File(dir, "index.sense")
         BufferedReader(FileReader(file)).use { reader ->
             reader.useLines { lines ->
