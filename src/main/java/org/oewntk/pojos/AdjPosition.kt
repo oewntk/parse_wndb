@@ -18,8 +18,8 @@ enum class AdjPosition(
     private val description: String,
 ) {
 
-    PREDICATIVE("p", "predicate"),  
-    ATTRIBUTIVE("a", "attributive"),  
+    PREDICATIVE("p", "predicate"),
+    ATTRIBUTIVE("a", "attributive"),
     POSTNOMINAL("ip", "immediately postnominal");
 
     override fun toString(): String {
@@ -35,12 +35,7 @@ enum class AdjPosition(
          * @return adj position
          */
         fun find(tag: String): AdjPosition? {
-            for (position in entries) {
-                if (position.id == tag) {
-                    return position
-                }
-            }
-            return null
+            return entries.find { it.id == tag }
         }
 
         /**
@@ -54,14 +49,8 @@ enum class AdjPosition(
         fun parseAdjPosition(suffix: String): AdjPosition {
             // remove parentheses
             val name = suffix.substring(1, suffix.length - 1)
-
             // look up
-            for (adjPosition in entries) {
-                if (name == adjPosition.id) {
-                    return adjPosition
-                }
-            }
-            throw ParsePojoException("AdjPosition:$name")
+            return entries.firstOrNull { it.id == name } ?: throw ParsePojoException("AdjPosition:$name")
         }
     }
 }
