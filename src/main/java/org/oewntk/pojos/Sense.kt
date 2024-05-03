@@ -47,7 +47,7 @@ class Sense(
                 val fields = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
                 // core fields
-                val sensekey = Sensekey.parseSensekey(fields[0])!!
+                val sensekey = Sensekey.parseSensekey(fields[0])
                 val type = sensekey.type
                 val lemma = sensekey.lemma
                 val sensenum = fields[2].toInt()
