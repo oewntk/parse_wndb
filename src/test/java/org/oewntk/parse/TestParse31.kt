@@ -11,10 +11,7 @@ import org.oewntk.parse.DataParser.parseAllSynsets
 import org.oewntk.parse.IndexParser.parseAllIndexes
 import org.oewntk.parse.Parser.parseAll
 import org.oewntk.parse.SenseParser.parseSenses
-import org.oewntk.pojos.Index
 import org.oewntk.pojos.ParsePojoException
-import org.oewntk.pojos.Sense
-import org.oewntk.pojos.Synset
 import org.oewntk.utils.Tracing
 import java.io.File
 import java.io.IOException
