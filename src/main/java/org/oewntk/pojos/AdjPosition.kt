@@ -3,8 +3,6 @@
  */
 package org.oewntk.pojos
 
-import org.oewntk.pojos.ParsePojoException
-
 /**
  * Adjective Position
  *
