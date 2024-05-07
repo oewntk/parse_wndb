@@ -82,8 +82,8 @@ open class CoreIndex protected constructor(
                 var fieldPointer = 0
 
                 // lemma/word
-                val lemmaString = fields[fieldPointer]
-                val lemma = Lemma.make(lemmaString)
+                val field = fields[fieldPointer]
+                val lemma = Lemma.make(field)
                 fieldPointer++
 
                 // part-of-speech

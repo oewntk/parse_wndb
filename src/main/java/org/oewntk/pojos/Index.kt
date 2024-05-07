@@ -69,8 +69,8 @@ class Index(
                 var fieldPointer = 0
 
                 // lemma
-                val lemmaString = fields[fieldPointer]
-                val lemma = Lemma.make(lemmaString)
+                val field = fields[fieldPointer]
+                val lemma = Lemma.make(field)
                 fieldPointer++
 
                 // part-of-speech
