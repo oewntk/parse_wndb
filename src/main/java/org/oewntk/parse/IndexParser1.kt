@@ -39,7 +39,7 @@ object IndexParser1 {
                             val index = parseIndexLine(line)
                             Tracing.psInfo.println(index)
                         } catch (e: ParsePojoException) {
-                            Tracing.psErr.printf("%s cause:%s%n", e.message, e.cause)
+                            Tracing.psErr.println("${e.message} cause:${ e.cause}")
                             e.printStackTrace(Tracing.psErr)
                         }
                     }

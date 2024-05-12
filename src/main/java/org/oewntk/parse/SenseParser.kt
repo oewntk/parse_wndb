@@ -54,17 +54,17 @@ object SenseParser {
                         consumer.accept(sense)
                     } catch (e: ParsePojoException) {
                         parseErrorCount++
-                        pse.printf("%n%s:%d line=[%s] except=%s", file.name, lineCount, line, e)
+                        pse.print("\n${file.name}:$lineCount line=[$line] except=$e")
                         if (THROW) {
                             throw e
                         }
                     }
                 }
             }
-            val format = "%-50s %d%n"
-            psl.printf(format, "lines", lineCount)
-            psl.printf(format, "parse successes", senseCount)
-            (if (parseErrorCount > 0) pse else psl).printf(format, "parse errors", parseErrorCount)
+            val format = "%-50s"
+            psl.println("${String.format(format, "lines")}$lineCount")
+            psl.println("${String.format(format, "parse successes")}$senseCount")
+            (if (parseErrorCount > 0) pse else psl).println("${String.format(format, "parse errors")}$parseErrorCount")
             return senseCount
         }
     }

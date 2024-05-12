@@ -39,7 +39,7 @@ object SenseParser1 {
                             sense = parseSenseLine(line)
                             Tracing.psInfo.println(sense)
                         } catch (e: ParsePojoException) {
-                            Tracing.psErr.printf("%s cause:%s%n", e.message, e.cause)
+                            Tracing.psErr.println("${e.message} cause:${e.cause}")
                             e.printStackTrace(Tracing.psErr)
                         }
                     }

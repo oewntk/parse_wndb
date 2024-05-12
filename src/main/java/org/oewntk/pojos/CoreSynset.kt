@@ -180,7 +180,7 @@ open class CoreSynset protected constructor(
                 fieldPointer++
 
                 // members
-                val members = Array<TrimmedNormalizedString>(count) {
+                val members = Array(count) {
                     val member = TrimmedNormalizedString(fields[fieldPointer])
                     fieldPointer++
 

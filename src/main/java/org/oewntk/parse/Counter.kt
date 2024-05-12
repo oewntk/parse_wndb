@@ -99,7 +99,7 @@ class Counter internal constructor(
      * @return this
      */
     fun reportCounts(): Counter {
-        Tracing.psInfo.printf("%s synsets:%d senses:%d indexes:%d relations:%d synset_relations:%d sense_relations:%d%n", dir, synsetCount, senseCount, indexCount, relationCount, synsetRelationCount, senseRelationCount)
+        Tracing.psInfo.println("$dir synsets:$synsetCount senses:$senseCount indexes:$indexCount relations:$relationCount synset_relations:$synsetRelationCount sense_relations:$senseRelationCount")
         return this
     }
 
@@ -109,7 +109,7 @@ class Counter internal constructor(
      * @return this
      */
     fun reportVerbFrameCounts(): Counter {
-        Tracing.psInfo.printf("verbframes: %d single_senses: %d multi_senses: %d senses: %d%n", verbFrameCount, verbFrameMultiSensesCount, verbFrameSingleSensesCount, verbFrameMultiSensesCount + verbFrameSingleSensesCount)
+        Tracing.psInfo.println("verbframes: $verbFrameCount single_senses: $verbFrameSingleSensesCount multi_senses: $verbFrameMultiSensesCount senses: ${verbFrameMultiSensesCount + verbFrameSingleSensesCount}")
         return this
     }
 
@@ -121,16 +121,16 @@ class Counter internal constructor(
     fun reportRelationCounts(): Counter {
         val countSum = LongArray(2)
 
-        Tracing.psInfo.printf("synset relations: %s%n", synsetRelationCount)
+        Tracing.psInfo.println("synset relations: $synsetRelationCount")
         synsetRelationByTypeCount.forEach { (relation, count) ->
-            Tracing.psInfo.printf("\t%s: %d%n", relation, count)
+            Tracing.psInfo.println("\t$relation: $count")
             countSum[0] += count
         }
         assert(synsetRelationCount == countSum[0])
 
-        Tracing.psInfo.printf("sense relations: %s%n", senseRelationCount)
+        Tracing.psInfo.println("sense relations: $senseRelationCount")
         senseRelationByTypeCount.forEach { (relation, count) ->
-            Tracing.psInfo.printf("\t%s: %d%n", relation, count)
+            Tracing.psInfo.println("\t$relation: $count")
             countSum[1] += count
         }
         assert(senseRelationCount == countSum[1])

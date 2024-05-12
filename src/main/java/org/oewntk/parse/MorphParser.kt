@@ -73,17 +73,17 @@ object MorphParser {
                         consumer.accept(morphMapping)
                     } catch (e: ParsePojoException) {
                         parseErrorCount++
-                        pse.printf("%n%s:%d line=[%s] except=%s", file.name, lineCount, line, e)
+                        pse.print("\n${file.name}:$lineCount line=[$line] except=$e")
                         if (THROW) {
                             throw e
                         }
                     }
                 }
             }
-            val format = "%-50s %d%n"
-            psi.printf(format, "lines", lineCount)
-            psi.printf(format, "parse successes", morphMappingCount)
-            (if (parseErrorCount > 0) pse else psi).printf(format, "parse errors", parseErrorCount)
+            val format = "%-50s"
+            psi.println("${String.format(format, "lines")}$lineCount")
+            psi.println("${String.format(format, "parse successes")}$morphMappingCount")
+            (if (parseErrorCount > 0) pse else psi).println("${String.format(format, "parse errors")}$parseErrorCount")
         }
     }
 

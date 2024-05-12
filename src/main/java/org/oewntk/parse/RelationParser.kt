@@ -42,10 +42,10 @@ class RelationParser(
             val toWord = relation.toWord
             require(!(toWord.synsetId.offset == 0L || toWord.wordNum == 0)) { relation.toString() }
             require(RelationType.SENSE_RELATIONS.contains(type)) { relation.toString() }
-            psi.printf("%-6s %s%n", "sense", relation)
+            psi.println("${String.format("%-6s", "sense")}$relation")
         } else {
             require(RelationType.SYNSET_RELATIONS.contains(type)) { relation.toString() }
-            psi.printf("%-6s %s%n", "synset", relation)
+            psi.println("${String.format("%-6s", "synset")}$relation")
         }
     }
 
@@ -58,9 +58,9 @@ class RelationParser(
         val toWord = relation.toWord
         require(!(toWord.synsetId.offset == 0L || toWord.wordNum == 0)) { relation.toString() }
         require(RelationType.SENSE_RELATIONS.contains(type)) { relation.toString() }
-        // psi.printf("%-6s %s%n", "sense", relation);
+        // psi.println("${String.format("%-6s", "sense")}$relation")
         val resolvedToWord = resolveToWord(relation)
-        psi.printf("%-6s %s%n", "sense", relation.toString(resolvedToWord))
+        psi.println("${String.format("%-6s", "sense")}${relation.toString(resolvedToWord)}")
     }
 
     // Source
@@ -162,7 +162,7 @@ class RelationParser(
                     // read offset
                     val readOffset = lineFields[0].toLong()
                     if (fileOffset != readOffset) {
-                        pse.printf("Offset: data.%s:%d offset=%08d line=[%s]%n", posName, lineCount, fileOffset, line)
+                        pse.println("Offset: data.$posName:$lineCount offset=${String.format("%08d", fileOffset)} line=[$line]")
                         offsetErrorCount++
                         continue
                     }
@@ -186,17 +186,17 @@ class RelationParser(
                             ?: 0
                     } catch (e: ParsePojoException) {
                         parseErrorCount++
-                        pse.printf("%n%s:%d offset=%08d line=[%s] except=%s", file.name, lineCount, fileOffset, line, e.message)
+                        pse.print("\n${file.name}:$lineCount offset=${String.format("%08d", fileOffset)} line=[line] except=${e.message}")
                         if (THROW) {
                             throw e
                         }
                     }
                 }
-                val format = "%-50s %d%n"
-                psl.printf(format, "lines", nonCommentCount)
-                psl.printf(format, "parse successes", relationCount)
-                (if (offsetErrorCount > 0) pse else psl).printf(format, "offset errors", offsetErrorCount)
-                (if (parseErrorCount > 0) pse else psl).printf(format, "parse errors", parseErrorCount)
+                val format = "%-50s"
+                psl.println("${String.format(format, "lines")}$nonCommentCount")
+                psl.println("${String.format(format, "parse successes")}$relationCount")
+                (if (offsetErrorCount > 0) pse else psl).println("${String.format(format, "offset errors")}$offsetErrorCount")
+                (if (parseErrorCount > 0) pse else psl).println("${String.format(format, "parse errors")}$parseErrorCount")
                 return relationCount
             }
         }

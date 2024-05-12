@@ -94,7 +94,7 @@ object IndexParser {
                             consumer.accept(index)
                         } catch (e: ParsePojoException) {
                             parseErrorCount++
-                            pse.printf("%n%s:%d line=[%s] except=%s", file.name, lineCount, line, e)
+                            pse.print("\n${file.name}:$lineCount line=[$line] except=$e")
                             if (THROW) {
                                 throw e
                             }
@@ -102,10 +102,10 @@ object IndexParser {
                     }
                 }
             }
-            val format = "%-50s %d%n"
-            psl.printf(format, "lines", nonCommentCount)
-            (if (parseErrorCount > 0) pse else psl).printf(format, "parse successes", indexCount)
-            (if (parseErrorCount > 0) pse else psl).printf(format, "parse errors", parseErrorCount)
+            val format = "%-50s"
+            psl.println("${String.format(format, "lines")}$nonCommentCount")
+            (if (parseErrorCount > 0) pse else psl).println("${String.format(format, "parse successes")}$indexCount")
+            (if (parseErrorCount > 0) pse else psl).println("${String.format(format, "parse errors")}$parseErrorCount")
             return indexCount
         }
     }
@@ -142,7 +142,7 @@ object IndexParser {
                             consumer.accept(index)
                         } catch (e: ParsePojoException) {
                             parseErrorCount++
-                            pse.printf("%n%s:%d line=[%s] except=%s", file.name, lineCount, line, e)
+                            pse.print("\n${file.name}:$lineCount line=[$line] except=$e")
                             if (THROW) {
                                 throw e
                             }
@@ -150,10 +150,10 @@ object IndexParser {
                     }
                 }
             }
-            val format = "%-50s %d%n"
-            psl.printf(format, "lines", nonCommentCount)
-            (if (parseErrorCount > 0) pse else psl).printf(format, "parse successes", indexCount)
-            (if (parseErrorCount > 0) pse else psl).printf(format, "parse errors", parseErrorCount)
+            val format = "%-50s"
+            psl.println("${String.format(format, "lines")}$nonCommentCount")
+            (if (parseErrorCount > 0) pse else psl).println("${String.format(format, "parse successes")}$indexCount")
+            (if (parseErrorCount > 0) pse else psl).println("${String.format(format, "parse errors")}$parseErrorCount")
             return indexCount
         }
     }

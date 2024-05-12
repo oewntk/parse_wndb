@@ -37,8 +37,8 @@ object DataParser {
      */
     @Throws(IOException::class, ParsePojoException::class)
     fun parseAllSynsets(dir: File, consumer: Consumer<Synset>): Long {
-         return sequenceOf("noun", "verb", "adj", "adv")
-            .map {parseSynsets(dir, it, consumer)}
+        return sequenceOf("noun", "verb", "adj", "adv")
+            .map { parseSynsets(dir, it, consumer) }
             .sum()
     }
 
@@ -89,7 +89,7 @@ object DataParser {
                 // read offset
                 val readOffset = lineFields[0].toLong()
                 if (fileOffset != readOffset) {
-                    pse.printf("Offset: data.%s:%d offset=%08d line=[%s]%n", posName, lineCount, fileOffset, line)
+                    pse.println("Offset: data.$posName:$lineCount offset=${String.format("%08d", fileOffset)} line=[$line]")
                     offsetErrorCount++
                     continue
                 }
@@ -101,17 +101,17 @@ object DataParser {
                     consumer.accept(synset)
                 } catch (e: ParsePojoException) {
                     parseErrorCount++
-                    pse.printf("%n%s:%d offset=%08d line=[%s] except=%s", file.name, lineCount, fileOffset, line, e.message)
+                    pse.println("\n${file.name}:$lineCount offset=${String.format("%08d", fileOffset)} line=[$line] except=${e.message}")
                     if (THROW) {
                         throw e
                     }
                 }
             }
-            val format = "%-50s %d%n"
-            psl.printf(format, "lines", nonCommentCount)
-            psl.printf(format, "parse successes", synsetCount)
-            (if (offsetErrorCount > 0) pse else psl).printf(format, "offset errors", offsetErrorCount)
-            (if (parseErrorCount > 0) pse else psl).printf(format, "parse errors", parseErrorCount)
+            val format = "%-50s"
+            psl.println("${String.format(format, "lines")}$nonCommentCount")
+            psl.println("${String.format(format, "parse successes")}$synsetCount")
+            (if (offsetErrorCount > 0) pse else psl).println("${String.format(format, "offset errors")}$offsetErrorCount")
+            (if (parseErrorCount > 0) pse else psl).println("${String.format(format, "parse errors")}$parseErrorCount")
             return synsetCount
         }
     }
