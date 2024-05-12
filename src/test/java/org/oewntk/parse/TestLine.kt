@@ -4,7 +4,7 @@
 
 package org.oewntk.parse
 
-import org.junit.Assert
+import junit.framework.TestCase.assertNotNull
 import org.junit.Test
 import org.oewntk.pojos.ParsePojoException
 import org.oewntk.pojos.Synset.Companion.parseSynsetLine
@@ -15,11 +15,11 @@ class TestLine {
     @Test
     @Throws(ParsePojoException::class)
     fun line() {
-        for (line in lines) {
-            ps.println(line)
-            Assert.assertNotNull(line)
-            val synset = parseSynsetLine(line, false)
-            Assert.assertNotNull(synset)
+        lines.forEach {
+            ps.println(it)
+            assertNotNull(it)
+            val synset = parseSynsetLine(it, false)
+            assertNotNull(synset)
         }
     }
 

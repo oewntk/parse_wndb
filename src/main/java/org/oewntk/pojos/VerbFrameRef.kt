@@ -16,17 +16,5 @@ class VerbFrameRef(
     val frameId: Int,
 ) {
 
-    override fun toString(): String {
-        val sb = StringBuilder()
-        sb.append("{")
-        for ((i, lemma) in this.lemmas.withIndex()) {
-            if (i > 0) {
-                sb.append(",")
-            }
-            sb.append(lemma.toString())
-        }
-        sb.append("}:")
-        sb.append(this.frameId)
-        return sb.toString()
-    }
+    override fun toString(): String = lemmas.joinToString(separator = ",", prefix = "{", postfix = "}:$frameId")
 }

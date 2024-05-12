@@ -5,6 +5,7 @@
 package org.oewntk.parse
 
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
 import org.junit.Assert
 import org.junit.Test
 import org.oewntk.pojos.ParsePojoException
@@ -19,12 +20,11 @@ class TestSensekey {
 
     @Test
     fun sk_escape() {
-        val heads: List<String> = mutableListOf("", *lemmas)
 
-        for (lemma in lemmas) {
-            for (head in heads) {
-                val sensekey = generate(lemma, POS, LEXFILE, LEXID, head, HEADID)
-                ps.printf("%s%n", sensekey)
+        testLemmas.forEach { lemma ->
+            testTargetHeads.forEach { targetHead ->
+                val sensekey = generate(lemma, POS, LEXFILE, LEXID, targetHead, HEADID)
+                ps.println(sensekey)
 
                 val decoded = decode(sensekey)
                 assertEquals(6, decoded.size.toLong())
@@ -32,8 +32,8 @@ class TestSensekey {
                 assertEquals(String.format("%01d", POS), decoded[1])
                 assertEquals(String.format("%02d", LEXFILE), decoded[2])
                 assertEquals(String.format("%02d", LEXID), decoded[3])
-                assertEquals(head, decoded[4])
-                if (head.isEmpty()) {
+                assertEquals(targetHead, decoded[4])
+                if (targetHead.isEmpty()) {
                     assertEquals("", decoded[5])
                 } else {
                     assertEquals(String.format("%02d", HEADID), decoded[5])
@@ -76,11 +76,13 @@ class TestSensekey {
         assertEquals("small", sk2.headWord.toString())
         assertEquals(0, sk2.headLexId.toLong())
 
-        for (i in 2 until sensekeys.size) {
-            val sk = parseSensekey(sensekeys[i])
-            Assert.assertNotNull(sk)
-            ps.println(sk.word)
-        }
+        sensekeys
+            .drop(2)
+            .map { parseSensekey(it) }
+            .forEach {
+                assertNotNull(it)
+                ps.println(it.word)
+            }
     }
 
     @Test
@@ -103,7 +105,9 @@ class TestSensekey {
         private const val LEXFILE = 22
         private const val LEXID = 33
         private const val HEADID = 44
-        private val lemmas = arrayOf("one", "two%three", "two%%three", "two%%%%three", "two%%%%%three", "two%", "%three", "two%%", "%%three", "normal", "two:three", "two::three", "two::::three", "two:::::three", "two:", ":three", "two::", "::three")
+
+        private val testLemmas = arrayOf("one", "two%three", "two%%three", "two%%%%three", "two%%%%%three", "two%", "%three", "two%%", "%%three", "normal", "two:three", "two::three", "two::::three", "two:::::three", "two:", ":three", "two::", "::three")
+        private val testTargetHeads = arrayOf("", *testLemmas)
 
         private fun generate(lemma: String, pos: Int, lexfile: Int, lexid: Int, head: String, headid: Int): String {
             val lexsense = String.format("%01d:%02d:%02d", pos, lexfile, lexid)

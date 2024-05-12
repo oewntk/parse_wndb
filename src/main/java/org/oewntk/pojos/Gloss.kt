@@ -94,26 +94,7 @@ class Gloss(
      *
      * @return pretty string
      */
-    fun toPrettyString(): String {
-        val sb = StringBuilder()
-        for (i in splitGloss.indices) {
-            if (i != 0) {
-                sb.append(";")
-                sb.append("\n\t")
-            }
-            sb.append(splitGloss[i])
-        }
-        return sb.toString()
-    }
+    fun toPrettyString(): String = splitGloss.joinToString(separator = ";\n\t", postfix = ";\n\t")
 
-    override fun toString(): String {
-        val sb = StringBuilder()
-        for (i in splitGloss.indices) {
-            if (i != 0) {
-                sb.append(";")
-            }
-            sb.append(splitGloss[i])
-        }
-        return sb.toString()
-    }
+    override fun toString(): String = splitGloss.joinToString(separator = ";")
 }

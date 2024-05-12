@@ -38,34 +38,35 @@ class Counter internal constructor(
     // Consumers
     private val synsetConsumer = Consumer<Synset> {
         synsetCount++
+
         // relations
-        val relations = it.relations
-        relationCount += relations?.size?.toLong() ?: 0
+        relationCount += it.relations?.size?.toLong() ?: 0
         it.relations?.forEach { r: Relation ->
             val type = r.type.toString()
-            if (r is LexRelation) {
-                senseRelationCount++
-                var v = senseRelationByTypeCount.computeIfAbsent(type) { 0L }
-                v += 1
-                senseRelationByTypeCount[type] = v
-            } else {
-                synsetRelationCount++
-                var v = synsetRelationByTypeCount.computeIfAbsent(type) { 0L }
-                v += 1
-                synsetRelationByTypeCount[type] = v
+            when (r) {
+                is LexRelation -> {
+                    senseRelationCount++
+                    var v = senseRelationByTypeCount.computeIfAbsent(type) { 0L }
+                    v += 1
+                    senseRelationByTypeCount[type] = v
+                }
+
+                else           -> {
+                    synsetRelationCount++
+                    var v = synsetRelationByTypeCount.computeIfAbsent(type) { 0L }
+                    v += 1
+                    synsetRelationByTypeCount[type] = v
+                }
             }
         }
 
         // verb frames
-        val verbFrames = it.verbFrames
-        if (verbFrames != null) {
-            verbFrameCount += verbFrames.size.toLong()
-            for (verbFrameRef in verbFrames) {
-                if (verbFrameRef.lemmas.size > 1) {
-                    verbFrameMultiSensesCount += verbFrameRef.lemmas.size.toLong()
-                } else {
-                    verbFrameSingleSensesCount += verbFrameRef.lemmas.size.toLong()
-                }
+        verbFrameCount += it.verbFrames?.size?.toLong() ?: 0
+        it.verbFrames?.forEach { verbFrameRef: VerbFrameRef ->
+            if (verbFrameRef.lemmas.size > 1) {
+                verbFrameMultiSensesCount += verbFrameRef.lemmas.size.toLong()
+            } else {
+                verbFrameSingleSensesCount += verbFrameRef.lemmas.size.toLong()
             }
         }
     }
