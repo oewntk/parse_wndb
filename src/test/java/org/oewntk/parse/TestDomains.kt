@@ -15,19 +15,17 @@ class TestDomains {
     @Test
     @Throws(ParsePojoException::class)
     fun testDomains() {
-        for (domain in Domain.entries) {
-            val domainStr = domain.domain
-            ps.printf("%d %s %s %s %s%n", domain.id, domain.name2, domain.pos, domainStr, parseDomain(domainStr))
+        Domain.entries.forEach {
+            ps.println("${it.id} ${it.name2} ${it.pos} ${it.domain} ${parseDomain(it.domain)}")
         }
     }
 
     @Test
     @Throws(ParsePojoException::class)
     fun testDomainsIds() {
-        for (domain in Domain.entries) {
-            val domainId = domain.id.toString()
-            val domain2 = parseDomainId(domainId)
-            ps.printf("%s -> %s %s%n", domainId, domain2.name2, domain2.pos)
+        Domain.entries.forEach {
+            val domain2 = parseDomainId(it.domain)
+            ps.println("${it.id} -> ${domain2.name2} ${domain2.pos}")
         }
     }
 

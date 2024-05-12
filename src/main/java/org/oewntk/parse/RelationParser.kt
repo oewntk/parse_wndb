@@ -75,13 +75,15 @@ class RelationParser(
     @Throws(IOException::class, ParsePojoException::class)
     fun parseAllSynsets(): RelationParser {
         // make map for resolution
-        for (posName in arrayOf("noun", "verb", "adj", "adv")) {
-            parseSynsets(dir, posName, synsetConsumer, null, null)
-        }
+        sequenceOf("noun", "verb", "adj", "adv")
+            .forEach {
+                parseSynsets(dir, it, synsetConsumer, null, null)
+            }
         // consume relations
-        for (posName in arrayOf("noun", "verb", "adj", "adv")) {
-            parseSynsets(dir, posName, null, relationConsumer, lexRelationConsumer)
-        }
+        sequenceOf("noun", "verb", "adj", "adv")
+            .forEach {
+                parseSynsets(dir, it, null, relationConsumer, lexRelationConsumer)
+            }
         return this
     }
 
@@ -120,7 +122,7 @@ class RelationParser(
          * @throws IOException        io exception
          */
         @Throws(ParsePojoException::class, IOException::class)
-        fun parseSynsets(dir: File, posName: String, synsetConsumer: Consumer<Synset>?, relationConsumer: Consumer<Relation>?, lexRelationConsumer: Consumer<LexRelation>?): Long {
+        fun parseSynsets(dir: File, posName: String, synsetConsumer: Consumer<Synset>?, relationConsumer: Consumer<Relation>?, lexRelationConsumer: Consumer<LexRelation>?): Int {
             psl.println("* Synsets $posName")
 
             val isAdj = posName == "adj"
@@ -135,7 +137,7 @@ class RelationParser(
                 var nonCommentCount = 0
                 var offsetErrorCount = 0
                 var parseErrorCount = 0
-                var relationCount: Long = 0
+                var relationCount = 0
 
                 while (true) {
                     // record current offset
@@ -172,13 +174,16 @@ class RelationParser(
                         if (relationConsumer == null && lexRelationConsumer == null) {
                             continue
                         }
-                        val relations = synset.relations
-                        for (relation in relations!!) {
-                            if (relation is LexRelation) {
-                                lexRelationConsumer?.accept(relation)
-                            } else relationConsumer?.accept(relation)
-                            relationCount++
-                        }
+                        relationCount = synset.relations
+                            ?.onEach {
+                                when (it) {
+                                    is LexRelation -> lexRelationConsumer?.accept(it)
+                                    else           -> relationConsumer?.accept(it)
+                                }
+                            }
+                            ?.map { 1 }
+                            ?.sum()
+                            ?: 0
                     } catch (e: ParsePojoException) {
                         parseErrorCount++
                         pse.printf("%n%s:%d offset=%08d line=[%s] except=%s", file.name, lineCount, fileOffset, line, e.message)

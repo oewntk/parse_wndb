@@ -37,10 +37,10 @@ object MorphParser {
      */
     @Throws(IOException::class, ParsePojoException::class)
     fun parseAllMorphs(dir: File, consumer: Consumer<MorphMapping>) {
-        // Process for all pos
-        for (posName in arrayOf("noun", "verb", "adj", "adv")) {
-            parseMorphs(dir, posName, consumer)
-        }
+        sequenceOf("noun", "verb", "adj", "adv")
+            .forEach {
+                parseMorphs(dir, it, consumer)
+            }
     }
 
     /**

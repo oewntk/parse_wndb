@@ -40,17 +40,7 @@ open class CoreIndex protected constructor(
     }
 
     override fun toString(): String {
-        val sb = StringBuilder()
-        sb.append(lemma.toString())
-        sb.append(" senses={")
-        for (i in senses.indices) {
-            if (i != 0) {
-                sb.append(" ")
-            }
-            sb.append(senses[i].toString())
-        }
-        sb.append("}")
-        return sb.toString()
+        return "$lemma senses={${senses.joinToString(separator = " ")}}"
     }
 
     companion object {

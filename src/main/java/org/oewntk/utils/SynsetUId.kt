@@ -17,17 +17,15 @@ import org.oewntk.pojos.SynsetId
 class SynsetUId
 private constructor(uniqueId: Long) {
 
-    private lateinit var synsetId: SynsetId
-
-    init {
-        for (p in Pos.entries) {
-            if (uniqueId >= getBaseUID(p.toChar()) && uniqueId < getCeilingUID(p.toChar())) {
-                val relativeId = uniqueId - getBaseUID(p.toChar())
-                this.synsetId = SynsetId(p, relativeId)
-                break
+    private val synsetId: SynsetId? =
+        Pos.entries
+            .firstNotNullOfOrNull {
+                val p = it.toChar()
+                val range = getBaseUID(p) until getCeilingUID(p)
+                if (uniqueId in range) {
+                    SynsetId(it, uniqueId - range.first)
+                } else null
             }
-        }
-    }
 
     /**
      * Get unique id

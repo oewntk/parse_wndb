@@ -25,19 +25,7 @@ class Index(
 ) : CoreIndex(lemma, pos, senses) {
 
     override fun toString(): String {
-        val sb = StringBuilder()
-        sb.append(super.toString())
-        sb.append(" relations={")
-        for (i in relationTypes.indices) {
-            if (i != 0) {
-                sb.append(" ")
-            }
-            sb.append(relationTypes[i].toString())
-        }
-        sb.append("}")
-        sb.append(" tagcnt=")
-        sb.append(this.tagCnt)
-        return sb.toString()
+        return "${super.toString()} relations=${relationTypes.joinToString(separator = " ", prefix = "{", postfix = "}")} tagcnt=$tagCnt"
     }
 
     companion object {

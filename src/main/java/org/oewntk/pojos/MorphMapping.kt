@@ -21,21 +21,7 @@ class MorphMapping private constructor(
 ) {
 
     override fun toString(): String {
-        val sb = StringBuilder()
-        sb.append(morph.toString())
-        sb.append(' ')
-        sb.append(pos.toChar())
-        sb.append("<-")
-        var first = true
-        for (lemma in this.lemmas) {
-            if (first) {
-                first = false
-            } else {
-                sb.append(' ')
-            }
-            sb.append(lemma)
-        }
-        return sb.toString()
+        return "$morph $pos <- ${lemmas.joinToString(separator = " ")}"
     }
 
     companion object {
@@ -62,13 +48,12 @@ class MorphMapping private constructor(
                 val morph = NormalizedString(fields[0])
 
                 // lemmas
-                val lemmas: MutableCollection<Lemma> = ArrayList()
-                if (fields.size > 1) {
-                    for (i in 1 until fields.size) {
-                        val lemma = make(fields[i])
-                        lemmas.add(lemma)
-                    }
-                }
+                val lemmas = fields
+                    .asSequence()
+                    .drop(1)
+                    .map { field -> make(field) }
+                    .toList()
+
                 return MorphMapping(morph, lemmas, pos)
             } catch (e: Exception) {
                 throw ParsePojoException(e)

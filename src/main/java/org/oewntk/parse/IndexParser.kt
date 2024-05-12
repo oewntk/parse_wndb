@@ -40,11 +40,9 @@ object IndexParser {
      */
     @Throws(IOException::class, ParsePojoException::class)
     fun parseAllIndexes(dir: File, consumer: Consumer<Index>): Long {
-        var count: Long = 0
-        for (posName in arrayOf("noun", "verb", "adj", "adv")) {
-            count += parseIndexes(dir, posName, consumer)
-        }
-        return count
+        return sequenceOf("noun", "verb", "adj", "adv")
+            .map { parseIndexes(dir, it, consumer) }
+            .sum()
     }
 
     /**
@@ -58,11 +56,9 @@ object IndexParser {
      */
     @Throws(IOException::class, ParsePojoException::class)
     fun parseAllCoreIndexes(dir: File, consumer: Consumer<CoreIndex>): Long {
-        var count: Long = 0
-        for (posName in arrayOf("noun", "verb", "adj", "adv")) {
-            count += parseCoreIndexes(dir, posName, consumer)
-        }
-        return count
+        return sequenceOf("noun", "verb", "adj", "adv")
+            .map { parseCoreIndexes(dir, it, consumer) }
+            .sum()
     }
 
     /**

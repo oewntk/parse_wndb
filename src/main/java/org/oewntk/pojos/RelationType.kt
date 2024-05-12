@@ -58,7 +58,7 @@ enum class RelationType(
     MEMBER("-", "member", false);
 
     override fun toString(): String {
-        return this.name
+        return name2
     }
 
     companion object {
@@ -94,14 +94,8 @@ enum class RelationType(
             "other"
         )
 
-        // @formatter:on
-        private val MAP: MutableMap<String, RelationType> = HashMap()
-
-        init {
-            for (type in entries) {
-                MAP[type.symbol] = type
-            }
-        }
+        private val MAP: Map<String, RelationType> = entries
+            .associateBy { it.symbol }
 
         /**
          * Parse relation type from string

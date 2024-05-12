@@ -80,12 +80,8 @@ enum class Type(
          */
         @Throws(ParsePojoException::class)
         fun parseType(id: Char): Type {
-            for (type in entries) {
-                if (id == type.id) {
-                    return type
-                }
-            }
-            throw ParsePojoException("Type:$id")
+            return entries
+                .firstOrNull { id == it.id } ?: throw ParsePojoException("Type:$id")
         }
 
         /**

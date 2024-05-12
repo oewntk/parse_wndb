@@ -51,26 +51,8 @@ enum class Pos(
          */
         @Throws(ParsePojoException::class)
         fun parsePos(id: Char): Pos {
-            for (pos in entries) {
-                if (id == pos.id) {
-                    return pos
-                }
-            }
-            throw ParsePojoException("Pos:$id")
-        }
-
-        /**
-         * Make pos from pos index
-         *
-         * @param index0 index
-         * @return pos
-         */
-        fun fromIndex(index0: Int): Pos {
-            val index = index0 - 1
-            if (index >= 0 && index < entries.size) {
-                return entries[index]
-            }
-            throw IllegalArgumentException("Pos:$index")
+            return entries
+                .firstOrNull { id == it.id } ?: throw ParsePojoException("Pos:$id")
         }
 
         /**
@@ -80,12 +62,8 @@ enum class Pos(
          * @return pos
          */
         fun fromName(name: String): Pos {
-            for (pos in entries) {
-                if (name == pos.name2) {
-                    return pos
-                }
-            }
-            throw IllegalArgumentException(name)
+            return entries
+                .firstOrNull { name == it.name2 } ?: throw IllegalArgumentException(name)
         }
     }
 }
