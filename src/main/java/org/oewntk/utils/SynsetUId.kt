@@ -17,7 +17,7 @@ import org.oewntk.pojos.SynsetId
 class SynsetUId
 private constructor(uniqueId: Long) {
 
-    private val synsetId: SynsetId? =
+    private val synsetId: SynsetId =
         Pos.entries
             .firstNotNullOfOrNull {
                 val p = it.toChar()
@@ -25,7 +25,7 @@ private constructor(uniqueId: Long) {
                 if (uniqueId in range) {
                     SynsetId(it, uniqueId - range.first)
                 } else null
-            }
+            } ?: throw IllegalArgumentException(uniqueId.toString())
 
     /**
      * Get unique id
