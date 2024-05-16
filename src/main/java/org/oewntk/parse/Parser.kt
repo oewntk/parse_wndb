@@ -22,6 +22,7 @@ object Parser {
 
     // PrintStreams
     private val psi = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
+    private val pse = if (!System.getProperties().containsKey("SILENT")) Tracing.psErr else Tracing.psNull
 
     // Consumers
     private val synsetConsumer = Consumer<Synset> { psi.println(it) }
@@ -64,6 +65,6 @@ object Parser {
 
         // Timing
         val endTime = System.currentTimeMillis()
-        psi.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
+        pse.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
     }
 }
