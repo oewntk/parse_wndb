@@ -31,8 +31,12 @@ class Synset private constructor(
 ) : CoreSynset(synsetId, lemmas, type, domain, gloss) {
 
     override fun toString(): String {
-        val r = relations?.joinToString(separator = ",", prefix = " relations={", postfix = "}")
-        val f = verbFrames?.joinToString(separator = ",", prefix = " relations={", postfix = "}")
+        val r = relations
+            ?.ifEmpty { null }
+            ?.joinToString(separator = ",", prefix = " relations={", postfix = "}")
+        val f = verbFrames
+            ?.ifEmpty { null }
+            ?.joinToString(separator = ",", prefix = " frames={", postfix = "}")
         return super.toString() + (r ?: "") + (f ?: "")
     }
 
@@ -42,8 +46,12 @@ class Synset private constructor(
      * @return pretty string
      */
     fun toPrettyString(): String {
-        val r = relations?.joinToString(separator = ",\n\t", prefix = "\nrelations={\n\t", postfix = "\n}")
-        val f = verbFrames?.joinToString(separator = ",\n\t", prefix = "\nframes={\n\t", postfix = "\n}")
+        val r = relations
+            ?.ifEmpty { null }
+            ?.joinToString(separator = ",\n\t", prefix = "\nrelations={\n\t", postfix = "\n}")
+        val f = verbFrames
+            ?.ifEmpty { null }
+            ?.joinToString(separator = ",\n\t", prefix = "\nframes={\n\t", postfix = "\n}")
         return super.toString() + '\n' + gloss.toPrettyString() + (r ?: "") + (f ?: "")
     }
 

@@ -25,7 +25,10 @@ class Index(
 ) : CoreIndex(lemma, pos, senses) {
 
     override fun toString(): String {
-        return "${super.toString()} relations=${relationTypes.joinToString(separator = " ", prefix = "{", postfix = "}")} tagcnt=$tagCnt"
+        val relations = relationTypes
+            .ifEmpty { null }
+            ?.joinToString(separator = " ", prefix = " relations={", postfix = "}") ?: ""
+        return "${super.toString()}$relations tagcnt=$tagCnt"
     }
 
     companion object {
