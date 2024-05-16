@@ -24,7 +24,7 @@ class TestDomains {
     @Throws(ParsePojoException::class)
     fun testDomainsIds() {
         Domain.entries.forEach {
-            val domain2 = parseDomainId(it.domain)
+            val domain2 = parseDomainId(it.id.toString())
             ps.println("${it.id} -> ${domain2.name2} ${domain2.pos}")
         }
     }
