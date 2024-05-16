@@ -42,10 +42,10 @@ class RelationParser(
             val toWord = relation.toWord
             require(!(toWord.synsetId.offset == 0L || toWord.wordNum == 0)) { relation.toString() }
             require(RelationType.SENSE_RELATIONS.contains(type)) { relation.toString() }
-            psi.println("${String.format("%-6s", "sense")}$relation")
+            psi.println("${String.format("%-6s", "sense")} $relation")
         } else {
             require(RelationType.SYNSET_RELATIONS.contains(type)) { relation.toString() }
-            psi.println("${String.format("%-6s", "synset")}$relation")
+            psi.println("${String.format("%-6s", "synset")} $relation")
         }
     }
 
@@ -106,7 +106,7 @@ class RelationParser(
 
         // PrintStreams
         private val psl = Tracing.psInfo
-        private val psi = if (System.getProperties().containsKey("VERBOSE")) Tracing.psInfo else Tracing.psNull
+        private val psi = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
         private val pse = if (!System.getProperties().containsKey("SILENT")) Tracing.psErr else Tracing.psNull
 
         /**

@@ -21,7 +21,7 @@ object MorphParser {
     private const val THROW = false
 
     // PrintStreams
-    private val psi = if (System.getProperties().containsKey("VERBOSE")) Tracing.psInfo else Tracing.psNull
+    private val psi = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
     private val pse = if (!System.getProperties().containsKey("SILENT")) Tracing.psErr else Tracing.psNull
 
     // Consumer
@@ -54,7 +54,7 @@ object MorphParser {
      */
     @Throws(IOException::class, ParsePojoException::class)
     fun parseMorphs(dir: File, posName: String, consumer: Consumer<MorphMapping>) {
-        psi.println("* Morphs")
+        psi.println("* Morphs $posName")
 
         val pos = fromName(posName)
 
@@ -65,20 +65,22 @@ object MorphParser {
             var parseErrorCount = 0
             var morphMappingCount: Long = 0
             reader.useLines { lines ->
-                lines.forEach { line ->
-                    lineCount++
-                    try {
-                        val morphMapping = parseMorphMapping(line, pos)
-                        morphMappingCount++
-                        consumer.accept(morphMapping)
-                    } catch (e: ParsePojoException) {
-                        parseErrorCount++
-                        pse.print("\n${file.name}:$lineCount line=[$line] except=$e")
-                        if (THROW) {
-                            throw e
+                lines
+                    .sorted()
+                    .forEach { line ->
+                        lineCount++
+                        try {
+                            val morphMapping = parseMorphMapping(line, pos)
+                            morphMappingCount++
+                            consumer.accept(morphMapping)
+                        } catch (e: ParsePojoException) {
+                            parseErrorCount++
+                            pse.print("\n${file.name}:$lineCount line=[$line] except=$e")
+                            if (THROW) {
+                                throw e
+                            }
                         }
                     }
-                }
             }
             val format = "%-50s"
             psi.println("${String.format(format, "lines")}$lineCount")

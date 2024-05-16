@@ -23,7 +23,7 @@ object IndexParser {
 
     // PrintStreams
     private val psl = Tracing.psNull
-    private val psi = if (System.getProperties().containsKey("VERBOSE")) Tracing.psInfo else Tracing.psNull
+    private val psi = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
     private val pse = if (!System.getProperties().containsKey("SILENT")) Tracing.psErr else Tracing.psNull
 
     // Consumer
