@@ -31,17 +31,13 @@ class Gloss(
      * @return fields
      */
     private fun split(gloss: String): Array<String> {
-        val pattern = Regex("\"[^\"]*\"").toPattern()
 
-        var quoteCount = 0
-        var p = 0
-        while ((gloss.indexOf('"', p + 1).also { p = it }) != -1) {
-            quoteCount++
-        }
+        val quoteCount = countQuotes(gloss)
         if (quoteCount % 2 != 0) {
-            Tracing.psErr.println("Uneven quotes in :$gloss")
+            Tracing.psErr.println("Uneven quotes $quoteCount in :$gloss")
         }
 
+        val pattern = Regex("\"[^\"]*\"").toPattern()
         val matcher = pattern.matcher(gloss) // get a matcher object
         var count = 0
         var split = -1
@@ -71,6 +67,15 @@ class Gloss(
             }
         }
         return result
+    }
+
+    private fun countQuotes(str: String): Int {
+        var quoteCount = 0
+        var p = -1
+        while ((str.indexOf('"', p + 1).also { p = it }) != -1) {
+            quoteCount++
+        }
+        return quoteCount
     }
 
     /**
