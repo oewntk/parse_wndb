@@ -42,5 +42,5 @@ esac
 OFS=$3
 
 echo "${INDIR}"
-jar=target/parse_wndb-2.1.0-uber.jar
+jar=target/parse_wndb-2.1.1-uber.jar
 java -ea -cp "${jar}" org.oewntk.parse.DataParser1 "${INDIR}" ${POS} "${OFS}"
