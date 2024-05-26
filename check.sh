@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#
+# Copyright (c) 2024. Bernard Bou.
+#
+
 # env variables
 # WNHOME20
 # WNHOME21
@@ -23,5 +27,5 @@ else
 fi
 
 echo "${INDIR}"
-java -DSILENT -cp oewn-parse_wndb.jar org.oewntk.parse.Parser "${INDIR}"
-
+jar=target/parse_wndb-2.1.1-uber.jar
+java -ea -DSILENT -cp "${jar}" org.oewntk.parse.Parser "${INDIR}"

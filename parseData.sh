@@ -28,4 +28,4 @@ fi
 
 echo "${INDIR}"
 jar=target/parse_wndb-2.1.1-uber.jar
-java -ea -cp "${jar}" org.oewntk.parse.Parser "${INDIR}"
+java -ea -cp "${jar}" org.oewntk.parse.DataParser "${INDIR}"
