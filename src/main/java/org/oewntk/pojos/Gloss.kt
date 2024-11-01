@@ -4,7 +4,6 @@
 package org.oewntk.pojos
 
 import org.oewntk.utils.Tracing
-import java.util.*
 
 /**
  * Gloss
@@ -92,7 +91,7 @@ class Gloss(
      * @return samples
      */
     val samples: Array<String>
-        get() = Arrays.copyOfRange(this.splitGloss, 1, splitGloss.size)
+        get() = this.splitGloss.copyOfRange(1, splitGloss.size)
 
     /**
      * Get pretty string

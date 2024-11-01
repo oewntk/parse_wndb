@@ -57,6 +57,7 @@ enum class Type(
         return this.pos
     }
 
+    @Suppress("unused")
     val isAdj: Boolean
         /**
          * Whether this synset has adj type

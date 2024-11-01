@@ -14,7 +14,6 @@ import org.oewntk.pojos.Sensekey.Companion.decode
 import org.oewntk.pojos.Sensekey.Companion.parseSensekey
 import org.oewntk.pojos.Type
 import org.oewntk.utils.Tracing
-import java.util.*
 
 class TestSensekey {
 
@@ -109,6 +108,7 @@ class TestSensekey {
         private val testLemmas = arrayOf("one", "two%three", "two%%three", "two%%%%three", "two%%%%%three", "two%", "%three", "two%%", "%%three", "normal", "two:three", "two::three", "two::::three", "two:::::three", "two:", ":three", "two::", "::three")
         private val testTargetHeads = arrayOf("", *testLemmas)
 
+        @Suppress("SameParameterValue")
         private fun generate(lemma: String, pos: Int, lexfile: Int, lexid: Int, head: String, headid: Int): String {
             val lexsense = String.format("%01d:%02d:%02d", pos, lexfile, lexid)
             val headidStr = if (head.isEmpty()) "" else String.format("%02d", headid)
