@@ -20,12 +20,8 @@ object MorphParser {
 
     private const val THROW = false
 
-    // PrintStreams
-    private val psi = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
-    private val pse = if (!System.getProperties().containsKey("SILENT")) Tracing.psErr else Tracing.psNull
-
     // Consumer
-    private val consumer = Consumer<MorphMapping> { psi.println(it) }
+    private val consumer = Consumer<MorphMapping> { Tracing.psInfo.println(it) }
 
     /**
      * Parse morph mappings
@@ -54,7 +50,7 @@ object MorphParser {
      */
     @Throws(IOException::class, ParsePojoException::class)
     fun parseMorphs(dir: File, posName: String, consumer: Consumer<MorphMapping>) {
-        psi.println("* Morphs $posName")
+        Tracing.psServ.println("* Morphs $posName")
 
         val pos = fromName(posName)
 
@@ -75,7 +71,7 @@ object MorphParser {
                             consumer.accept(morphMapping)
                         } catch (e: ParsePojoException) {
                             parseErrorCount++
-                            pse.print("\n${file.name}:$lineCount line=[$line] except=$e")
+                            Tracing.psErr.print("\n${file.name}:$lineCount line=[$line] except=$e")
                             if (THROW) {
                                 throw e
                             }
@@ -83,9 +79,9 @@ object MorphParser {
                     }
             }
             val format = "%-50s"
-            psi.println("${String.format(format, "lines")}$lineCount")
-            psi.println("${String.format(format, "parse successes")}$morphMappingCount")
-            (if (parseErrorCount > 0) pse else psi).println("${String.format(format, "parse errors")}$parseErrorCount")
+            Tracing.psServ.println("${String.format(format, "lines")}$lineCount")
+            Tracing.psServ.println("${String.format(format, "parse successes")}$morphMappingCount")
+            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "parse errors")}$parseErrorCount")
         }
     }
 
@@ -110,6 +106,6 @@ object MorphParser {
 
         // Timing
         val endTime = System.currentTimeMillis()
-        psi.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
+        Tracing.psInfo.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
     }
 }

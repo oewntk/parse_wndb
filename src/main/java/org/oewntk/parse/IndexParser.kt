@@ -21,13 +21,8 @@ object IndexParser {
 
     private const val THROW = false
 
-    // PrintStreams
-    private val psl = Tracing.psNull
-    private val psi = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
-    private val pse = if (!System.getProperties().containsKey("SILENT")) Tracing.psErr else Tracing.psNull
-
     // Consumer
-    private val consumer = Consumer<Index> { psi.println(it) }
+    private val consumer = Consumer<Index> { Tracing.psInfo.println(it) }
 
     /**
      * Parse all indexes
@@ -73,7 +68,7 @@ object IndexParser {
      */
     @Throws(IOException::class, ParsePojoException::class)
     fun parseIndexes(dir: File, posName: String, consumer: Consumer<Index>): Long {
-        psl.println("* Indexes $posName")
+        Tracing.psServ.println("* Indexes $posName")
 
         // iterate on lines
         val file = File(dir, "index.$posName")
@@ -94,7 +89,7 @@ object IndexParser {
                             consumer.accept(index)
                         } catch (e: ParsePojoException) {
                             parseErrorCount++
-                            pse.print("\n${file.name}:$lineCount line=[$line] except=$e")
+                            Tracing.psErr.print("\n${file.name}:$lineCount line=[$line] except=$e")
                             if (THROW) {
                                 throw e
                             }
@@ -103,9 +98,9 @@ object IndexParser {
                 }
             }
             val format = "%-50s"
-            psl.println("${String.format(format, "lines")}$nonCommentCount")
-            (if (parseErrorCount > 0) pse else psl).println("${String.format(format, "parse successes")}$indexCount")
-            (if (parseErrorCount > 0) pse else psl).println("${String.format(format, "parse errors")}$parseErrorCount")
+            Tracing.psServ.println("${String.format(format, "lines")}$nonCommentCount")
+            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "parse successes")}$indexCount")
+            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "parse errors")}$parseErrorCount")
             return indexCount
         }
     }
@@ -122,7 +117,7 @@ object IndexParser {
      */
     @Throws(IOException::class, ParsePojoException::class)
     fun parseCoreIndexes(dir: File, posName: String, consumer: Consumer<CoreIndex>): Long {
-        psl.println("* Indexes $posName")
+        Tracing.psServ.println("* Indexes $posName")
 
         // iterate on lines
         val file = File(dir, "index.$posName")
@@ -142,7 +137,7 @@ object IndexParser {
                             consumer.accept(index)
                         } catch (e: ParsePojoException) {
                             parseErrorCount++
-                            pse.print("\n${file.name}:$lineCount line=[$line] except=$e")
+                            Tracing.psErr.print("\n${file.name}:$lineCount line=[$line] except=$e")
                             if (THROW) {
                                 throw e
                             }
@@ -151,9 +146,9 @@ object IndexParser {
                 }
             }
             val format = "%-50s"
-            psl.println("${String.format(format, "lines")}$nonCommentCount")
-            (if (parseErrorCount > 0) pse else psl).println("${String.format(format, "parse successes")}$indexCount")
-            (if (parseErrorCount > 0) pse else psl).println("${String.format(format, "parse errors")}$parseErrorCount")
+            Tracing.psServ.println("${String.format(format, "lines")}$nonCommentCount")
+            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "parse successes")}$indexCount")
+            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "parse errors")}$parseErrorCount")
             return indexCount
         }
     }
@@ -179,6 +174,6 @@ object IndexParser {
 
         // Timing
         val endTime = System.currentTimeMillis()
-        psl.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
+        Tracing.psServ.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
     }
 }

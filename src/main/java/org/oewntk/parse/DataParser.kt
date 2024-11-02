@@ -18,13 +18,8 @@ object DataParser {
 
     private const val THROW = false
 
-    // PrintStreams
-    private val psl = Tracing.psNull
-    private val psi = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
-    private val pse = if (!System.getProperties().containsKey("SILENT")) Tracing.psErr else Tracing.psNull
-
     // Consumer
-    private val consumer = Consumer<Synset> { psi.println(it) }
+    private val consumer = Consumer<Synset> { Tracing.psInfo.println(it) }
 
     /**
      * Parse all synsets
@@ -54,7 +49,7 @@ object DataParser {
      */
     @Throws(ParsePojoException::class, IOException::class)
     fun parseSynsets(dir: File, posName: String, consumer: Consumer<Synset>): Long {
-        psl.println("* Synsets $posName")
+        Tracing.psServ.println("* Synsets $posName")
 
         val isAdj = posName == "adj"
 
@@ -89,7 +84,7 @@ object DataParser {
                 // read offset
                 val readOffset = lineFields[0].toLong()
                 if (fileOffset != readOffset) {
-                    pse.println("Offset: data.$posName:$lineCount offset=${String.format("%08d", fileOffset)} line=[$line]")
+                    Tracing.psErr.println("Offset: data.$posName:$lineCount offset=${String.format("%08d", fileOffset)} line=[$line]")
                     offsetErrorCount++
                     continue
                 }
@@ -101,17 +96,17 @@ object DataParser {
                     consumer.accept(synset)
                 } catch (e: ParsePojoException) {
                     parseErrorCount++
-                    pse.println("\n${file.name}:$lineCount offset=${String.format("%08d", fileOffset)} line=[$line] except=${e.message}")
+                    Tracing.psErr.println("\n${file.name}:$lineCount offset=${String.format("%08d", fileOffset)} line=[$line] except=${e.message}")
                     if (THROW) {
                         throw e
                     }
                 }
             }
             val format = "%-50s"
-            psl.println("${String.format(format, "lines")}$nonCommentCount")
-            psl.println("${String.format(format, "parse successes")}$synsetCount")
-            (if (offsetErrorCount > 0) pse else psl).println("${String.format(format, "offset errors")}$offsetErrorCount")
-            (if (parseErrorCount > 0) pse else psl).println("${String.format(format, "parse errors")}$parseErrorCount")
+            Tracing.psServ.println("${String.format(format, "lines")}$nonCommentCount")
+            Tracing.psServ.println("${String.format(format, "parse successes")}$synsetCount")
+            (if (offsetErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "offset errors")}$offsetErrorCount")
+            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "parse errors")}$parseErrorCount")
             return synsetCount
         }
     }
@@ -150,6 +145,6 @@ object DataParser {
 
         // Timing
         val endTime = System.currentTimeMillis()
-        psl.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
+        Tracing.psServ.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
     }
 }

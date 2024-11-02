@@ -20,14 +20,10 @@ import java.util.function.Consumer
  */
 object Parser {
 
-    // PrintStreams
-    private val psi = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
-    private val pse = if (!System.getProperties().containsKey("SILENT")) Tracing.psErr else Tracing.psNull
-
     // Consumers
-    private val synsetConsumer = Consumer<Synset> { psi.println(it) }
-    private val senseConsumer = Consumer<Sense> { psi.println(it) }
-    private val indexConsumer = Consumer<Index> { psi.println(it) }
+    private val synsetConsumer = Consumer<Synset> { Tracing.psInfo.println(it) }
+    private val senseConsumer = Consumer<Sense> { Tracing.psInfo.println(it) }
+    private val indexConsumer = Consumer<Index> { Tracing.psInfo.println(it) }
 
     /**
      * Parse all
@@ -65,6 +61,6 @@ object Parser {
 
         // Timing
         val endTime = System.currentTimeMillis()
-        pse.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
+        Tracing.psServ.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
     }
 }

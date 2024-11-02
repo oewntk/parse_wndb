@@ -42,10 +42,10 @@ class RelationParser(
             val toWord = relation.toWord
             require(!(toWord.synsetId.offset == 0L || toWord.wordNum == 0)) { relation.toString() }
             require(RelationType.SENSE_RELATIONS.contains(type)) { relation.toString() }
-            psi.println("${String.format("%-6s", "sense")} $relation")
+            Tracing.psInfo.println("${String.format("%-6s", "sense")} $relation")
         } else {
             require(RelationType.SYNSET_RELATIONS.contains(type)) { relation.toString() }
-            psi.println("${String.format("%-6s", "synset")} $relation")
+            Tracing.psInfo.println("${String.format("%-6s", "synset")} $relation")
         }
     }
 
@@ -60,7 +60,7 @@ class RelationParser(
         require(RelationType.SENSE_RELATIONS.contains(type)) { relation.toString() }
         // psi.println("${String.format("%-6s", "sense")}$relation")
         val resolvedToWord = resolveToWord(relation)
-        psi.println("${String.format("%-6s", "sense")}${relation.toString(resolvedToWord)}")
+        Tracing.psInfo.println("${String.format("%-6s", "sense")}${relation.toString(resolvedToWord)}")
     }
 
     // Source
@@ -104,11 +104,6 @@ class RelationParser(
 
         private const val THROW = false
 
-        // PrintStreams
-        private val psl = Tracing.psInfo
-        private val psi = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
-        private val pse = if (!System.getProperties().containsKey("SILENT")) Tracing.psErr else Tracing.psNull
-
         /**
          * Parse synsets
          *
@@ -123,7 +118,7 @@ class RelationParser(
          */
         @Throws(ParsePojoException::class, IOException::class)
         fun parseSynsets(dir: File, posName: String, synsetConsumer: Consumer<Synset>?, relationConsumer: Consumer<Relation>?, lexRelationConsumer: Consumer<LexRelation>?): Int {
-            psl.println("* Synsets $posName")
+            Tracing.psServ.println("* Synsets $posName")
 
             val isAdj = posName == "adj"
 
@@ -162,7 +157,7 @@ class RelationParser(
                     // read offset
                     val readOffset = lineFields[0].toLong()
                     if (fileOffset != readOffset) {
-                        pse.println("Offset: data.$posName:$lineCount offset=${String.format("%08d", fileOffset)} line=[$line]")
+                        Tracing.psErr.println("Offset: data.$posName:$lineCount offset=${String.format("%08d", fileOffset)} line=[$line]")
                         offsetErrorCount++
                         continue
                     }
@@ -186,17 +181,17 @@ class RelationParser(
                             ?: 0
                     } catch (e: ParsePojoException) {
                         parseErrorCount++
-                        pse.print("\n${file.name}:$lineCount offset=${String.format("%08d", fileOffset)} line=[line] except=${e.message}")
+                        Tracing.psErr.print("\n${file.name}:$lineCount offset=${String.format("%08d", fileOffset)} line=[line] except=${e.message}")
                         if (THROW) {
                             throw e
                         }
                     }
                 }
                 val format = "%-50s"
-                psl.println("${String.format(format, "lines")}$nonCommentCount")
-                psl.println("${String.format(format, "parse successes")}$relationCount")
-                (if (offsetErrorCount > 0) pse else psl).println("${String.format(format, "offset errors")}$offsetErrorCount")
-                (if (parseErrorCount > 0) pse else psl).println("${String.format(format, "parse errors")}$parseErrorCount")
+                Tracing.psServ.println("${String.format(format, "lines")}$nonCommentCount")
+                Tracing.psServ.println("${String.format(format, "parse successes")}$relationCount")
+                (if (offsetErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "offset errors")}$offsetErrorCount")
+                (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "parse errors")}$parseErrorCount")
                 return relationCount
             }
         }
@@ -237,7 +232,7 @@ class RelationParser(
 
             // Timing
             val endTime = System.currentTimeMillis()
-            psl.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
+            Tracing.psServ.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
         }
     }
 }

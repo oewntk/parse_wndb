@@ -19,13 +19,8 @@ object SenseParser {
 
     private const val THROW = false
 
-    // PrintStreams
-    private val psl = Tracing.psNull
-    private val psi = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
-    private val pse = if (!System.getProperties().containsKey("SILENT")) Tracing.psErr else Tracing.psNull
-
     // Consumer
-    private val consumer = Consumer<Sense> { psi.println(it) }
+    private val consumer = Consumer<Sense> { Tracing.psInfo.println(it) }
 
     /**
      * Parse senses
@@ -37,7 +32,7 @@ object SenseParser {
      */
     @Throws(IOException::class, ParsePojoException::class)
     fun parseSenses(dir: File, consumer: Consumer<Sense>): Long {
-        psl.println("* Senses")
+        Tracing.psServ.println("* Senses")
 
         // iterate on lines
         val file = File(dir, "index.sense")
@@ -54,7 +49,7 @@ object SenseParser {
                         consumer.accept(sense)
                     } catch (e: ParsePojoException) {
                         parseErrorCount++
-                        pse.print("\n${file.name}:$lineCount line=[$line] except=$e")
+                        Tracing.psErr.print("\n${file.name}:$lineCount line=[$line] except=$e")
                         if (THROW) {
                             throw e
                         }
@@ -62,9 +57,9 @@ object SenseParser {
                 }
             }
             val format = "%-50s"
-            psl.println("${String.format(format, "lines")}$lineCount")
-            psl.println("${String.format(format, "parse successes")}$senseCount")
-            (if (parseErrorCount > 0) pse else psl).println("${String.format(format, "parse errors")}$parseErrorCount")
+            Tracing.psServ.println("${String.format(format, "lines")}$lineCount")
+            Tracing.psServ.println("${String.format(format, "parse successes")}$senseCount")
+            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "parse errors")}$parseErrorCount")
             return senseCount
         }
     }
@@ -90,6 +85,6 @@ object SenseParser {
 
         // Timing
         val endTime = System.currentTimeMillis()
-        psl.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
+        Tracing.psServ.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
     }
 }

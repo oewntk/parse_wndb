@@ -140,9 +140,6 @@ class Counter internal constructor(
 
     companion object {
 
-        // PrintStreams
-        private val psi = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
-
         /**
          * Main
          *
@@ -167,7 +164,7 @@ class Counter internal constructor(
 
             // Timing
             val endTime = System.currentTimeMillis()
-            psi.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
+            Tracing.psServ.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
         }
     }
 }
