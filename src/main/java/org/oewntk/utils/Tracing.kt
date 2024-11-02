@@ -15,9 +15,9 @@ object Tracing {
         }
     })
 
-    val psInfo: PrintStream = System.out
+    val psInfo: PrintStream = if (!System.getProperties().containsKey("SILENT")) System.out else psNull
+
+    val psServ: PrintStream = if (!System.getProperties().containsKey("SILENT")) System.out else psNull
 
     val psErr: PrintStream = System.err
-
-    val psServ: PrintStream = psNull
 }
