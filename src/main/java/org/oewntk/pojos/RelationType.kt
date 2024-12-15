@@ -37,6 +37,7 @@ enum class RelationType(
 
     ANTONYM("!", "antonym", false),
     SIMILAR("&", "similar", false),
+    COLLOCATION("`", "collocation", false),
 
     ALSO("^", "also", false),
     ATTRIBUTE("=", "attribute", false),
@@ -77,7 +78,7 @@ enum class RelationType(
             "attribute",
             "similar",
             "verb_group",
-            "also"
+            "also",
         )
 
         val SENSE_RELATIONS: Set<String> = setOf(
@@ -91,7 +92,8 @@ enum class RelationType(
             "also",
             "domain_region", "has_domain_region",
             "domain_topic", "has_domain_topic",
-            "other"
+            "collocation",
+            "other",
         )
 
         private val MAP: Map<String, RelationType> = entries
