@@ -4,6 +4,8 @@
 # Copyright (c) 2024. Bernard Bou.
 #
 
+set -e
+
 # env variables
 # WNHOME20
 # WNHOME21

@@ -4,6 +4,8 @@
 # Copyright (c) 2024. Bernard Bou.
 #
 
+set -e
+
 function count_data()
 {
   local file="$1"
