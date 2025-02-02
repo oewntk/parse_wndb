@@ -53,7 +53,7 @@ class Gloss(
 
         val result = Array(count + 1) {
             if (it == 0)
-            // [0] definition
+                // [0] definition
                 definition
             else {
                 // [1-n] samples
