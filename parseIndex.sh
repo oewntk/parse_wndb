@@ -29,5 +29,5 @@ else
 fi
 
 echo "${INDIR}"
-jar=target/parse_wndb-2.3.1-uber.jar
+jar=target/parse_wndb-2.3.2-uber.jar
 java -ea -cp "${jar}" org.oewntk.parse.IndexParser "${INDIR}"
