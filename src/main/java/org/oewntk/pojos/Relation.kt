@@ -8,14 +8,14 @@ import java.util.*
 /**
  * (Semantical) Relation (a lexical relation is an extended semantical relation)
  *
- * @property type         relation type
+ * @property rel         relation type
  * @property fromSynsetId source synset id
  * @property toSynsetId   target synset id
  *
  * @author Bernard Bou
  */
 open class Relation(
-    val type: RelationType,
+    val rel: RelationType,
     val fromSynsetId: SynsetId,
     val toSynsetId: SynsetId,
 ) {
@@ -30,14 +30,14 @@ open class Relation(
             return false
         }
         val relation = other as Relation
-        return type == relation.type && fromSynsetId == relation.fromSynsetId && toSynsetId == relation.toSynsetId
+        return rel == relation.rel && fromSynsetId == relation.fromSynsetId && toSynsetId == relation.toSynsetId
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(type, fromSynsetId, toSynsetId)
+        return Objects.hash(rel, fromSynsetId, toSynsetId)
     }
 
     override fun toString(): String {
-        return "${type.name2}: $fromSynsetId -> $toSynsetId"
+        return "${rel.name2}: $fromSynsetId -> $toSynsetId"
     }
 }

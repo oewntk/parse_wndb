@@ -36,7 +36,7 @@ class RelationParser(
      * Semantic relation consumer
      */
     private val relationConsumer = Consumer { relation: Relation ->
-        val type = relation.type.toString()
+        val type = relation.rel.toString()
         require(!(relation.fromSynsetId.offset == 0L || relation.toSynsetId.offset == 0L)) { relation.toString() }
         if ((relation is LexRelation)) {
             val toWord = relation.toWord
@@ -53,7 +53,7 @@ class RelationParser(
      * Lexical relation consumer
      */
     private val lexRelationConsumer = Consumer { relation: LexRelation ->
-        val type = relation.type.toString()
+        val type = relation.rel.toString()
         require(!(relation.fromSynsetId.offset == 0L || relation.toSynsetId.offset == 0L)) { relation.toString() }
         val toWord = relation.toWord
         require(!(toWord.synsetId.offset == 0L || toWord.wordNum == 0)) { relation.toString() }

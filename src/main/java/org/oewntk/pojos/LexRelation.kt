@@ -56,7 +56,7 @@ class LexRelation(
         return Objects.hash(super.hashCode(), fromWord, toWord)
     }
 
-    override fun toString() = "${type.name2}: $fromSynsetId[$fromWord] -> $toSynsetId[${toWord.wordNum}]"
+    override fun toString() = "${rel.name2}: $fromSynsetId[$fromWord] -> $toSynsetId[${toWord.wordNum}]"
 
-    fun toString(toWord: String): String = "${type.name2}: $fromSynsetId[$fromWord] -> $toSynsetId[$toWord]"
+    fun toString(toWord: String): String = "${rel.name2}: $fromSynsetId[$fromWord] -> $toSynsetId[$toWord]"
 }

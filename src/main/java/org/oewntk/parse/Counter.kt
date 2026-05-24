@@ -42,7 +42,7 @@ class Counter internal constructor(
         // relations
         relationCount += it.relations?.size?.toLong() ?: 0
         it.relations?.forEach { r: Relation ->
-            val type = r.type.toString()
+            val type = r.rel.toString()
             when (r) {
                 is LexRelation -> {
                     senseRelationCount++
