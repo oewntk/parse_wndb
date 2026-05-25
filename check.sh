@@ -29,5 +29,16 @@ else
 fi
 
 echo "${INDIR}"
-jar=target/parse_wndb-2.4.0-uber.jar
+jar=parse_wndb-2.4.0-uber.jar
+if [ ! -e "${jar}" ]; then
+  if [ ! -e "target/${jar}" ]; then
+    echo "Non existing uber jar" >&2
+    exit 1
+    fi
+  ln -s "target/${jar}"
+  fi
+if [ ! -e "${jar}" ]; then
+  echo "Non existing uber jar" >&2
+  exit 2
+  fi
 java -ea -DSILENT -cp "${jar}" org.oewntk.parse.Parser "${INDIR}"
