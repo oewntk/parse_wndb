@@ -18,7 +18,7 @@ open class Lemma(
     normString: NormalizedString,
 ) : Comparable<Lemma>, Serializable {
 
-    private val lowerCasedNormalized = normString.normalized.lowercase(Locale.getDefault())
+    private val lowerCasedNormalized = normString.normalized.lowercase(Locale.ENGLISH)
 
     // I D E N T I T Y
 
