@@ -133,7 +133,8 @@
         <configuration>
           <systemPropertyVariables>
             <SOURCE31>${env.WNHOME31}/</SOURCE31>
-            <SOURCEXX>${env.WNHOMEXX_compat}/</SOURCEXX>
+            <SOURCEXX>${env.WNHOMEXX}/</SOURCEXX>
+            <SOURCEXXCOMPAT>${env.WNHOMEXX_compat}/</SOURCEXXCOMPAT>
             <SILENT/>
           </systemPropertyVariables>
         </configuration>
