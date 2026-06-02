@@ -15,6 +15,7 @@ import org.oewntk.pojos.ParsePojoException
 import org.oewntk.utils.Tracing
 import java.io.File
 import java.io.IOException
+import java.io.PrintStream
 
 class TestParseXX {
 
@@ -44,7 +45,11 @@ class TestParseXX {
 
     companion object {
 
-        private val ps = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
+        private val silent = if (System.getProperties().containsKey("VERBOSE")) false
+        else if (System.getProperties().containsKey("SILENT")) true
+        else true
+
+        private val ps: PrintStream = if (!silent) Tracing.psInfo else Tracing.psNull
 
         private val wnHome: String? = System.getProperty("SOURCEXX")
 

@@ -9,6 +9,7 @@ import org.oewntk.pojos.Domain.Companion.parseDomain
 import org.oewntk.pojos.Domain.Companion.parseDomainId
 import org.oewntk.pojos.ParsePojoException
 import org.oewntk.utils.Tracing
+import java.io.PrintStream
 
 class TestDomains {
 
@@ -31,6 +32,10 @@ class TestDomains {
 
     companion object {
 
-        private val ps = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
-    }
+        private val silent = if (System.getProperties().containsKey("VERBOSE")) false
+        else if (System.getProperties().containsKey("SILENT")) true
+        else true
+
+        private val ps: PrintStream = if (!silent) Tracing.psInfo else Tracing.psNull
+     }
 }
