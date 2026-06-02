@@ -1,9 +1,11 @@
 /target/
+/build/
 
 /wndb*/
 /wndb*
 **/_*/
 **/_*
 **/*.jar
+
 /dependency-reduced-pom.xml
 /parsed/
