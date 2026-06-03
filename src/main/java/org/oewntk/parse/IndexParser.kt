@@ -35,9 +35,7 @@ object IndexParser {
      */
     @Throws(IOException::class, ParsePojoException::class)
     fun parseAllIndexes(dir: File, consumer: Consumer<Index>): Long {
-        return sequenceOf("noun", "verb", "adj", "adv")
-            .map { parseIndexes(dir, it, consumer) }
-            .sum()
+        return sequenceOf("noun", "verb", "adj", "adv").sumOf { parseIndexes(dir, it, consumer) }
     }
 
     /**
@@ -51,9 +49,7 @@ object IndexParser {
      */
     @Throws(IOException::class, ParsePojoException::class)
     fun parseAllCoreIndexes(dir: File, consumer: Consumer<CoreIndex>): Long {
-        return sequenceOf("noun", "verb", "adj", "adv")
-            .map { parseCoreIndexes(dir, it, consumer) }
-            .sum()
+        return sequenceOf("noun", "verb", "adj", "adv").sumOf { parseCoreIndexes(dir, it, consumer) }
     }
 
     /**

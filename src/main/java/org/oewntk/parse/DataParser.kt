@@ -32,9 +32,7 @@ object DataParser {
      */
     @Throws(IOException::class, ParsePojoException::class)
     fun parseAllSynsets(dir: File, consumer: Consumer<Synset>): Long {
-        return sequenceOf("noun", "verb", "adj", "adv")
-            .map { parseSynsets(dir, it, consumer) }
-            .sum()
+        return sequenceOf("noun", "verb", "adj", "adv").sumOf { parseSynsets(dir, it, consumer) }
     }
 
     /**
