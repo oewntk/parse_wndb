@@ -44,7 +44,7 @@ esac
 OFS=$3
 
 echo "${INDIR}"
-jar=parse_wndb-2.4.0-uber.jar
+jar=parse_wndb-3.0.1-uber.jar
 if [ ! -e "${jar}" ]; then
   if [ ! -e "target/${jar}" ]; then
     echo "Non existing uber jar" >&2
