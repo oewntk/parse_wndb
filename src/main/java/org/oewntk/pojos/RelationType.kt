@@ -15,7 +15,6 @@ package org.oewntk.pojos
 enum class RelationType(
     private val symbol: String,
     val name2: String,
-    @Suppress("unused")
     private val recurses: Boolean,
 ) {
 
