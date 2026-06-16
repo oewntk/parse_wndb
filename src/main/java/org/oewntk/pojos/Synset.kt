@@ -153,8 +153,7 @@ class Synset private constructor(
                         // create
                         val frameLemmas = if (wordIndex != 0) {
                             arrayOf(csLemmas[wordIndex - 1].lemma)
-                        } else  // 0 means all
-                        {
+                        } else { // 0 means all
                             protoSynset.lemmas
                         }
                         VerbFrameRef(frameLemmas, frameId)
