@@ -17,7 +17,7 @@ class Sense(
     lemma: Lemma,
     sensePosIndex: Int,
     sensekey: Sensekey,
-    val tagCnt: TagCnt,
+    val tagCnt: Int, // initially the value in index.sense
 ) : CoreSense(synsetId, lemma, sensePosIndex, sensekey) {
 
     override fun toString(): String {
@@ -54,7 +54,7 @@ class Sense(
                 val synsetId = SynsetId(type.toPos(), fields[1].toLong())
 
                 // parse tag/lexid
-                val tagCnt = TagCnt.parseTagCnt(fields[3], sensenum)
+                val tagCnt = fields[3].toInt()
 
                 return Sense(synsetId, lemma, sensenum, sensekey, tagCnt)
             } catch (e: Exception) {
