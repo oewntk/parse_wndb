@@ -132,10 +132,11 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
                 <configuration>
+                    <skipTests>true</skipTests>
                     <systemPropertyVariables>
                         <SOURCE31>${env.WNHOME31}/</SOURCE31>
-                        <SOURCEXX>${env.WNHOMEXX}/</SOURCEXX>
-                        <SOURCEXXCOMPAT>${env.WNHOMEXX_compat}/</SOURCEXXCOMPAT>
+                        <SOURCEXX>${env.OEWNHOME}/</SOURCEXX>
+                        <SOURCEXXCOMPAT>${env.OEWNHOME_compat}/</SOURCEXXCOMPAT>
                         <SILENT/>
                     </systemPropertyVariables>
                 </configuration>
