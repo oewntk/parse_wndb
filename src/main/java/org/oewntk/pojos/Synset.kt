@@ -125,7 +125,7 @@ class Synset private constructor(
                             val toWordIndex = relationSourceTarget and 0xff
                             val fromLemma = csLemmas[fromWordIndex - 1]
                             val toLemma = LemmaRef(toId, toWordIndex)
-                            val lexRelationType = if (transformLexVerbGroup && relationType == RelationType.VERB_GROUP) RelationType.SIMILAR else RelationType.VERB_GROUP
+                            val lexRelationType = if (transformLexVerbGroup && relationType == RelationType.VERB_GROUP) RelationType.SIMILAR else relationType
                             LexRelation(lexRelationType, synsetId, toId, fromLemma, toLemma)
                         } else {
                             Relation(relationType, synsetId, toId)
