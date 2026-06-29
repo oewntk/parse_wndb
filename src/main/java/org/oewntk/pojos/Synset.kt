@@ -62,11 +62,12 @@ class Synset private constructor(
          *
          * @param line  line
          * @param isAdj whether adj synsets are being parsed
+         * @param transformLexVerbGroup transform the 2 instances (bear-v) of verb-group in sense relations in WN31
          * @return synset
          * @throws ParsePojoException parse exception
          */
         @Throws(ParsePojoException::class)
-        fun parseSynsetLine(line: String, isAdj: Boolean): Synset {
+        fun parseSynsetLine(line: String, isAdj: Boolean, transformLexVerbGroup: Boolean = true): Synset {
             try {
                 // core subparse
                 val protoSynset = parseCoreSynset(line, isAdj)
@@ -124,7 +125,8 @@ class Synset private constructor(
                             val toWordIndex = relationSourceTarget and 0xff
                             val fromLemma = csLemmas[fromWordIndex - 1]
                             val toLemma = LemmaRef(toId, toWordIndex)
-                            LexRelation(relationType, synsetId, toId, fromLemma, toLemma)
+                            val lexRelationType = if (transformLexVerbGroup && relationType == RelationType.VERB_GROUP) RelationType.SIMILAR else RelationType.VERB_GROUP
+                            LexRelation(lexRelationType, synsetId, toId, fromLemma, toLemma)
                         } else {
                             Relation(relationType, synsetId, toId)
                         }
