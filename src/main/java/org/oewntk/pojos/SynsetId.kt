@@ -36,6 +36,6 @@ class SynsetId(
     }
 
     override fun toString(): String {
-        return "" + offset + '-' + pos.toChar()
+        return "%08d-%c".format(offset, pos.toChar())
     }
 }
