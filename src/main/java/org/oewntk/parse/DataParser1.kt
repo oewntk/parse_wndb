@@ -32,8 +32,8 @@ object DataParser1 {
         val file = File(dir, "data.$posName")
         RandomAccessFile(file, "r").use { raFile ->
             raFile.seek(fileOffset)
-            val rawString = raFile.readLine()
-            return if (rawString == null) null else String(rawString.toByteArray(Flags.charSet))
+            val r = raFile.lineSequence().firstOrNull()
+            return r?.second
         }
     }
 

@@ -6,7 +6,9 @@ package org.oewntk.parse
 import org.oewntk.pojos.ParsePojoException
 import org.oewntk.pojos.Synset
 import org.oewntk.utils.Tracing
-import java.io.*
+import java.io.File
+import java.io.IOException
+import java.io.RandomAccessFile
 import java.util.function.Consumer
 
 /**
@@ -63,24 +65,13 @@ object DataParser {
             var parseErrorCount = 0
             var synsetCount: Long = 0
 
-            while (true) {
-                val fileOffset = raFile.filePointer
-                // readLine() does not respect any charset.
-                // Per its Javadoc, it reads raw bytes and
-                // converts each one to a char by zero-extending the byte value
-                // (i.e. it treats the file as ISO-8859-1 / Latin-1).
-                // So rawLine is a String whose chars are really just the original bytes
-                // reinterpreted as Latin-1
-                val rawLine = raFile.readLine() ?: break
+            for ((fileOffset, line) in raFile.lineSequence()) {
 
                 lineCount++
-                if (rawLine.isEmpty() || rawLine[0] == ' ') {
+                // discard comment
+                if (line.isEmpty() || line[0] == ' ') {
                     continue
                 }
-
-                // decode
-                val byteArray = rawLine.toByteArray(Charsets.ISO_8859_1)
-                val line = String(byteArray, Flags.charSet)
                 nonCommentCount++
 
                 // split into fields
@@ -108,10 +99,10 @@ object DataParser {
                 }
             }
             val format = "%-50s"
-            Tracing.psServ.println("${format.format( "lines")}$nonCommentCount")
-            Tracing.psServ.println("${format.format( "parse successes")}$synsetCount")
-            (if (offsetErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${format.format( "offset errors")}$offsetErrorCount")
-            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${format.format( "parse errors")}$parseErrorCount")
+            Tracing.psServ.println("${format.format("lines")}$nonCommentCount")
+            Tracing.psServ.println("${format.format("parse successes")}$synsetCount")
+            (if (offsetErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${format.format("offset errors")}$offsetErrorCount")
+            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${format.format("parse errors")}$parseErrorCount")
             return synsetCount
         }
     }

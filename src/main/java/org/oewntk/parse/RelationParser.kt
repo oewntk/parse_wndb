@@ -134,22 +134,14 @@ class RelationParser(
                 var parseErrorCount = 0
                 var relationCount = 0
 
-                while (true) {
-                    // record current offset
-                    val fileOffset = raFile.filePointer
+                for ((fileOffset, line) in raFile.lineSequence()) {
 
-                    // read a line
-                    val rawLine = raFile.readLine() ?: break
                     lineCount++
-
                     // discard comment
-                    if (rawLine.isEmpty() || rawLine[0] == ' ') {
+                    if (line.isEmpty() || line[0] == ' ') {
                         continue
                     }
                     nonCommentCount++
-
-                    // decode
-                    val line = String(rawLine.toByteArray(Flags.charSet))
 
                     // split into fields
                     val lineFields = line.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -173,7 +165,7 @@ class RelationParser(
                             ?.onEach {
                                 when (it) {
                                     is LexRelation -> lexRelationConsumer?.accept(it)
-                                    else           -> relationConsumer?.accept(it)
+                                    else -> relationConsumer?.accept(it)
                                 }
                             }
                             ?.map { 1 }
