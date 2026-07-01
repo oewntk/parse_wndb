@@ -29,14 +29,14 @@ class TestSensekey {
                 val decoded = decode(sensekey)
                 assertEquals(6, decoded.size.toLong())
                 assertEquals(lemma, decoded[0])
-                assertEquals(String.format("%01d", POS), decoded[1])
-                assertEquals(String.format("%02d", LEXFILE), decoded[2])
-                assertEquals(String.format("%02d", LEXID), decoded[3])
+                assertEquals("%01d".format(POS), decoded[1])
+                assertEquals("%02d".format(LEXFILE), decoded[2])
+                assertEquals("%02d".format(LEXID), decoded[3])
                 assertEquals(targetHead, decoded[4])
                 if (targetHead.isEmpty()) {
                     assertEquals("", decoded[5])
                 } else {
-                    assertEquals(String.format("%02d", HEADID), decoded[5])
+                    assertEquals("%02d".format(HEADID), decoded[5])
                 }
             }
         }
@@ -115,8 +115,8 @@ class TestSensekey {
 
         @Suppress("SameParameterValue")
         private fun generate(lemma: String, pos: Int, lexfile: Int, lexid: Int, head: String, headid: Int): String {
-            val lexsense = String.format("%01d:%02d:%02d", pos, lexfile, lexid)
-            val headidStr = if (head.isEmpty()) "" else String.format("%02d", headid)
+            val lexsense = "%01d:%02d:%02d".format(pos, lexfile, lexid)
+            val headidStr = if (head.isEmpty()) "" else "%02d".format(headid)
             return lemma.replace("%", Sensekey.ESCAPED_PERCENT) + '%' + lexsense + ':' + head.replace("%", Sensekey.ESCAPED_PERCENT) + ':' + headidStr
         }
     }

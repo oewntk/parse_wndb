@@ -82,7 +82,7 @@ object DataParser {
                 // read offset
                 val readOffset = lineFields[0].toLong()
                 if (fileOffset != readOffset) {
-                    Tracing.psErr.println("Offset: data.$posName:$lineCount offset=${String.format("%08d", fileOffset)} line=[$line]")
+                    Tracing.psErr.println("Offset: data.$posName:$lineCount offset=${"%08d".format(fileOffset)} line=[$line]")
                     offsetErrorCount++
                     continue
                 }
@@ -94,17 +94,17 @@ object DataParser {
                     consumer.accept(synset)
                 } catch (e: ParsePojoException) {
                     parseErrorCount++
-                    Tracing.psErr.println("\n${file.name}:$lineCount offset=${String.format("%08d", fileOffset)} line=[$line] except=${e.message}")
+                    Tracing.psErr.println("\n${file.name}:$lineCount offset=${"%08d".format(fileOffset)} line=[$line] except=${e.message}")
                     if (THROW) {
                         throw e
                     }
                 }
             }
             val format = "%-50s"
-            Tracing.psServ.println("${String.format(format, "lines")}$nonCommentCount")
-            Tracing.psServ.println("${String.format(format, "parse successes")}$synsetCount")
-            (if (offsetErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "offset errors")}$offsetErrorCount")
-            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "parse errors")}$parseErrorCount")
+            Tracing.psServ.println("${format.format( "lines")}$nonCommentCount")
+            Tracing.psServ.println("${format.format( "parse successes")}$synsetCount")
+            (if (offsetErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${format.format( "offset errors")}$offsetErrorCount")
+            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${format.format( "parse errors")}$parseErrorCount")
             return synsetCount
         }
     }

@@ -54,7 +54,7 @@ open class CoreSynset protected constructor(
     }
 
     override fun toString(): String {
-        val offset = String.format("%08d", id.offset)
+        val offset = "%08d".format(id.offset)
         val words = cSLemmas.joinToString(",") {
             if (it.lemma is AdjLemma) {
                 it.toString() + it.lemma.toPositionSuffix()

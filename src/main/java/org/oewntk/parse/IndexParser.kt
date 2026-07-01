@@ -94,9 +94,9 @@ object IndexParser {
                 }
             }
             val format = "%-50s"
-            Tracing.psServ.println("${String.format(format, "lines")}$nonCommentCount")
-            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "parse successes")}$indexCount")
-            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "parse errors")}$parseErrorCount")
+            Tracing.psServ.println("${format.format("lines")}$nonCommentCount")
+            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${format.format("parse successes")}$indexCount")
+            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${format.format("parse errors")}$parseErrorCount")
             return indexCount
         }
     }
@@ -142,9 +142,9 @@ object IndexParser {
                 }
             }
             val format = "%-50s"
-            Tracing.psServ.println("${String.format(format, "lines")}$nonCommentCount")
-            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "parse successes")}$indexCount")
-            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "parse errors")}$parseErrorCount")
+            Tracing.psServ.println("${format.format("lines")}$nonCommentCount")
+            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${format.format( "parse successes")}$indexCount")
+            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${format.format( "parse errors")}$parseErrorCount")
             return indexCount
         }
     }

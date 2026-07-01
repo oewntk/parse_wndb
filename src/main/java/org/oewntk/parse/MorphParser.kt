@@ -79,9 +79,9 @@ object MorphParser {
                     }
             }
             val format = "%-50s"
-            Tracing.psServ.println("${String.format(format, "lines")}$lineCount")
-            Tracing.psServ.println("${String.format(format, "parse successes")}$morphMappingCount")
-            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "parse errors")}$parseErrorCount")
+            Tracing.psServ.println("${format.format("lines")}$lineCount")
+            Tracing.psServ.println("${format.format("parse successes")}$morphMappingCount")
+            (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${format.format("parse errors")}$parseErrorCount")
         }
     }
 

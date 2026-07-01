@@ -42,10 +42,10 @@ class RelationParser(
             val toWord = relation.toWord
             require(!(toWord.synsetId.offset == 0L || toWord.wordNum == 0)) { relation.toString() }
             require(RelationType.SENSE_RELATIONS.contains(type)) { relation.toString() }
-            Tracing.ps.println("${String.format("%-6s", "sense")} $relation")
+            Tracing.ps.println("${"%-6s".format("sense")} $relation")
         } else {
             require(RelationType.SYNSET_RELATIONS.contains(type)) { relation.toString() }
-            Tracing.ps.println("${String.format("%-6s", "synset")} $relation")
+            Tracing.ps.println("${"%-6s".format("synset")} $relation")
         }
     }
 
@@ -58,9 +58,9 @@ class RelationParser(
         val toWord = relation.toWord
         require(!(toWord.synsetId.offset == 0L || toWord.wordNum == 0)) { relation.toString() }
         require(RelationType.SENSE_RELATIONS.contains(type)) { relation.toString() }
-        // psi.println("${String.format("%-6s", "sense")}$relation")
+        // psi.println("${"%-6s".format("sense")}$relation")
         val resolvedToWord = resolveToWord(relation)
-        Tracing.ps.println("${String.format("%-6s", "sense")}${relation.toString(resolvedToWord)}")
+        Tracing.ps.println("${"%-6s".format("sense")}${relation.toString(resolvedToWord)}")
     }
 
     // Source
@@ -157,7 +157,7 @@ class RelationParser(
                     // read offset
                     val readOffset = lineFields[0].toLong()
                     if (fileOffset != readOffset) {
-                        Tracing.psErr.println("Offset: data.$posName:$lineCount offset=${String.format("%08d", fileOffset)} line=[$line]")
+                        Tracing.psErr.println("Offset: data.$posName:$lineCount offset=${"%08d".format(fileOffset)} line=[$line]")
                         offsetErrorCount++
                         continue
                     }
@@ -181,17 +181,17 @@ class RelationParser(
                             ?: 0
                     } catch (e: ParsePojoException) {
                         parseErrorCount++
-                        Tracing.psErr.print("\n${file.name}:$lineCount offset=${String.format("%08d", fileOffset)} line=[line] except=${e.message}")
+                        Tracing.psErr.print("\n${file.name}:$lineCount offset=${"%08d".format(fileOffset)} line=[line] except=${e.message}")
                         if (THROW) {
                             throw e
                         }
                     }
                 }
                 val format = "%-50s"
-                Tracing.psServ.println("${String.format(format, "lines")}$nonCommentCount")
-                Tracing.psServ.println("${String.format(format, "parse successes")}$relationCount")
-                (if (offsetErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "offset errors")}$offsetErrorCount")
-                (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${String.format(format, "parse errors")}$parseErrorCount")
+                Tracing.psServ.println("${format.format("lines")}$nonCommentCount")
+                Tracing.psServ.println("${format.format("parse successes")}$relationCount")
+                (if (offsetErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${format.format("offset errors")}$offsetErrorCount")
+                (if (parseErrorCount > 0) Tracing.psErr else Tracing.psServ).println("${format.format("parse errors")}$parseErrorCount")
                 return relationCount
             }
         }
