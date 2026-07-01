@@ -33,11 +33,11 @@ object SenseParser1 {
             reader.useLines { lines ->
                 lines.forEach { line ->
                     if (line.contains(target!!)) {
-                        Tracing.psInfo.println(line)
+                        Tracing.ps.println(line)
                         val sense: Sense
                         try {
                             sense = parseSenseLine(line)
-                            Tracing.psInfo.println(sense)
+                            Tracing.ps.println(sense)
                         } catch (e: ParsePojoException) {
                             Tracing.psErr.println("${e.message} cause:${e.cause}")
                             e.printStackTrace(Tracing.psErr)

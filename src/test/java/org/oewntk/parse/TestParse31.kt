@@ -49,7 +49,7 @@ class TestParse31 {
         else if (System.getProperties().containsKey("SILENT")) true
         else true
 
-        private val ps: PrintStream = if (!silent) Tracing.psInfo else Tracing.psNull
+        private val ps: PrintStream = if (!silent) Tracing.ps else Tracing.psNull
 
         private val wnHome: String? = System.getProperty("SOURCE31")
 
@@ -63,7 +63,7 @@ class TestParse31 {
                 Tracing.psErr.println("When running Maven tests, define a WNHOME31 environment variable that points to WordNet 3.1 dict directory.")
                 Assert.fail()
             }
-            Tracing.psInfo.printf("source=%s%n", wnDir?.absolutePath ?: "null")
+            Tracing.ps.printf("source=%s%n", wnDir?.absolutePath ?: "null")
             if (!wnDir!!.exists()) {
                 Tracing.psErr.println("Define WNDB source dir that exists")
                 Assert.fail()

@@ -22,7 +22,7 @@ object IndexParser {
     private const val THROW = false
 
     // Consumer
-    private val consumer = Consumer<Index> { Tracing.psInfo.println(it) }
+    private val consumer = Consumer<Index> { Tracing.ps.println(it) }
 
     /**
      * Parse all indexes

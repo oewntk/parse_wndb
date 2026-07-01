@@ -103,7 +103,7 @@ class TestSensekey {
         else if (System.getProperties().containsKey("SILENT")) true
         else true
 
-        private val ps: PrintStream = if (!silent) Tracing.psInfo else Tracing.psNull
+        private val ps: PrintStream = if (!silent) Tracing.ps else Tracing.psNull
 
         private const val POS = 1
         private const val LEXFILE = 22

@@ -21,7 +21,7 @@ object MorphParser {
     private const val THROW = false
 
     // Consumer
-    private val consumer = Consumer<MorphMapping> { Tracing.psInfo.println(it) }
+    private val consumer = Consumer<MorphMapping> { Tracing.ps.println(it) }
 
     /**
      * Parse morph mappings
@@ -106,6 +106,6 @@ object MorphParser {
 
         // Timing
         val endTime = System.currentTimeMillis()
-        Tracing.psInfo.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
+        Tracing.ps.println("Total execution time: " + (endTime - startTime) / 1000 + "s")
     }
 }

@@ -8,8 +8,7 @@ import java.io.PrintStream
 
 object Tracing {
 
-    val psNull: PrintStream = PrintStream(object : OutputStream(
-    ) {
+    val psNull: PrintStream = PrintStream(object : OutputStream() {
         override fun write(i: Int) {
             // do nothing
         }
@@ -19,7 +18,9 @@ object Tracing {
     else if (System.getProperties().containsKey("SILENT")) true
     else true
 
-    val psInfo: PrintStream = if (!silent) System.out else psNull
+    val psInfo: PrintStream = System.out
+
+    val ps: PrintStream = if (!silent) System.out else psNull
 
     val psServ: PrintStream = if (!silent) System.out else psNull
 

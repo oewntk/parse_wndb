@@ -20,7 +20,7 @@ object SenseParser {
     private const val THROW = false
 
     // Consumer
-    private val consumer = Consumer<Sense> { Tracing.psInfo.println(it) }
+    private val consumer = Consumer<Sense> { Tracing.ps.println(it) }
 
     /**
      * Parse senses

@@ -21,9 +21,9 @@ import java.util.function.Consumer
 object Parser {
 
     // Consumers
-    private val synsetConsumer = Consumer<Synset> { Tracing.psInfo.println(it) }
-    private val senseConsumer = Consumer<Sense> { Tracing.psInfo.println(it) }
-    private val indexConsumer = Consumer<Index> { Tracing.psInfo.println(it) }
+    private val synsetConsumer = Consumer<Synset> { Tracing.ps.println(it) }
+    private val senseConsumer = Consumer<Sense> { Tracing.ps.println(it) }
+    private val indexConsumer = Consumer<Index> { Tracing.ps.println(it) }
 
     /**
      * Parse all

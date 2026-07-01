@@ -49,7 +49,7 @@ class TestParseXX {
         else if (System.getProperties().containsKey("SILENT")) true
         else true
 
-        private val ps: PrintStream = if (!silent) Tracing.psInfo else Tracing.psNull
+        private val ps: PrintStream = if (!silent) Tracing.ps else Tracing.psNull
 
         private val wnHome: String? = System.getProperty("SOURCEXX")
 
@@ -63,7 +63,7 @@ class TestParseXX {
                 Tracing.psErr.println("When running Maven tests, define a WNHOMEXX_compat environment variable that points to WordNet 2021 compat dict directory.")
                 Assert.fail()
             }
-            Tracing.psInfo.printf("source=%s%n", wnDir?.absolutePath ?: "null")
+            Tracing.ps.printf("source=%s%n", wnDir?.absolutePath ?: "null")
             if (!wnDir!!.exists()) {
                 Tracing.psErr.println("Define WNDB source dir that exists")
                 Assert.fail()

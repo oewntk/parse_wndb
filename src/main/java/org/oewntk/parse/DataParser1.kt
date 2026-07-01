@@ -68,10 +68,10 @@ object DataParser1 {
 
         // Process
         val line = read(dir, posName, fileOffset)
-        Tracing.psInfo.println(line)
+        Tracing.ps.println(line)
         if (line != null) {
             val synset = parseSynset(line, isAdj)
-            Tracing.psInfo.println(synset.toPrettyString())
+            Tracing.ps.println(synset.toPrettyString())
         }
     }
 }

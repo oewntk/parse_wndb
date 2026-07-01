@@ -42,10 +42,10 @@ class RelationParser(
             val toWord = relation.toWord
             require(!(toWord.synsetId.offset == 0L || toWord.wordNum == 0)) { relation.toString() }
             require(RelationType.SENSE_RELATIONS.contains(type)) { relation.toString() }
-            Tracing.psInfo.println("${String.format("%-6s", "sense")} $relation")
+            Tracing.ps.println("${String.format("%-6s", "sense")} $relation")
         } else {
             require(RelationType.SYNSET_RELATIONS.contains(type)) { relation.toString() }
-            Tracing.psInfo.println("${String.format("%-6s", "synset")} $relation")
+            Tracing.ps.println("${String.format("%-6s", "synset")} $relation")
         }
     }
 
@@ -60,7 +60,7 @@ class RelationParser(
         require(RelationType.SENSE_RELATIONS.contains(type)) { relation.toString() }
         // psi.println("${String.format("%-6s", "sense")}$relation")
         val resolvedToWord = resolveToWord(relation)
-        Tracing.psInfo.println("${String.format("%-6s", "sense")}${relation.toString(resolvedToWord)}")
+        Tracing.ps.println("${String.format("%-6s", "sense")}${relation.toString(resolvedToWord)}")
     }
 
     // Source

@@ -19,7 +19,7 @@ object DataParser {
     private const val THROW = false
 
     // Consumer
-    private val consumer = Consumer<Synset> { Tracing.psInfo.println(it) }
+    private val consumer = Consumer<Synset> { Tracing.ps.println(it) }
 
     /**
      * Parse all synsets

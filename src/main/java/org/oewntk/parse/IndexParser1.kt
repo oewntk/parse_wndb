@@ -34,10 +34,10 @@ object IndexParser1 {
             reader.useLines { lines ->
                 lines.forEach { line ->
                     if (line.contains(target)) {
-                        Tracing.psInfo.println(line)
+                        Tracing.ps.println(line)
                         try {
                             val index = parseIndexLine(line)
-                            Tracing.psInfo.println(index)
+                            Tracing.ps.println(index)
                         } catch (e: ParsePojoException) {
                             Tracing.psErr.println("${e.message} cause:${ e.cause}")
                             e.printStackTrace(Tracing.psErr)
