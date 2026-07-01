@@ -65,6 +65,12 @@ object DataParser {
 
             while (true) {
                 val fileOffset = raFile.filePointer
+                // readLine() does not respect any charset.
+                // Per its Javadoc, it reads raw bytes and
+                // converts each one to a char by zero-extending the byte value
+                // (i.e. it treats the file as ISO-8859-1 / Latin-1).
+                // So rawLine is a String whose chars are really just the original bytes
+                // reinterpreted as Latin-1
                 val rawLine = raFile.readLine() ?: break
 
                 lineCount++
@@ -73,7 +79,8 @@ object DataParser {
                 }
 
                 // decode
-                val line = String(rawLine.toByteArray(Flags.charSet))
+                val byteArray = rawLine.toByteArray(Charsets.ISO_8859_1)
+                val line = String(byteArray, Flags.charSet)
                 nonCommentCount++
 
                 // split into fields
