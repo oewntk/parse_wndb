@@ -99,8 +99,7 @@ class TestSensekey {
 
     companion object {
 
-        private val silent = if (System.getProperties().containsKey("VERBOSE")) false
-        else if (System.getProperties().containsKey("SILENT")) true
+        private val silent = !System.getProperties().containsKey("VERBOSE") && if (System.getProperties().containsKey("SILENT")) true
         else true
 
         private val ps: PrintStream = if (!silent) Tracing.ps else Tracing.psNull
