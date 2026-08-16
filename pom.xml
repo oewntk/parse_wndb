@@ -7,7 +7,7 @@
 
     <groupId>io.github.oewntk</groupId>
     <artifactId>parse_wndb</artifactId>
-    <version>3.0.1</version>
+    <version>3.0.1-SNAPSHOT</version>
     <name>parse_wndb</name>
     <description>Parse WordNet WNDB file into pojos.</description>
     <url>https://github.com/oewntk/parse</url>
