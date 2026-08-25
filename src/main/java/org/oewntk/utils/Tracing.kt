@@ -14,14 +14,13 @@ object Tracing {
         }
     })
 
-    val silent = !System.getProperties().containsKey("VERBOSE") && if (System.getProperties().containsKey("SILENT")) true
-    else true
+    val verbose = System.getProperties().containsKey("VERBOSE") || !System.getProperties().containsKey("SILENT")
 
     val psInfo: PrintStream = System.out
 
-    val ps: PrintStream = if (!silent) System.out else psNull
+    var ps: PrintStream = if (verbose) System.out else psNull
 
-    val psServ: PrintStream = if (!silent) System.out else psNull
+    var psServ: PrintStream = if (verbose) System.out else psNull
 
     val psErr: PrintStream = System.err
 }
