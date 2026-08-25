@@ -52,11 +52,18 @@ object Parser {
     @Throws(IOException::class, ParsePojoException::class)
     @JvmStatic
     fun main(args: Array<String>) {
+        var iArg = 0
+        if ("--silent" == args[iArg]) {
+            Tracing.ps = Tracing.psNull
+            Tracing.psServ = Tracing.psNull
+            iArg++
+        }
+
         // Timing
         val startTime = System.currentTimeMillis()
 
         // Input
-        val dir = File(args[0])
+        val dir = File(args[iArg])
         parseAll(dir, synsetConsumer, senseConsumer, indexConsumer)
 
         // Timing
